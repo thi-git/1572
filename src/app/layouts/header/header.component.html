@@ -1,0 +1,38 @@
+<mat-toolbar class="header">
+  <div class="header__title">
+    <!-- 左側區塊 -->
+    <div class="header__title-text">
+      <div class="top_text">
+        <div class="left-logo">
+          <img src="./assets/icons/header/logo.png" alt="">
+        </div>
+        <div class="left-title">
+          <div class="title">
+            <span>路口車流資料管理系統</span>
+          </div>
+          <div class="now-page">
+            <span>{{setting.lv1_page}} / {{setting.lv2_page}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 右側區塊 -->
+    <div class="header__title-text">
+      <div class="top_text2">
+        <div class="user">
+          <mat-icon>supervised_user_circle</mat-icon>
+          {{ user }}
+        </div>
+        <div class="img-logo">
+          <img src="./assets/icons/sign-out.svg" (click)="signOut()" [class]="uploadStatus ? 'is-uploading' : ''" alt="登出">
+        </div>
+        <!-- <div class="img-logo">
+          <img src="./assets/icons/setting.svg" alt="設定">
+        </div>
+        <div class="img-logo">
+          <img src="./assets/icons/notify.svg" alt="通知">
+        </div> -->
+      </div>
+    </div>
+  </div>
+</mat-toolbar>

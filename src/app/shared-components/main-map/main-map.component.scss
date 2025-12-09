@@ -1,0 +1,76 @@
+// 框選按鈕
+.marker_select {
+  position: absolute;
+  top: 190px;
+  right: 18px;
+  z-index: 9999;
+  height: 42px;
+
+  mat-icon {
+    vertical-align: middle; // icon和文字置中
+    font-size: 24px;
+  }
+
+  .word {
+    display: inline-block;
+    padding: 2px;
+    padding-bottom: 3.5px;
+    vertical-align: middle; // icon和文字置中
+    font-size: 16px;
+    font-weight: normal;
+    font-family: "Noto Sans CJK TC", sans-serif;
+  }
+}
+
+.cancel {
+  color: #B92D2D;
+}
+
+.change_btn_pos {
+  position: absolute;
+  top: 190px;
+  right: 386px; // 按鈕在右邊視窗出現時左移
+  z-index: 99999;
+
+  @media (max-width: 1500px) {
+    right: 286px;
+  }
+}
+
+.change_btn_pos_v2 {
+  position: absolute;
+  top: 190px;
+  right: 352px;
+  z-index: 99999;
+
+  @media (max-width: 1500px) {
+    right: 286px;
+  }
+}
+
+// 地圖
+.mainMap {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+::ng-deep {
+  .leaflet-marker-icon {
+    background-color: transparent;
+    border: none;
+
+    .cluster-icon {
+      width: 45px;
+    }
+
+    .cluster-icon-text {
+      position: absolute;
+      top: 6px;
+      left: 15px;
+      font-weight: bolder;
+      color: black;
+    }
+  }
+}
+

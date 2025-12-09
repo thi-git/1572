@@ -1,0 +1,29 @@
+.district {
+  width: 180px;
+
+  @media (max-width: 1500px) {
+    width: 120px;
+  }
+
+  mat-expansion-panel-header {
+    height: 36px !important; // 展開時高度不隨著改變
+
+    @media (max-width: 1500px) {
+      padding: 0 14px;
+    }
+
+    mat-panel-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: -2px; // 待調整
+
+      @media (max-width: 1500px) {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.district-none {
+  display: none;
+}

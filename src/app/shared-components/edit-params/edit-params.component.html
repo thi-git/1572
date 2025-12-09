@@ -1,0 +1,58 @@
+<div class="edit-params" *ngIf="selectEditStep === 'params'">
+  <div class="slider1" *ngIf="dataSource.length > 0">
+    <mat-icon class="left" (click)="clickBtn('left')">keyboard_arrow_left</mat-icon>
+  </div>
+  <div class="slider2" *ngIf="dataSource.length > 0">
+    <mat-icon class="right" (click)="clickBtn('right')">keyboard_arrow_right</mat-icon>
+  </div>
+
+  <div class="edit-params-content" *ngIf="dataSource.length > 0">
+    <!-- 表格輸入 -->
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- 欄位名稱列表 -->
+      <ng-container matColumnDef="index">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" [class]="capacityColor(element.index)">
+          {{element.index}}
+          <img *ngIf="element.index !== '建議道路容量'" src="./assets/icons/info-display.svg" alt=""
+          matTooltip={{display_info[element.index]}}
+          [matTooltipPosition]="'above'">
+        </td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="direction" *ngFor="let direction of allDirection; let dirIdx = index">
+        <th mat-header-cell *matHeaderCellDef>{{ roadName[direction] }}</th>
+        <td mat-cell *matCellDef="let element; let idx = index">
+          <!-- 道路分類 -->
+          <div class="data1" *ngIf="idx === 0">
+            <button [ngClass]="{'clicked': roadType === element[direction]}" *ngFor="let roadType of allRoadType" (click)="selectRoadType(element, direction, roadType, dirIdx)">{{ roadType.split('-')[1] }}</button>
+          </div>
+          <!-- 道路分隔 -->
+          <div class="data2" *ngIf="idx === 1">
+            <button [ngClass]="{'clicked': seperateType === element[direction]}" *ngFor="let seperateType of isSeparate" (click)="selectRoadType(element, direction, seperateType, dirIdx)">{{ seperateType }}</button>
+          </div>
+          <!-- 車道數 -->
+          <div class="panel-setting data3" *ngIf="idx === 2">
+            <mat-expansion-panel class="panel" [(expanded)]="panelOpen3[dirIdx]" >
+              <mat-expansion-panel-header>
+                {{ element[direction].length === 0 ? '請選擇' : element[direction] }}
+              </mat-expansion-panel-header>
+              <mat-radio-group class="radio-group" [(ngModel)]="element[direction]">
+                <mat-radio-button class="radio-button" *ngFor="let num of laneNum" [value]="num" (change)="hasSelectValue(element, direction, num, dirIdx)">
+                  {{num}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </mat-expansion-panel>
+          </div>
+          <!-- 道路建議容量 -->
+          <span *ngIf="idx === 3" class="capacity-color">{{ element[direction]}} pcu/hr</span>
+          <!-- 道路容量 -->
+          <input *ngIf="idx === 4" class="input-text" min="0" type="number" matInput [(ngModel)]="element[direction] == -99 ? '' : element[direction]" (input)="hasInputValue(element, direction)">
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

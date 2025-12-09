@@ -1,0 +1,21 @@
+<!-- 框選按鈕-->
+<button class="marker_select btn_yellow" [ngClass]="changeBtnPos()" (click)="selectBtn()" *ngIf="page === '/view/search' && selectModeOpen && !isSelecting">
+  <mat-icon>edit</mat-icon>
+  <span class="word">自訂圈選範圍</span>
+</button>
+<button class="marker_select btn_yellow cancel" [ngClass]="changeBtnPos()" (click)="cancelBtn()" *ngIf="page === '/view/search' && selectModeOpen && isSelecting">
+  <mat-icon>clear</mat-icon>
+  <span class="word">取消圈選</span>
+</button>
+
+<!-- 地圖 -->
+<div class="mainMap" id="search_page_map"
+leaflet
+[leafletOptions]='MapOptions'
+(leafletMapReady)='onMapReady($event)'
+[leafletLayers]='CurrentMapLayers'
+[(leafletZoom)]="mapCenter.zoom"
+[(leafletCenter)]="mapCenter.latlng">
+  <div *ngIf="theme==='dark-theme'" [leafletLayer]="baseMap"></div>
+  <div *ngIf="theme==='light-theme'" [leafletLayer]="lightMap"></div>
+</div>

@@ -1,0 +1,267 @@
+.edit-params {
+  width: 100%;
+  height: calc(100vh - 161px);
+  background: linear-gradient(#FFF6E5, #DBF0F7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // border: 1px solid #fa0;
+
+  .slider1 {
+    position: absolute;
+    left: 20px; // 待修正
+    z-index: 9999;
+
+    .left {
+      background-color: #f2f2f3;
+      color: #404040;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.45);
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      box-sizing: border-box;
+      padding-top: 2px;
+      padding-left: 2px;
+      cursor: pointer;
+    }
+  }
+
+  .slider2 {
+    position: absolute;
+    right: 20px; // 待修正
+
+    .right {
+      background-color: #f2f2f3;
+      color: #404040;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.45);
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      box-sizing: border-box;
+      padding-top: 2.5px;
+      padding-left: 2.5px;
+      cursor: pointer;
+    }
+  }
+
+  .edit-params-content {
+    width: 85%;
+    height: 60%;
+    position: relative;
+    // 表格輸入
+    table {
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      border-collapse: collapse;
+
+      // 標題高度設定
+      .mat-header-row {
+        height: 45px;
+        margin-bottom: 20px !important;
+      }
+
+      // 標題列設定
+      .mat-header-cell {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 600;
+        border-right: 1px solid #aaa;
+        padding: 0 !important;
+        color: #000 !important;
+      }
+
+      @media (max-width: 1280px) {
+        .mat-header-cell {
+          font-size: 20px;
+        }
+      }
+
+      // 各列設定
+      .mat-cell {
+        position: relative;
+        height: 20%; // 五筆資料均分高度(待調整)
+        text-align: center;
+        padding: 0 !important;
+        border-right: 1px solid #aaa;
+
+        &:nth-child(1) {
+          font-size: 25px;
+          font-weight: 600;
+        }
+      }
+
+      @media (max-width: 1280px) {
+        .mat-cell {
+          &:nth-child(1) {
+            font-size: 20px;
+          }
+        }
+      }
+
+      mat-expansion-panel {
+        width: 80%;
+
+        mat-expansion-panel-header {
+          height: 35px;
+
+          font-size: 15px;
+          font-weight: 500;
+          margin-bottom: -2px; // 待調整
+        }
+
+        @media (max-width: 1280px) {
+          mat-expansion-panel-header {
+            font-size: 12px;
+          }
+        }
+      }
+
+      input {
+        width: 80%;
+        height: 35px;
+        border: none;
+        border-radius: 4px;
+        padding-left: 0;
+        padding-right: 0;
+        font-size: 18px;
+        text-align: center;
+        color: #fff;
+        background-color: #005581;
+      }
+
+      @media (max-width: 1280px) {
+        input {
+          font-size: 16px;
+        }
+      }
+
+      // 下拉選單設定
+      .panel-setting {
+        display: flex;
+        justify-content: center;
+
+        .radio-group {
+          display: flex;
+          flex-direction: column;
+
+          .radio-button {
+            margin: 5px;
+          }
+
+          @media (max-width: 1280px) {
+            .radio-button {
+              font-size: 12px;
+            }
+          }
+        }
+      }
+
+      .data1 {
+        button {
+          border: 1px solid #005581;
+          width: 25%;
+          margin: 5px;
+          height: 35px;
+          border-radius: 4px;
+          background-color: #fff;
+          cursor: pointer;
+          padding-top: 4px;
+
+          &.clicked {
+            background-color: #005581;
+            color: #fff;
+          }
+        }
+      }
+
+      .data2 {
+        button {
+          border: 1px solid #005581;
+          width: 39%;
+          margin: 5px;
+          height: 35px;
+          border-radius: 4px;
+          background-color: #fff;
+          cursor: pointer;
+          padding-top: 4px;
+
+          &.clicked {
+            background-color: #005581;
+            color: #fff;
+          }
+        }
+      }
+
+      .data3 {
+        position: absolute;
+        z-index: 9997;
+        width: 100%;
+        top: calc(50% - 22.5px);
+      }
+
+      .capacity-color {
+        color: #005581;
+        font-size: 20px;
+
+        @media (max-width: 1500px) {
+          font-size: 15px;
+        }
+      }
+    }
+
+    // 欄寬設定
+    .mat-column-index {
+      flex: 0 0 15%;
+      width: 15%;
+    }
+
+    .mat-elevation-z8 {
+      box-shadow: none;
+    }
+  }
+
+  @media (max-width: 1280px) {
+    .edit-params-content {
+      height: 80%;
+    }
+  }
+}
+
+// 指定edit-params class底下的才作此設定
+::ng-deep .edit-params .mat-expansion-panel {
+  background-color: #fff;
+  color: #000;
+}
+
+::ng-deep .data3 .mat-expansion-panel-content {
+  max-height: 150px !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-left: 0;
+}
+
+// 下拉選單indicator設定
+::ng-deep .data1 .mat-expansion-indicator::after {
+  color: #00000080 !important;
+}
+
+::ng-deep .data2 .mat-expansion-indicator::after {
+  color: #00000080 !important;
+}
+
+::ng-deep .data3 .mat-expansion-indicator::after {
+  color: #00000080 !important;
+}
+
+::ng-deep .mat-tooltip {
+  white-space: pre-line !important; // 換行設定
+  font-size: 14.6px;
+  line-height: 1.5;
+}
+
+
+
+
+
+

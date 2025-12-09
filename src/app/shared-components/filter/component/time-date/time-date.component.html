@@ -1,0 +1,24 @@
+<div class="time-date">
+  <div class="test">
+    <mat-expansion-panel [(expanded)]="panelOpen" class="panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+         <!-- {{ title }} | <span class="time-range">{{timeRange}}</span> -->
+         {{ title }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-form-field appearance="" class="field" [ngClass]="inputDisplay()">
+        <mat-label>選擇時間</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input class="date-input" matStartDate placeholder="日期(起)" (dateChange)="chooseStartDate($event)">
+          <input class="date-input input-right" matEndDate placeholder="日期(迄)" (dateChange)="chooseEndDate($event)">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+        <mat-divider></mat-divider>
+      </mat-form-field>
+      <!-- 調查日期大於兩年以上 -->
+      <mat-checkbox *ngIf="page === '/view/db_search'" class="select-section" (change)="selectDate($event)">調查日期大於兩年以上</mat-checkbox>
+    </mat-expansion-panel>
+  </div>
+</div>

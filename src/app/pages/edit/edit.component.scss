@@ -1,0 +1,31 @@
+// 整體設定
+.edit {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+// 路口定義
+::ng-deep .edit-arrow {
+  position: absolute;
+  z-index: 99999999;
+  top: 65px;
+  right: 0;
+}
+
+// 參數設定
+::ng-deep .edit-params {
+  position: absolute;
+  z-index: 9999;
+  width: 100%;
+  top: 32px;
+}
+
+// 路段繪製
+::ng-deep .drawing-info {
+  position: absolute;
+  z-index: 9999;
+  top: 28px;
+  left: 0;
+}
+

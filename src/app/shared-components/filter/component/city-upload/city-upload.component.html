@@ -1,0 +1,20 @@
+<div class="district-new" [class]="setDisplay()">
+  <div class="test">
+    <mat-expansion-panel [(expanded)]="panelOpen" class="panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+        縣市
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-container *ngIf="isData">
+        <app-checkbox-tree
+        [custom]="'district_new'"
+        [treeList]="treeList"
+        (getName)="getName($event)">
+        </app-checkbox-tree>
+      </ng-container>
+    </mat-expansion-panel>
+  </div>
+</div>
+
+

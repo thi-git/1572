@@ -1,0 +1,120 @@
+<!-- 原點(路口定義) -->
+<div class="definition-section" *ngIf="selectStep === 'definition'">
+  <button class="search_btn btn_yellow btn-with-icon" (click)="backToCenter('definition')">
+    <img src="./assets/icons/start-pin.svg" alt="">原點
+  </button>
+</div>
+
+<!-- 完成/回復/刪除/原點(路段繪製) -->
+<div class="drawing-section" *ngIf="selectStep === 'drawing'">
+  <button *ngIf="!isFirstEdit && isEditing" class="search_btn btn_yellow temp-finish" (click)="tempFinishDrawing()">完成</button>
+  <button *ngIf="isFirstEdit && isEditing" class="search_btn btn_yellow btn-with-icon draw-back" (click)="changePolyline('back')">
+    <img src="./assets/icons/draw-back.svg" alt="">
+    <span>回復</span>
+  </button>
+  <button *ngIf="isEditing" class="search_btn btn_yellow btn-with-icon delete" (click)="changePolyline('delete')">
+    <img src="./assets/icons/delete.svg" alt="">
+    <span>刪除路段</span>
+  </button>
+  <button class="search_btn btn-with-icon btn_yellow test" (click)="backToCenter('drawing')">
+    <img src="./assets/icons/start-pin.svg" alt="">原點
+  </button>
+</div>
+
+<div class="img-section" *ngIf="selectStep === 'drawing'">
+  <div class="title">路口示意圖</div>
+  <div class="bg-setting pos1" *ngIf="intersectionType === '四叉路口' || intersectionType === '正交四叉路口'">
+    <svg width="380" height="354" viewBox="0 0 380 354" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="360" height="334" rx="7.2" fill="white"/>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="16" letter-spacing="0em"><tspan x="317.787" y="204.896">{{ testRoadGroup.length > 0 ? testRoadGroup[0]['roadName'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="16" letter-spacing="0em"><tspan x="165.016" y="325.495">{{ testRoadGroup.length > 0 ? testRoadGroup[1]['roadName'] : ''  }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="16" letter-spacing="0em"><tspan x="14.5156" y="204.896">{{ testRoadGroup.length > 0 ? testRoadGroup[2]['roadName'] : ''  }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="16" letter-spacing="0em"><tspan x="165.016" y="85.1963">{{ testRoadGroup.length > 0 ? testRoadGroup[3]['roadName'] : ''  }}</tspan></text>
+      <line x1="149.956" y1="101.004" x2="149.956" y2="160.404" stroke="black" stroke-width="0.9"/>
+      <line x1="74.3543" y1="160.403" x2="74.3543" y2="239.603" stroke="black" stroke-width="0.9"/>
+      <path d="M229.6 298.555L149.5 298.555" stroke="black" stroke-width="0.9"/>
+      <path d="M229.6 101.456L149.5 101.456" stroke="black" stroke-width="0.9"/>
+      <line x1="305.651" y1="160.404" x2="305.651" y2="239.604" stroke="black" stroke-width="0.9"/>
+      <line x1="229.149" y1="101.005" x2="229.149" y2="160.405" stroke="black" stroke-width="0.9"/>
+      <line x1="149.956" y1="239.604" x2="149.956" y2="298.104" stroke="black" stroke-width="0.9"/>
+      <line x1="305.203" y1="160.854" x2="228.703" y2="160.854" stroke="black" stroke-width="0.9"/>
+      <line x1="150.402" y1="160.854" x2="73.9024" y2="160.854" stroke="black" stroke-width="0.9"/>
+      <line x1="229.151" y1="239.605" x2="229.151" y2="298.105" stroke="black" stroke-width="0.9"/>
+      <line x1="305.203" y1="240.054" x2="228.703" y2="240.054" stroke="black" stroke-width="0.9"/>
+      <line x1="150.402" y1="240.054" x2="73.9024" y2="240.054" stroke="black" stroke-width="0.9"/>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="275.506" y="204.896">{{ testRoadGroup.length > 0 ? testRoadGroup[0]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="184.602" y="281.396">{{ testRoadGroup.length > 0 ? testRoadGroup[1]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="95.5039" y="204.896">{{ testRoadGroup.length > 0 ? testRoadGroup[2]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="184.602" y="129.296">{{ testRoadGroup.length > 0 ? testRoadGroup[3]['direction'] : '' }}</tspan></text>
+    </svg>
+  </div>
+
+  <div class="bg-setting pos2" *ngIf="intersectionType === '五叉路口'">
+    <svg width="270" height="245" viewBox="0 0 270 245" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="200.5" y="125.292">{{ testRoadGroup.length > 0 ? testRoadGroup[0]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.2912" letter-spacing="0.02em"><tspan x="99" y="208.162">{{ testRoadGroup.length > 0 ? testRoadGroup[1]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="46.5" y="125.292">{{ testRoadGroup.length > 0 ? testRoadGroup[2]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="100" y="52.292">{{ testRoadGroup.length > 0 ? testRoadGroup[3]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="155" y="52.292">{{ testRoadGroup.length > 0 ? testRoadGroup[4]['direction'] : '' }}</tspan></text>
+
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="237" y="125.292">{{ testRoadGroup.length > 0 ? testRoadGroup[0]['roadName'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="90" y="240.292">{{ testRoadGroup.length > 0 ? testRoadGroup[1]['roadName'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="0" y="125.292">{{ testRoadGroup.length > 0 ? testRoadGroup[2]['roadName'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="90" y="14.792">{{ testRoadGroup.length > 0 ? testRoadGroup[3]['roadName'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="140" y="14.792">{{ testRoadGroup.length > 0 ? testRoadGroup[4]['roadName'] : '' }}</tspan></text>
+
+      <line x1="179" y1="176" x2="230" y2="176" stroke="black"/>
+      <line x1="179.5" y1="175" x2="179.5" y2="223.5" stroke="black"/>
+      <line x1="180" y1="20" x2="180" y2="73" stroke="black"/>
+      <line x1="129.5" y1="20" x2="129.5" y2="73" stroke="black"/>
+      <line x1="79" y1="175" x2="79" y2="223.5" stroke="black"/>
+      <line x1="30" y1="176" x2="78.5" y2="176" stroke="black"/>
+      <line x1="30" y1="72.5" x2="78.5" y2="72.5" stroke="black"/>
+      <line x1="79" y1="20" x2="79" y2="73" stroke="black"/>
+      <line x1="179" y1="72.5" x2="230" y2="72.5" stroke="black"/>
+    </svg>
+  </div>
+
+  <div class="bg-setting pos2" *ngIf="intersectionType === '六叉路口'">
+    <svg width="270" height="245" viewBox="0 0 270 245" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="203" y="125.292">{{ testRoadGroup.length > 0 ? testRoadGroup[0]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="152" y="208.792">{{ testRoadGroup.length > 0 ? testRoadGroup[1]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="102" y="208.792">{{ testRoadGroup.length > 0 ? testRoadGroup[2]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="49" y="125.292">{{ testRoadGroup.length > 0 ? testRoadGroup[3]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="102.5" y="52.292">{{ testRoadGroup.length > 0 ? testRoadGroup[4]['direction'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="152.5" y="52.292">{{ testRoadGroup.length > 0 ? testRoadGroup[5]['direction'] : '' }}</tspan></text>
+
+      <line x1="181.5" y1="176" x2="232.5" y2="176" stroke="black"/>
+      <line x1="182" y1="176" x2="182" y2="224.5" stroke="black"/>
+      <line x1="182.5" y1="20" x2="182.5" y2="73" stroke="black"/>
+      <line x1="132" y1="176" x2="132" y2="224.5" stroke="black"/>
+      <line x1="132" y1="20" x2="132" y2="73" stroke="black"/>
+      <line x1="81.5" y1="175" x2="81.5" y2="223.5" stroke="black"/>
+      <line x1="32.5" y1="176" x2="81" y2="176" stroke="black"/>
+
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="237" y="125.292">{{ testRoadGroup.length > 0 ? testRoadGroup[0]['roadName'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="140" y="240.292">{{ testRoadGroup.length > 0 ? testRoadGroup[1]['roadName'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="90" y="240.292">{{ testRoadGroup.length > 0 ? testRoadGroup[2]['roadName'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="0" y="125.292">{{ testRoadGroup.length > 0 ? testRoadGroup[3]['roadName'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="90" y="14.792">{{ testRoadGroup.length > 0 ? testRoadGroup[4]['roadName'] : '' }}</tspan></text>
+      <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0.02em"><tspan x="140" y="14.792">{{ testRoadGroup.length > 0 ? testRoadGroup[5]['roadName'] : '' }}</tspan></text>
+      <line x1="32.5" y1="72.5" x2="81" y2="72.5" stroke="black"/>
+      <line x1="81.5" y1="20" x2="81.5" y2="73" stroke="black"/>
+      <line x1="181.5" y1="72.5" x2="232.5" y2="72.5" stroke="black"/>
+      </svg>
+
+  </div>
+</div>
+
+<!-- 地圖 -->
+<div class="mainMap" id="edit_page_map"
+leaflet
+[leafletOptions]='MapOptions'
+(leafletMapReady)='onMapReady($event)'
+[leafletLayers]='CurrentMapLayers'
+[(leafletZoom)]="mapCenter.zoom"
+[(leafletCenter)]="mapCenter.latlng">
+  <div *ngIf="theme==='dark-theme'" [leafletLayer]="baseMap"></div>
+  <div *ngIf="theme==='light-theme'" [leafletLayer]="lightMap"></div>
+</div>
+

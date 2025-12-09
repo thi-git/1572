@@ -1,0 +1,78 @@
+<div class="account-setting">
+  <form nz-form [formGroup]="validateForm" nzLayout="horizontal">
+    <div nz-row [nzGutter]="[0,8]">
+      <div nz-col [nzXs]="24">
+        <nz-form-item>
+          <nz-form-label nzFor="account">帳號</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="account" id="account"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXs]="24">
+        <nz-form-item>
+          <nz-form-label nzFor="name">姓名</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="name" id="name"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXs]="10">
+        <nz-form-item>
+          <nz-form-label nzFor="group">群組</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="group" id="group" nzPlaceHolder=""  (ngModelChange)="changeGroup($event)">
+              <nz-option *ngFor="let item of groups" [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXs]="2"></div>
+      <div nz-col [nzXs]="10">
+        <nz-form-item>
+          <nz-form-label nzFor="role">角色</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="role" id="role" nzPlaceHolder="" (ngModelChange)="changeRole($event)">
+              <nz-option *ngFor="let item of subGroups" [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+  <div class="checkbox">
+    <div class="title-section">
+      <h3>權限預覽</h3>
+      <div class="tab-section">
+        <span class="tab-option" (click)="changeSubPage('permission')">頁面</span>
+        <span class="tab-option" (click)="changeSubPage('data')">資料</span>
+      </div>
+    </div>
+    <div class="container">
+      <!-- 頁面權限 -->
+      <app-permissions *ngIf="subPage ==='permission'" class="permission" [allPermission]="permission" [disable]="true"></app-permissions>
+
+      <!-- 資料權限 -->
+      <div class="auth-select" *ngIf="subPage ==='data'">
+        <div *ngFor="let page of init" class="test">
+          <div class="each-section">
+            <label nz-checkbox [(ngModel)]="page.checked" (ngModelChange)="updateAllChecked(page.value)"
+            [nzIndeterminate]="page.indeterminate">
+            {{ page.label }}
+            </label>
+            <br />
+            <nz-checkbox-group class="asdasd" [(ngModel)]="page.sub" (ngModelChange)="updateSingleChecked(page.value)"></nz-checkbox-group>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-container">
+    <button class="btn btn-submit" (click)="cancel()">
+      <span>取消</span>
+    </button>
+    <button class="btn btn-submit" (click)="submitForm()">
+      <span>儲存</span>
+    </button>
+  </div>
+</div>

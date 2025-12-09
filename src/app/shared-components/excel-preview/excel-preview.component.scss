@@ -1,0 +1,20 @@
+.excel-preview {
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 192px);
+  box-sizing: border-box;
+
+  .excel-preview-container {
+    margin-top: 6vh;
+    position: relative;
+    width: 80%;
+    height: 80%;
+
+    #luckysheet {
+      position: absolute;
+      width: 100% !important;
+      height: 100% !important;
+      overflow: hidden;
+    }
+  }
+}

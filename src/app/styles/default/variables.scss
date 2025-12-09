@@ -1,0 +1,82 @@
+@import "colors";
+
+//== Viewports
+
+$small: 800px;
+$normal: 1024px;
+$large: 1280px;
+
+
+//== Sidebar
+$sidebar-origin: 70px;
+$sidebar-width: 230px;
+$sidebar-font-color: $font-color;
+$sidebar-font-color-active: $font-color;
+$sidebar-background-color-active: $color-primary-500;
+$sidebar-background-color-hover: $color-primary-500;
+$sidebar-icon-color-active: $font-color;
+$sidebar-icon-color: $font-color;
+$sidebar-title-color: $sidebar-font-color;
+$sidebar-circle-color: $color-primary-A200;
+
+//== Material Card
+
+$card-font-color: $font-color;
+$card-title-font-color: $color-primary-300;
+
+//== Material Toolbar
+
+$toolbar-title-font-color: $color-primary-A200;
+$toolbar-button-font-color: $color-accent-A100;
+$toolbar-button-background-color: $red;
+$toolbar-button-background-color-active: $red;
+
+//== Material Sidebar Content
+
+$sidebar-content-padding: 48px;
+
+//== Material Tabs
+
+$tabs-header-font-color: $color-primary-A200;
+$tabs-header-font-color-active: $color-accent-500;
+$tabs-ink-bar-color: $color-accent-500;
+
+
+//== Apex Chart X axis tooltip
+
+$chart-tooltip-background-color: $color-accent-500;
+$chart-tooltip-border-color: $color-accent-500;
+$chart-tooltip-font-color: $color-accent-A100;
+
+//== Scroll bar
+
+$scrollbar-track-color: $color-primary-A200;
+$scrollbar-track-piece-color: $color-accent-A100;
+$scrollbar-thumb-color: $color-primary-A200;
+$scrollbar-corner-color: $color-primary-A200;
+
+//== Header
+
+$header-background-color: rgba(0, 0, 0, 0);
+$header-height: 95px;
+$header-button-background-color: rgba(0, 0, 0, 0);
+$header-button-background-color-hover: $color-accent-500;
+$header-button-font-color: $color-accent-500;
+$header-title-font-color: $color-accent-500;
+
+//== Footer
+
+$footer-height: 80px;
+$footer-width: calc(100% - #{$sidebar-content-padding});
+$footer-link-color: $color-accent-500;
+$footer-icon-color: $color-accent-600;
+$footer-icon-background-color-hover: $color-accent-900;
+
+//== Settings menu element
+
+$settings-button-background-color: $color-accent-A100;
+$settings-button-background-color-hover: $color-accent-500;
+$settings-button-color: $color-primary-A200;
+$settings-button-color-hover: $color-accent-A100;
+$settings-menu-font-color: $dark-grey;
+$settings-menu-background-color-hover: $color-accent-200;

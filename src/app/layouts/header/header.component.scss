@@ -1,0 +1,108 @@
+@import 'src/app/styles/default/colors';
+@import 'src/app/styles/default/font';
+@import 'src/app/styles/default/variables';
+
+// 整體設定
+.header {
+  height: 100%;
+  padding: 0;
+  background-image: url("../../../assets/icons/header/header-bg.png") !important;
+  background-color: #fff;
+
+  .header__title {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; // 左側&右側區塊排版設定
+    padding: 0 20px;
+
+    // 左側&右側區塊
+    .header__title-text {
+      height: 100%;
+      display: flex;
+      flex-wrap: nowrap;
+
+      .top_text {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        flex-direction: row;
+        color: $font-color;
+        text-align: center;
+
+        // 左側區塊
+        .left-logo {
+          margin-right: 15px;
+          display: flex;
+          justify-content: center;
+          align-items: center ;
+
+          img {
+            width: 90%;
+          }
+        }
+
+        .left-title {
+          height: 100%;
+          margin-right: 16px;
+          font-size: 22px;
+          color: #000;
+          display: flex;
+          flex-direction: column;
+
+          .title {
+            width: 260px;
+            border-bottom: 1px solid #000;
+            font-weight: 500;
+          }
+          .now-page {
+            font-size: 15px;
+            font-weight: 400;
+          }
+        }
+      }
+
+      // 右側區塊
+      .top_text2 {
+        display: flex;
+        width: 100%;
+
+        // 使用者
+        .user {
+          margin-top: 14px;
+          padding-right: 12px;
+          color: #fff;
+          display: flex;
+          font-size: 17px;
+
+          mat-icon {
+            width: 30px;
+            height: 30px;
+            font-size: 36px;
+            margin-right: 10px;
+            color: #fff;
+          }
+        }
+
+        .img-logo {
+          height: 48px;
+          margin-top: 6px;
+          padding: 3px 5px;
+          border-left: 1px solid #fff;
+          cursor: pointer;
+
+          img {
+            width: 100%;
+          }
+        }
+
+        // 上傳中時避免登出
+        .is-uploading {
+          pointer-events: none;
+          cursor: default;
+        }
+      }
+    }
+  }
+}

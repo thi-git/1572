@@ -1,0 +1,5 @@
+<div [ngClass]="setPosition()">
+  <span class="title">差異百分比：</span>
+  <input type="text" [(ngModel)]="diff" (input)="getValue($event)">
+  <span class="title setting">%</span>
+</div>

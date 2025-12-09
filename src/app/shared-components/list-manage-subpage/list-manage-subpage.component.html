@@ -1,0 +1,11 @@
+<div class="list-manage-subpage">
+  <div class="subpage-section">
+    <span class="subpage" [ngClass]="selectSubpage === 'owner' ? 'is-page' : 'no-page'" (click)="changePage('owner')">業主名稱/專案編號</span>
+    <span class="subpage" [ngClass]="selectSubpage === 'road' ? 'is-page' : 'no-page'" (click)="changePage('road')">路口清單</span>
+  </div>
+  <!-- 邏輯之後從filter移過來 -->
+  <!-- <div class="btn-section">
+    <button class="btn_white" (click)="saveResult('cancel_update')">取消編輯</button>
+    <button  class="btn_yellow" (click)="saveResult('update')">儲存</button>
+  </div> -->
+</div>

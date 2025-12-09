@@ -1,0 +1,148 @@
+// 路口定義按鈕
+.definition-section {
+  position: absolute;
+  z-index: 9999;
+  top: 185px;
+  right: 670px;
+  // font-family: "Noto Sans CJK TC", sans-serif;
+
+  .btn-with-icon {
+    padding: 3.5px 10px 1px 7px;
+
+    img {
+      width: 24px;
+      height: 24px;
+      margin-right: 4px;
+      padding-bottom: 2px;
+      vertical-align: middle;
+    }
+  }
+}
+
+// 路段繪製按鈕
+.drawing-section {
+  position: absolute;
+  z-index: 9999;
+  top: 185px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  // font-family: "Noto Sans CJK TC", sans-serif;
+
+  .btn-with-icon {
+    padding: 3.5px 10px 1px 7px;
+
+    img {
+      width: 24px;
+      height: 24px;
+      margin-right: 4px;
+      padding-bottom: 2px;
+      vertical-align: middle;
+    }
+  }
+}
+
+// 地圖
+.mainMap {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+::ng-deep {
+  .leaflet-marker-icon {
+    background-color: transparent;
+    border: none;
+
+    .cluster-icon {
+      width: 45px;
+    }
+
+    .cluster-icon-text {
+      position: absolute;
+      top: 6px;
+      left: 15px;
+      font-weight: bolder;
+      color: black;
+    }
+  }
+}
+
+// 設定小幫手樣式
+::ng-deep snack-bar-container.snack-bar-setting-red {
+  background-color: #AC2222 !important;
+}
+
+::ng-deep snack-bar-container.snack-bar-setting-green {
+  background-color: #008000 !important;
+}
+
+::ng-deep snack-bar-container.snack-bar-setting-brown {
+  background-color: #C7B299 !important;
+
+  .mat-simple-snackbar {
+    font-weight: 500;
+    color: #000 !important;
+
+    button {
+      border-color: #000;
+    }
+  }
+
+  .mat-simple-snackbar-action button .mat-button-wrapper {
+    color: #000 !important;
+  }
+}
+
+.temp-finish, .draw-back {
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #005581;
+}
+
+.delete {
+  color: #fff;
+  background-color: #C75858;
+  border: 1px solid #c44747;
+}
+
+.img-section {
+  position: absolute;
+  z-index: 9999;
+  top: 250px;
+  right: 26px;
+  width: 300px;
+  height: 300px;
+  border-radius: 8px;
+  background-color: #fff;
+
+  .bg-setting {
+    display: flex;
+    width: 100%;
+    height: 258px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .pos1 {
+    margin-top: 22px; // 待調整
+  }
+
+  .pos2 {
+    margin-top: 42px; // 待調整
+  }
+
+  .title {
+    position: absolute; // 待調整
+    top: 0;
+    z-index: 99999;
+    width: 100%;
+    height: 42px;
+    color: #fff;
+    background-color: #005581;
+    border-radius: 8px 8px 0 0 ;
+    font-size: 17px;
+    text-align: center;
+    line-height: 42px;
+  }
+}

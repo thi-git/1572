@@ -1,0 +1,14 @@
+<div class="intersection-type">
+  <mat-expansion-panel  [expanded]="panelOpen" class="panel" #panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+       路口類型 | {{ select }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-radio-group class="radio-group" [(ngModel)]="select">
+      <mat-radio-button class="radio-button" *ngFor="let type of types" [value]="type" (change)="selectChange(type)" (click)="close()">
+        {{ type }}
+      </mat-radio-button>
+    </mat-radio-group>
+  </mat-expansion-panel>
+</div>

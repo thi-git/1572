@@ -1,0 +1,33 @@
+.excel-select {
+  border: 1px solid #656565;
+  border-radius: 5px;
+  padding: 3.6px 9px;
+  width: 495px;
+
+  > #file-uploader {
+    color: #005581;
+    font-size: 16px;
+    font-family: "Noto Sans CJK TC", sans-serif;
+    line-height: 16px;
+    width: 88%;
+  }
+  > .btn_black {
+    line-height: 27px;
+  }
+}
+
+.none {
+ opacity: 0;
+ cursor: default;
+}
+
+.help-section {
+  margin-top: 18px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #000;
+}
+
+.btn-setting {
+  margin: 0;
+}

@@ -1,0 +1,52 @@
+<mat-card class="data-analyze-section" *ngIf="showAnalyze && bigOrSmall">
+  <div class="panel-section">
+    <!-- 選單(折線圖/轉向量) -->
+    <mat-expansion-panel [(expanded)]="panelOpenDisplay" class="panel" #panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ displayValue }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div *ngFor="let option of displayOption">
+        <button mat-button class="button-type" (click)="selectDisplay(option.value)">{{ option.name }}</button>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- 選單(晨峰/離峰/昏峰) -->
+    <mat-expansion-panel *ngIf="selectDisplayValue === 2 && periodOption?.length > 0" [(expanded)]="panelOpenPeriod" class="panel2" #panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ periodValue }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div *ngFor="let option of periodOption">
+        <button mat-button class="button-type" (click)="selectPeriod(option.name)">{{ option.name }}</button>
+      </div>
+    </mat-expansion-panel>
+  </div>
+  <mat-card-content>
+    <!-- 折線圖 -->
+    <div *ngIf="selectDisplayValue === 1" class="main-section">
+      <!--左側圖表 -->
+      <div class="chart-section">
+        <div class="chart" echarts [options]="chartOption" (chartInit)="onChartInit($event)"></div>
+      </div>
+      <!-- 右側排名 -->
+      <div class="ranking-section">
+        <p class="ranking-title">累計流量時段排名</p>
+        <mat-divider class="divider-setting"></mat-divider>
+        <p [innerHTML]="rank_volume" class="ranking-body"></p>
+      </div>
+    </div>
+    <!-- 轉向量 -->
+    <div *ngIf="selectDisplayValue === 2" class="main-section2">
+      <app-map-small-card *ngFor="let tc of selectedTC" [whichRoadId]='tc' [positionData]='positionData'
+        [allData]='allData' [whichTime]='whichTime'></app-map-small-card>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<div class="icon" *ngIf="showAnalyze">
+  <img class="big" *ngIf="bigOrSmall" src="./assets/icons/leftleft.svg" alt="" (click)="changeShowAnalyze()">
+  <img class="small" *ngIf="!bigOrSmall" src="./assets/icons/leftleft.svg" alt="" (click)="changeShowAnalyze()">
+</div>

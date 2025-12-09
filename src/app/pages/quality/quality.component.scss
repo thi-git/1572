@@ -1,0 +1,30 @@
+// 整體設定
+.quality {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+// 基本設定
+::ng-deep .quality-basic {
+  position: absolute;
+  z-index: 99999999; // 待調整
+  top: 0;
+  right: 0;
+}
+
+// 方向設定
+::ng-deep .quality-setting {
+  position: absolute;
+  z-index: 99999999; // 待調整
+  width: 100%;
+  top: 32px;
+}
+
+// 結果產出
+::ng-deep .quality-result  {
+  position: absolute;
+  z-index: 9999; // 待調整
+  width: 100%;
+  top: 32px;
+}

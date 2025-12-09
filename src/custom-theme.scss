@@ -1,0 +1,843 @@
+@use '@angular/material' as mat;
+@import '@angular/material/theming';
+@import "src/app/styles/default/colors";
+@import "src/app/styles/default/variables";
+@import "src/app/styles/default/font";
+@include mat.core();
+
+
+$dark-primary: (50: $color-primary-100,
+  100: $color-primary-100,
+  200: $color-primary-200,
+  300: $color-primary-300,
+  400: $color-primary-400,
+  500: $color-primary-500,
+  600: $color-primary-600,
+  700: $color-primary-700,
+  800: $color-primary-800,
+  900: $color-primary-900,
+  A100: $color-primary-A100,
+  A200: $color-primary-A200,
+  A400: $color-primary-A400,
+  A700: $color-primary-A700,
+  contrast: (50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $light-primary-text,
+    A700: $light-primary-text,
+  ));
+
+$dark-primary: mat.define-palette($dark-primary, 900);
+$dark-accent: mat.define-palette(mat.$cyan-palette);
+$dark-warn: mat.define-palette(mat.$red-palette);
+
+$dark-theme: mat.define-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+// class包裹其他樣式
+.dark-theme {
+  @include mat.all-component-themes($dark-theme);
+}
+
+$light-primary: mat.define-palette($dark-primary, 900);
+$light-accent: mat.define-palette(mat.$lime-palette);
+$light-warn: mat.define-palette(mat.$pink-palette);
+
+$light-theme: mat.define-light-theme($light-primary, $light-accent, $light-warn);
+
+// class包裹其他樣式
+.light-theme {
+  @include mat.all-component-themes($light-theme);
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Noto Sans TC', sans-serif, Helvetica;
+}
+
+button.mat-menu-item {
+  font-size: 16px;
+}
+
+button.mat-menu-item:hover:not([disabled]),
+.mat-menu-item.cdk-program-focused:not([disabled]),
+.mat-menu-item.cdk-keyboard-focused:not([disabled]),
+.mat-menu-item-highlighted:not([disabled]) {
+  font-size: 16px;
+}
+
+.mat-option {
+  font-size: 20px;
+  height: 36px;
+  padding: 6px 16px;
+  color: white;
+
+  &.mat-focus-indicator.mat-selected.mat-active {
+    background-color: $blue-green;
+    color: white;
+  }
+
+  &:hover:not(.mat-option-disabled) {
+    background-color: $blue-green;
+  }
+}
+
+.mat-form-field-wrapper {
+  padding: 0.5rem 0;
+}
+
+.mat-form-field-infix {
+  font: normal normal normal 22px/33px Noto Sans CJK TC;
+  color: #000000 !important;
+}
+
+.mat-form-field-underline {
+  display: none;
+}
+
+.mat-h1,
+.mat-headline,
+.mat-typography h1 {
+  font-weight: 400;
+  font-size: 48px;
+}
+
+.mat-h2,
+.mat-headline,
+.mat-typography h2 {
+  font-weight: 400;
+  font-size: 36px;
+}
+
+.mat-h3,
+.mat-headline,
+.mat-typography h3 {
+  font-weight: 400;
+  font-size: 26px;
+}
+
+.mat-h4,
+.mat-headline,
+.mat-typography h4 {
+  font-weight: 400;
+  font-size: 24px;
+}
+
+.mat-h5,
+.mat-headline,
+.mat-typography h5 {
+  font-weight: 400;
+  font-size: 21px;
+}
+
+.mat-h6,
+.mat-headline,
+.mat-typography h6 {
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.mat-body p,
+.mat-body-1 p,
+.mat-typography p {
+  margin-bottom: 16px;
+  line-height: normal;
+}
+
+button.mat-fab .mat-button-wrapper {
+  padding: 0;
+}
+
+// mat-card 樣式自訂
+mat-card.mat-card:not([class*=mat-elevation-z]) {
+  margin: 0;
+  padding: 17px;
+  border-radius: 10px;
+  background-color: transparent;
+  background-image: linear-gradient($background-color, rgba($background-color, 0.8) 30%, rgba($background-color, 0.6) 70%, rgba($background-color, 0.0));
+}
+
+// 暗色模式
+.dark-theme mat-card.mat-card:not([class*=mat-elevation-z]) {
+  box-shadow: none;
+  background: transparent linear-gradient(180deg, #3F434400 0%, #0D0D0E 100%) 0% 0% no-repeat padding-box;
+}
+
+// 明色模式
+.light-theme mat-card.mat-card:not([class*=mat-elevation-z]) {
+  box-shadow: none;
+  background-image: linear-gradient($light-background-color, rgba($light-background-color, 0.8) 30%, rgba($light-background-color, 0.6) 70%, rgba($light-background-color, 0.0));
+}
+
+mat-card.mat-card:not([class*=mat-elevation-z]) {
+  box-shadow: none;
+}
+
+mat-card .mat-card-header-text {
+  margin: 0 12px;
+  overflow: hidden;
+}
+
+// 卡片icon
+mat-card .mat-card-avatar {
+  border-radius: 0;
+}
+
+// 卡片上標題
+.mat-card-header .mat-card-title {
+  font-size: $fs-card-title;
+  font-weight: 400;
+  color: $card-font-color;
+  margin-bottom: 8px;
+  word-break: break-all;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
+
+// 暗色模式
+.dark-theme .mat-card-header .mat-card-title {
+  color: $card-font-color;
+}
+
+// 明色模式
+.light-theme .mat-card-header .mat-card-title {
+  color: $light-font-color;
+}
+
+// 卡片副標題
+.mat-card-header .mat-card-subtitle {
+  font-size: 9.5px;
+  color: rgba($card-font-color, .5);
+  margin-bottom: 8px;
+  white-space: nowrap;
+}
+
+// 暗色模式
+.dark-theme .mat-card-header .mat-card-subtitle {
+  color: rgba($card-font-color, .5);
+}
+
+// 明色模式
+.light-theme .mat-card-header .mat-card-subtitle {
+  color: rgba($light-font-color, .5);
+}
+
+mat-toolbar.page-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 50px 24px 16px 24px;
+  background: none;
+  height: auto;
+}
+
+.mat-toolbar,
+.mat-toolbar h1,
+.mat-toolbar h2,
+.mat-toolbar h3,
+.mat-toolbar h4,
+.mat-toolbar h5,
+.mat-toolbar h6 {
+  font-family: 'Roboto', 'Noto Sans TC', sans-serif, Helvetica;
+}
+
+.mat-toolbar h1 {
+  font-weight: 400;
+  font-size: 38.4px;
+  color: $toolbar-title-font-color;
+  line-height: 1;
+  letter-spacing: -0.2186px;
+}
+
+.mat-toolbar button {
+  height: 41.6px;
+  width: auto;
+  line-height: 1.75;
+  font-size: 0.9375rem;
+  font-weight: 400;
+}
+
+mat-tab-header .mat-tab-label,
+.mat-tab-link {
+  text-transform: uppercase;
+  color: $tabs-header-font-color;
+  font-weight: $fw-normal;
+  width: 50%;
+  min-width: 0;
+  padding: 0;
+  opacity: 1;
+}
+
+mat-tab-header .mat-tab-label-active {
+  color: $tabs-header-font-color-active;
+}
+
+mat-tab-group.mat-tab-group.mat-primary .mat-ink-bar {
+  background-color: $tabs-ink-bar-color;
+}
+
+mat-tab-body div.mat-tab-body-content {
+  overflow: hidden;
+}
+
+.toast-top-center {
+  top: 76px;
+}
+
+.toast-top-left {
+  top: 76px;
+}
+
+.toast-top-right {
+  top: 76px;
+}
+
+.toast-bottom-center {
+  bottom: 12px;
+}
+
+.toast-container .ngx-toastr {
+  padding: 16px;
+  border-radius: 45px;
+}
+
+.toast-container .ngx-toastr:hover {
+  box-shadow: 0 0 12px $gray;
+}
+
+.mat-icon {
+  padding-right: 3px;
+  padding-bottom: 5px;
+}
+
+.material-icons {
+  font-size: 20px;
+}
+
+button.mat-mini-fab .mat-button-wrapper {
+  padding: 0;
+}
+
+button.mat-mini-fab {
+  height: 36px;
+  width: 36px;
+}
+
+div.mat-menu-panel {
+  margin-top: 20px;
+}
+
+.fa {
+  font-size: 1.5em;
+}
+
+.apexcharts-xaxistooltip.apexcharts-xaxistooltip-bottom.apexcharts-theme-light {
+  background-color: $chart-tooltip-background-color;
+  color: $chart-tooltip-font-color;
+  border: none;
+}
+
+div.apexcharts-xaxistooltip-bottom:after {
+  border-bottom-color: $chart-tooltip-border-color;
+}
+
+.mat-drawer-backdrop.mat-drawer-shown {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+// dialog 鎖死背景色與字體顏色
+.cdk-overlay-container .mat-dialog-container {
+  overflow: hidden;
+  background-color: #FFFFFF;
+  color: #000000;
+  border-radius: 10px 10px 4px 4px;
+  padding: 0;
+}
+
+div.mat-dialog-title {
+  padding: 16px 16px;
+  color: #FFFFFF;
+  border-radius: 10px 10px 0px 0px;
+  display: flex;
+  align-items: center;
+
+  .dialog-title {
+    font-size: 24px;
+    margin-right: 3%;
+  }
+
+  .dialog-close {
+    margin-left: auto;
+  }
+}
+
+.dark-theme .mat-dialog-title {
+  background-color: #6D6D6D;
+}
+
+.light-theme .mat-dialog-title {
+  background-color: #3FC3C9;
+}
+
+mat-dialog-container .mat-dialog-content {
+  height: 100%;
+  max-height: 69vh;
+}
+
+// filter中確認按紐
+.dark-theme .mat-raised-button.button-filter-sure {
+  width: 40%;
+  max-width: 80px;
+  background-color: #002851;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.light-theme .mat-raised-button.button-filter-sure {
+  width: 40%;
+  max-width: 80px;
+  background-color: #3FC3C9;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+// filter中取消按紐
+.dark-theme .mat-raised-button.button-filter-cancel {
+  width: 40%;
+  max-width: 80px;
+  background-color: #FFFFFF;
+  color: #002851;
+  font-size: 16px;
+  font-weight: 600;
+  border: #002851 1px solid;
+}
+
+.light-theme .mat-raised-button.button-filter-cancel {
+  width: 40%;
+  max-width: 80px;
+  background-color: #FFFFFF;
+  color: #3FC3C9;
+  font-size: 16px;
+  font-weight: 600;
+  border: #3FC3C9 1px solid;
+}
+
+// dialog input背景色
+.dark-theme .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+// map-explan
+// 暗色模式
+.dark-theme div.map-explan {
+  color: $font-color;
+  background-image: linear-gradient($background-color, rgba($background-color, 0.8) 30%, rgba($background-color, 0.0));
+}
+
+// 明色模式
+.light-theme div.map-explan {
+  color: $light-font-color;
+  background-image: linear-gradient($light-background-color, rgba($light-background-color, 0.8) 30%, rgba($light-background-color, 0.0));
+}
+
+// table
+.dark-theme .mat-table {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.light-theme .mat-table {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.dark-theme mat-row,
+.dark-theme mat-header-row,
+.dark-theme mat-footer-row,
+.dark-theme th.mat-header-cell,
+.dark-theme td.mat-cell,
+.dark-theme td.mat-footer-cell {
+  border-bottom-color: transparent;
+}
+
+.dark-theme .mat-table mat-header-cell,
+mat-cell {
+  color: #FFFFFF;
+}
+
+.light-theme mat-row,
+.light-theme mat-header-row,
+.light-theme mat-footer-row,
+.light-theme th.mat-header-cell,
+.light-theme td.mat-cell,
+.light-theme td.mat-footer-cell {
+  border-bottom-color: transparent;
+}
+
+.light-theme .mat-table mat-header-cell,
+mat-cell {
+  color: #000000;
+}
+
+// snackbar
+.mat-simple-snackbar {
+  font-size: $fs-regular;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-weight: 300;
+  color: #FFFFFF;
+  white-space: break-spaces;
+}
+
+.mat-simple-snackbar-action button {
+  border: 1px solid $font-color;
+
+  .mat-button-wrapper {
+    color: #FFFFFF;
+  }
+}
+
+.dark-theme .mat-snack-bar-container {
+  background-color: #AC2222;
+  border-radius: 10px;
+  color: $font-color;
+}
+
+// tooltip
+.mat-tooltip {
+  font-size: 14px;
+}
+
+// input
+.dark-theme .mat-form-field-label {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.dark-theme .mat-autocomplete-panel {
+  background: white;
+}
+
+.dark-theme .mat-option {
+  color: white;
+  font-size: 20px;
+}
+
+.mat-icon-button {
+  color: white;
+  background-color: transparent;
+}
+
+// 按鈕樣式
+// 藍底
+.btn_yellow {
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 20px;
+  color: #fff;
+  background-color: #005581;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  padding: 7px 14px 6px ;
+  margin:  0 5px;
+  box-sizing: border-box;
+  height: 38px;
+
+  @media (max-width: 1500px) {
+    padding: 7px 10px 6px ;
+    margin: 0;
+  }
+}
+
+// 灰底
+.btn_black {
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 24px;
+  color: white;
+  background-color: #656565;
+  border: none;
+  border-radius: 5px;
+  padding: 0 10px;
+  margin:  0 5px;
+  box-sizing: border-box;
+  &:hover {
+    background-color: #424242;
+  }
+  &:disabled {
+    background-color: gray;
+  }
+}
+
+// 白底
+.btn_white {
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 20px;
+  color: black;
+  background-color: white;
+  border: 1px solid #005581;
+  border-radius: 5px;
+  padding: 7px 14px 6px ;
+  margin:  0 5px;
+  box-sizing: border-box;
+  height: 38px;
+}
+
+// filter樣式
+.filter_item {
+  z-index: 101;
+  margin-right: 16px !important; // filter間距設定
+}
+
+// 下拉選單樣式
+.mat-expansion-panel {
+  border: 1px solid #005581;
+}
+
+.light-theme .mat-expansion-indicator::after {
+  color: #005581;
+  margin-top: -2px;
+}
+
+// radio樣式
+.light-theme .mat-radio-button.mat-accent .mat-radio-inner-circle {
+  width: 18px;
+  height: 18px;
+  background-color: #000;
+}
+
+.light-theme .mat-radio-outer-circle {
+  width: 18px;
+  height: 18px;
+  border-color: #000 !important;
+}
+
+// 選取器樣式調整
+.mat-calendar-body-selected {
+  color: #fff !important ;
+  background-color: #005581 !important; // 選擇時間range的顏色
+}
+
+.mat-date-range-input-separator {
+  margin-bottom: 6px !important;
+}
+
+.mat-form-field-type-mat-date-range-input .mat-form-field-infix {
+  border-top: 0;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding-top: 0;
+}
+
+.mat-date-range-input-start-wrapper {
+  width: 26%;
+}
+
+// 地圖
+.bg-map {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+}
+
+// leaflet
+.leaflet-popup-content-wrapper {
+  font-size: 16px;
+}
+
+// scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-button {
+  display: none
+}
+
+::-webkit-scrollbar-track {
+  background-color: $scrollbar-track-color;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: $scrollbar-track-piece-color;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 50px;
+  background-color: $gray;
+  border-radius: 36px;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: $scrollbar-corner-color;
+}
+
+::-webkit-resizer {
+  background-color: $dark-grey;
+}
+
+.ant-table-header {
+  overflow: hidden !important;
+  padding-right: 8px;
+}
+
+// 提示訊息樣式
+snack-bar-container.snack-bar-setting-red {
+  background-color: #AC2222 !important;
+}
+
+snack-bar-container.snack-bar-setting-green {
+  background-color: #008000 !important;
+}
+
+snack-bar-container.snack-bar-setting-brown {
+  background-color: #C7B299 !important;
+
+  .mat-simple-snackbar {
+    font-weight: 500;
+    color: #000 !important;
+
+    button {
+      border-color: #000;
+    }
+  }
+
+  .mat-simple-snackbar-action button .mat-button-wrapper {
+    color: #000 !important;
+  }
+}
+
+// 共用table
+.table {
+  width: 98%;
+  height: calc(100% - 100px);
+  margin: 0 auto;
+  margin-top: 100px;
+
+  .flex {
+    display: flex;
+    justify-content: center;
+  }
+
+  >button {
+    &:nth-child(1) {
+      float: right;
+    }
+
+    margin-bottom: 20px;
+  }
+}
+
+// 共用btn
+.btn {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+  border-radius: 5px;
+  padding: 6px 11px;
+
+  &.btn-blue {
+    color: #005581;
+    border: 1px solid #005581;
+    padding: 10px 10px;
+    font-size: 1.2rem;
+
+    &.clicked {
+      color: #fff;
+      background-color: #005581;
+      border: 1px solid #005581;
+
+    }
+  }
+
+  &.btn-blue2 {
+    color: #005581;
+    border: 1px solid #005581;
+    padding: 10px 10px;
+    font-size: 1.2rem;
+
+    &.clicked {
+      color: #fff;
+      background-color: #005581;
+      border: 1px solid #005581;
+
+    }
+  }
+
+  &.btn-green {
+    color: #005581;
+    border: 1px solid #005581;
+
+    &.clicked {
+      color: #fff;
+      background-color: #005581;
+      border: 1px solid #005581;
+    }
+  }
+
+  &.btn-orange {
+    color: #fff;
+    border: 1px solid rgb(252, 168, 76);
+    background-color: rgb(252, 168, 76);
+    padding: 10px 10px;
+    font-size: 1.2rem;
+  }
+
+  &.btn-img {
+    background-color: transparent;
+    border: none;
+    padding: 6px 2px;
+  }
+
+  &.btn-gray {
+    color: gray;
+    border: 1px solid gray;
+
+    &.clicked {
+      color: #fff;
+      background-color: gray;
+      border: 1px solid gray;
+    }
+  }
+
+  &.btn-submit {
+    border: 1px solid #DBDBDB;
+    color: #000;
+    background: transparent;
+    margin-left: 10px;
+
+    &:hover {
+      background: #DBDBDB;
+    }
+  }
+
+  &.btn-cancel {
+    background-color: rgba($color: #fff, $alpha: 1.0);
+    color: #000;
+    border: 1px solid gray;
+    margin: 0 10px
+  }
+}
+
+

@@ -1,0 +1,12 @@
+<div class="permission">
+  <div class="btn-container">
+    <ng-container>
+      <span class="step" [ngClass]="tableName === 'account' ? 'is-page' : 'no-page'" (click)="changeTable('account')">帳號列表</span>
+      <span class="step" [ngClass]="tableName === 'group' ? 'is-page' : 'no-page'" (click)="changeTable('group')">群組管理</span>
+      <span class="step" [ngClass]="tableName === 'role' ? 'is-page' : 'no-page'" (click)="changeTable('role')">角色管理</span>
+    </ng-container>
+  </div>
+  <app-account *ngIf="tableName === 'account'"></app-account>
+  <app-group *ngIf="tableName === 'group'"></app-group>
+  <app-role *ngIf="tableName === 'role'"></app-role>
+</div>

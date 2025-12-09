@@ -1,0 +1,55 @@
+<div class="role-setting">
+  <form nz-form [formGroup]="validateForm" nzLayout="horizontal">
+    <div nz-row [nzGutter]="[0,8]">
+      <div nz-col [nzXs]="24">
+        <nz-form-item>
+          <nz-form-label nzFor="name">名稱</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="name" id="name" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXs]="9">
+        <nz-form-item>
+          <nz-form-label nzFor="group">群組</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="group" id="group" nzPlaceHolder="">
+              <nz-option *ngFor="let item of groups" [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXs]="1"></div>
+      <div nz-col [nzXs]="14">
+        <nz-form-item>
+          <nz-form-label nzFor="description">備註</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="description" id="description" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+  <div class="checkbox">
+    <h3>權限設定</h3>
+    <div class="container">
+      <app-permissions [allPermission]="permission" (selected)="getSelected($event)"></app-permissions>
+    </div>
+  </div>
+  <div class="btn-container">
+    <button class="btn btn-submit" (click)="cancel()">
+      <span>取消</span>
+    </button>
+    <button class="btn btn-submit" (click)="submitForm()">
+      <span>儲存</span>
+    </button>
+  </div>
+  <!-- <div *nzModalFooter>
+    <button class="btn btn-cancel" (click)="cancel()">
+      <span>取消</span>
+    </button>
+    <button class="btn btn-blue clicked" (click)="submitForm()">
+      <span>儲存</span>
+    </button>
+  </div> -->
+</div>

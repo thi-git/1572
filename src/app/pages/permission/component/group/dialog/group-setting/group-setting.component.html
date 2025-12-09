@@ -1,0 +1,32 @@
+<div class="group-setting">
+  <form nz-form [formGroup]="validateForm">
+    <div nz-row>
+      <nz-form-label [nzXs]="4" nzFor="name">群組名稱</nz-form-label>
+      <nz-form-control [nzXs]="20">
+        <input nz-input formControlName="name" id="name" />
+      </nz-form-control>
+    </div>
+    <div nz-row>
+      <nz-form-label [nzXs]="4" nzFor="description">備註</nz-form-label>
+      <nz-form-control [nzXs]="20">
+        <input nz-input formControlName="description" id="description" />
+      </nz-form-control>
+    </div>
+  </form>
+  <div class="btn-container">
+    <button class="btn btn-submit" (click)="cancel()">
+      <span>取消</span>
+    </button>
+    <button class="btn btn-submit" (click)="submitForm()">
+      <span>儲存</span>
+    </button>
+  </div>
+  <!-- <div *nzModalFooter>
+    <button class="btn btn-cancel" (click)="cancel()">
+      <span>取消</span>
+    </button>
+    <button class="btn btn-blue clicked" (click)="submitForm()">
+      <span>儲存</span>
+    </button>
+  </div> -->
+</div>

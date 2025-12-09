@@ -1,0 +1,10 @@
+<div class="permissions">
+  <div *ngFor="let page of init">
+    <label nz-checkbox [(ngModel)]="page.checked" (ngModelChange)="updateAllChecked(page.value)"
+      [nzIndeterminate]="page.indeterminate" [disabled]="disable">
+      {{ page.label }}
+    </label>
+    <br />
+    <nz-checkbox-group [(ngModel)]="page.sub" (ngModelChange)="updateSingleChecked(page.value)"></nz-checkbox-group>
+  </div>
+</div>

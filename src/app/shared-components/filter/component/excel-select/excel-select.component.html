@@ -1,0 +1,9 @@
+<div class="excel-select">
+  <input type="file" name="" id="file-uploader" multiple="true" data-target="file-uploader" accept="{{ acceptFormat }}"
+    (change)="getFile($event.target.files)">
+  <button [ngClass]="acceptFormat === '' ? 'none' : ''" class="btn_black btn-setting" (click)="preview()">預覽</button>
+</div>
+
+<div class="help-section" *ngIf="this.acceptFormat === ''">
+  <p>上傳其他資料，檔名需設定為 [業主名稱_專案編號_備註]</p>
+</div>

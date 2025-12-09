@@ -1,0 +1,46 @@
+<div class="tc-select" [ngClass]="setDisplay()">
+  <div class="test">
+    <mat-expansion-panel [(expanded)]="panelOpen" class="panel" collapsedHeight="20px" expandedHeight="20px">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="title">
+         路口選擇<span *ngIf="page === 'analyze' || page === 'quality'" class="need-select">*</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <!-- 無tab(無地圖框選和道路群組) -->
+      <ng-container *ngIf="!haveTab && isData1">
+        <app-checkbox-tree
+        [custom]="'main_road'"
+        [treeList]="treeList"
+        (getName)="getName($event)">
+        </app-checkbox-tree>
+      </ng-container>
+      <!-- 有tab(有地圖框選和道路群組) -->
+      <mat-tab-group *ngIf="haveTab" [(selectedIndex)]="tabIndex" (selectedTabChange)="tabChange($event)">
+        <mat-tab label="路口篩選">
+          <mat-tab-group class="sub-tab" [(selectedIndex)]="subTabIndex" (selectedTabChange)="subTabChange($event)">
+            <mat-tab label="區域篩選">
+              <ng-container *ngIf="isData1">
+                <app-checkbox-tree
+                [custom]="'main_road'"
+                [treeList]="treeList"
+                (getName)="getName($event)">
+                </app-checkbox-tree>
+              </ng-container>
+            </mat-tab>
+            <mat-tab label="群組篩選">
+              <ng-container *ngIf="isData2">
+                <app-checkbox-tree
+                [custom]="'main_group'"
+                [treeList]="groupList"
+                (getName)="getName($event)">
+                </app-checkbox-tree>
+              </ng-container>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-tab>
+        <mat-tab label="地圖框選"></mat-tab>
+      </mat-tab-group>
+    </mat-expansion-panel>
+  </div>
+</div>
+

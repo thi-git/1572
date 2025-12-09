@@ -1,0 +1,125 @@
+@import "../../styles/nz-style-custom.scss";
+
+.db-search-form {
+  height: calc(100vh - 192px);
+  // overflow: auto;
+
+  .db-search-form-container {
+    width: 96%;
+    margin: 0 auto; // 置中
+    padding-top: 30px;
+
+    .btn-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: "Noto Sans CJK TC", sans-serif;
+
+      .left-result {
+        font-size: 20px;
+        font-weight: 500;
+      }
+
+      .right-btn {
+        display: flex;
+        align-items: center;
+
+        .item {
+          margin: 6px;
+          img {
+            margin-right: 4px;
+            margin-bottom: 2px;
+          }
+        }
+
+        .item:last-child {
+          margin-right: 0;
+        }
+
+        .count {
+          color: #005581;
+          font-size: 16px;
+          font-weight: 500;
+        }
+
+        .download-btn {
+          padding: 7px 10px 3px;
+          border-radius: 4px;
+          font-size: 16px;
+          font-weight: normal;
+          cursor: pointer;
+        }
+
+        .list {
+          color: #000;
+          background-color: #fff;
+          border: 1px solid #005581;
+        }
+
+        .file {
+          color: #fff;
+          background-color: #005581;
+          border: 1px solid #005581;
+        }
+
+        .delete {
+          color: #fff;
+          background-color: #C75858;
+          border: 1px solid #c44747;
+        }
+      }
+    }
+
+    .table {
+      width: 100%;
+      padding: 0;
+      margin-top: 8px;
+
+      .img-section {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .check-all {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        p {
+          // margin-bottom: 8px;
+          // margin-right: 7px;
+        }
+      }
+
+      nz-select {
+        width: 80%;
+      }
+    }
+  }
+}
+
+// 修改checkbox樣式
+::ng-deep .db-search-form .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: #005581 !important;
+}
+
+::ng-deep .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  border: none;
+  background-color: rgba(#A9DEF1, 0);
+}
+
+::ng-deep .ant-select-arrow .anticon > svg {
+  color: #005581;
+}
+
+.img-section {
+  cursor: pointer;
+}
+
+.no-event {
+  pointer-events: none;
+}
+
+
+

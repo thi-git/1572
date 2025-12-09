@@ -1,0 +1,47 @@
+.time-line-template {
+  .time-line {
+    height: 40px;
+  }
+
+  .big-border {
+    position: absolute;
+    z-index: 1000;
+    top: 185px;
+    right: 15px;
+    height: 42.5px;
+    padding: 5px 20px 0px 20px;
+    background-color: #fff;
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+  }
+
+  .small-border {
+    height: 40px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    width: 800px;
+  }
+
+  .small-border::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  .left-button {
+    margin-right: 5px;
+  }
+
+  .right-button {
+    margin-left: 5px;
+  }
+
+  .mat-icon {
+    height: auto;
+    width: 36px;
+  }
+
+  .material-icons {
+    font-size: 36px;
+    color: #005581;
+  }
+}

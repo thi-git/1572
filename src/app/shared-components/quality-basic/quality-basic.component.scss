@@ -1,0 +1,177 @@
+.quality-basic {
+  width: 460px;
+  height: calc(100vh - 96px);
+
+  padding: 16px;
+  border-radius: 8px 0 0 8px;
+  background-color: #fff;
+  color: #000;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  h1 {
+    color: #000;
+    font-family: "Noto Sans CJK TC";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .radio-section {
+    width: 100%;
+    height: 120px;
+    padding: 6px;
+
+    .panel {
+      position: relative;
+      z-index: 99999;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      font-size: 15.5px;
+      font-weight: 700;
+
+      .radio-button {
+        margin-top: 5px;
+      }
+    }
+
+    .radio-group2 {
+      display: flex;
+      flex-direction: column;
+      font-size: 15px;
+      font-family: "Noto Sans CJK TC";
+      font-weight: 700;
+      max-height: 170px;
+      overflow: auto;
+
+      .radio-button {
+        margin-top: 5px;
+      }
+    }
+
+    mat-expansion-panel-header {
+      height: 36px !important; // 展開時高度不隨著改變
+
+      mat-panel-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: -2px; // 待調整
+      }
+    }
+  }
+
+  .radio-section2 {
+    width: 100%;
+    // height: 360px;
+    padding: 6px;
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      font-size: 15.5px;
+      font-weight: 700;
+
+      .radio-button {
+        margin-top: 20px;
+      }
+    }
+
+    .table {
+      width: 100%;
+      padding: 0;
+      margin-top: 8px;
+
+      .img-section {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        cursor: grab;
+      }
+
+      .check-all {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      nz-select {
+        width: 80%;
+      }
+    }
+  }
+
+  .check {
+    margin-top: 20px;
+
+    .setting {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .em {
+      color: #C75858;
+    }
+  }
+
+  .btn {
+    margin-top: 20px;
+    cursor: pointer;
+    padding: 0;
+  }
+}
+
+::ng-deep {
+  // 表格header
+  .ant-table-thead>tr>th {
+    text-align: center;
+    color: #000;
+    background-color: #6BBDDB;
+    border: 0.5px solid #fff;
+    border-right: none;
+    padding: 8px 16px;
+    font-size: 15.5px;
+    font-weight: normal;
+    font-family: "Noto Sans CJK TC", sans-serif;
+
+    @media (max-width: 1500px) {
+      font-size: 14px;
+    }
+  }
+
+  // 表格body
+  .quality-basic .ant-table-tbody>tr {
+    &:nth-child(even) {
+      background-color: #E7E7E7;
+    }
+
+    &:nth-child(odd) {
+      background-color: #F2F2F3;
+    }
+  }
+
+  .ant-table-tbody>tr>td {
+    font-size: 15px;
+    color: #000;
+    text-align: center;
+    border: 0.5px solid #fff;
+    border-top: none;
+    border-right: none;
+    font-family: "Noto Sans CJK TC", sans-serif;
+    padding: 6px 15px;
+    height: 42px;
+  }
+}
+
+// radio樣式
+::ng-deep .light-theme .quality-basic .mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: #005581;
+}
+
+::ng-deep  .light-theme .quality-basic .mat-radio-outer-circle {
+  border-color: #000 !important;
+}
+

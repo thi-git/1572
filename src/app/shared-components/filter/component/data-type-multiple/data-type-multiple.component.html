@@ -1,0 +1,13 @@
+<div class="data-type-multiple">
+  <div class="test">
+    <mat-expansion-panel [(expanded)]="panelOpen" class="panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+         資料類型
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-checkbox-tree [treeList]="treeList" (getName)="getName($event)">
+      </app-checkbox-tree>
+    </mat-expansion-panel>
+  </div>
+</div>

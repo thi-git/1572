@@ -1,0 +1,73 @@
+<div class="quality-basic" *ngIf="selectEditStep === 'basic' && status ==='origin'">
+  <!-- 連鎖方向選擇 -->
+  <div class="radio-section direction">
+    <h1>連鎖方向選擇</h1>
+    <mat-radio-group class="radio-group" [(ngModel)]="selectDirection">
+      <mat-radio-button class="radio-button" [value]="'東西向'" (change)="selectChange('direction', '東西向')">東西向</mat-radio-button>
+      <mat-radio-button class="radio-button" [value]="'南北向'" (change)="selectChange('direction', '南北向')">南北向</mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <!-- 檢核方式 -->
+  <div class="radio-section check">
+    <h1>檢核方式</h1>
+    <mat-radio-group class="radio-group" [(ngModel)]="selectCheck">
+      <mat-radio-button class="radio-button" [value]="'車流量'" (change)="selectChange('check', '車流量')">車流量</mat-radio-button>
+      <mat-radio-button class="radio-button" [value]="'PCU'" (change)="selectChange('check', 'pcu')">PCU</mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <!-- 基準路口選擇 -->
+  <div class="radio-section check">
+    <h1 class="setting">基準路口選擇</h1>
+    <span>基準路口必須為<span class="em">最北或最西</span>路口</span>
+    <mat-expansion-panel [expanded]="panelOpen" class="panel" #panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ selectRoad }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-radio-group class="radio-group2" [(ngModel)]="selectRoad">
+        <mat-radio-button class="radio-button" *ngFor="let road of roadArr" [value]="road" (change)="selectChangeRoad(road)" (click)="close()">
+          {{ road }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </mat-expansion-panel>
+  </div>
+  <!-- 編輯路口順序 -->
+  <div class="radio-section2 check">
+    <h1>編輯路口順序</h1>
+    <div class="table">
+      <nz-table [nzData]="listOfData" [nzLoading]="loading" nzTableLayout="fixed" [nzSize]="tableSize"
+      [nzShowPagination]="showPagination" [nzPageSize]="pageSize" [nzSimple]="true"
+      [nzScroll]="{ y: scrollY, x: scrollX }">
+      <thead>
+        <tr>
+          <ng-container *ngFor="let column of listOfColumn">
+            <th [nzSortFn]="column.compare" [nzSortPriority]="column.priority" [nzWidth]="column.width"
+            [nzFilterMultiple]="column.filterMultiple"
+            [nzFilters]="column.listOfFilter"
+            [nzFilterFn]="column.filterFn">
+            {{ column.title }}
+            </th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+        <tr *ngFor="let data of listOfData" cdkDrag>
+          <ng-container *ngFor="let column of listOfColumn">
+            <td nzEllipsis *ngIf="column.value !== 'order'">{{ data[column.value] }}</td>
+            <td nzEllipsis *ngIf="column.value === 'order'">
+              <div class="img-section">
+                <img src="./assets/icons/drag.svg" alt="">
+              </div>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+      </nz-table>
+    </div>
+  </div>
+  <!-- 按鈕 -->
+  <div class="btn">
+    <button class="btn_yellow" (click)="changePage()">下一步</button>
+  </div>
+</div>

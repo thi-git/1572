@@ -1,0 +1,36 @@
+<div class="data-list" *ngIf="this.isSelecting">
+  <!-- 下載格式選擇 -->
+  <div class="select-format">
+    <span class="format-option" [ngClass]="selectFormatMode === 0 ? 'is-select' : 'none-select'" (click)="selectFormat(0)">下載檔</span>
+    <span *ngIf="user != 'eland_gov' && user != 'thb001'" class="format-option" [ngClass]="selectFormatMode === 1 ? 'is-select' : 'none-select'" (click)="selectFormat(1)">上傳檔</span>
+  </div>
+  <!-- 按鈕 -->
+  <div class="btn_section">
+    <div class="all_btn">
+      <div class="btn_sm_two">
+        <button class="btn_black btn_sm btn_black_map" (click)="toggleAll(1)">全選</button>
+        <button class="btn_black btn_sm btn_grey_map" (click)="toggleAll(0)">清空</button>
+      </div>
+      <img src="./assets/icons/download-data.svg" class="download" (click)="downloadData()" alt="">
+    </div>
+  </div>
+
+  <!-- 資料列表 -->
+  <div class="data_section">
+    <div class="all_data">
+      <ng-container *ngFor="let option of this.uploadDataRes">
+        <hr size=1 color="#393939">
+        <div class="card">
+          <mat-card-title class="title">{{ option.tc_id }} {{ option.road }}</mat-card-title>
+          <mat-card-content>
+          <h4 class="subtitle" *ngIf="option['dataType'].length === 0">暫無資料</h4>
+          <h4 class="subtitle" *ngIf="option['dataType'].includes('volume')">流量(人工調查)</h4>
+            <mat-checkbox class="example-margin" [(ngModel)]="volume_data.is_enable" (change)="toggle($event, volume_data)" *ngFor="let volume_data of option.volume">{{ volume_data['date'] }}({{ volume_data['week_type'] }})</mat-checkbox>
+          <h4 class="subtitle" *ngIf="option['dataType'].includes('delay')">延滯(人工調查)</h4>
+            <mat-checkbox class="example-margin" [(ngModel)]="delay_data.is_enable" (change)="toggle($event, delay_data)" *ngFor="let delay_data of option.delay">{{ delay_data['date_group'] }}</mat-checkbox>
+        </mat-card-content>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

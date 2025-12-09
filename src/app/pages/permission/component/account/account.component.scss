@@ -1,0 +1,12 @@
+@import "src/app/styles/default/font";
+@import "src/app/styles/nz-style-custom";
+
+.reset {
+  font-family: $ff-card;
+  border: 1px solid rgba($color: #fff, $alpha: 0);
+  box-sizing: border-box;
+  font-size: 20px;
+  color: #1B81A8;
+  background-color: rgba($color: #fff, $alpha: 0);
+  font-weight: 400;
+}

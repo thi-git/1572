@@ -1,0 +1,271 @@
+@import "src/app/styles/default/colors";
+
+body {
+  margin: 0;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-color: #fff;
+}
+
+::ng-deep .form-check {
+  font-size: 18px;
+  font-weight: 500;
+  input[type=checkbox]:checked:after {
+    position: relative;
+    text-align: center;
+    display: block;
+    border-radius: 2px;
+    top: -1px;
+    content: "✓";
+    color: #fff;
+    font-size: 12px;
+    height: 15px;
+    width: 13px;
+    line-height: 1.4;
+    background-color: #005581 !important;
+  }
+}
+
+::ng-deep .treeview-container {
+  max-height: 100%;
+}
+
+::ng-deep .treeview-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+::ng-deep ::after, ::before {
+  box-sizing: border-box;
+}
+
+::ng-deep .row {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  // margin-right: -15px;
+  // margin-left: -15px;
+  // padding-left: 15px;
+  &.row-filter {
+    padding-left: 0px;
+  }
+  .col-12{
+    width: 80%;
+    padding: 0;
+  }
+}
+
+::ng-deep {
+  .mat-dialog-actions {
+    padding-right: 20px;
+  }
+}
+::ng-deep button, input {
+  overflow: visible;
+}
+
+::ng-deep .form-control {
+  margin: 0;
+  font-family: inherit;
+  display: block;
+  width: 100%;
+  height: 32px;
+  // height: calc(1.5em + .75rem + 1.5px);
+  // padding: .375rem .75rem;
+  padding: 2px 8px;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #000;
+  background-clip: padding-box;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  box-sizing: border-box;
+  // background-color: #fff !important;
+}
+
+::ng-deep .dark-theme .form-control {
+  // background-color: #002851;
+  // border: 1px solid #002851;
+  // &::placeholder {
+  //   color: #fff;
+  // }
+  background-color: #C7B299;
+  border: 1px solid #C7B299;
+  &::placeholder {
+    color: #000;
+  }
+}
+
+::ng-deep .light-theme .form-control {
+  background-color: #E4E4E4;
+  border: 1px solid #E4E4E4;
+  border-radius: 18px;
+  &::placeholder {
+    padding-left: 4px; // 待調整
+    font-weight: 600;
+    color: #000;
+  }
+}
+
+::ng-deep .col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+::ng-deep .col-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+::ng-deep .form-check {
+  position: relative;
+  display: block;
+  padding-left: 1.25rem;
+}
+
+::ng-deep .form-check-inline {
+  display: inline-flex;
+  align-items: center;
+  padding-left: 0;
+  margin-right: .75rem;
+}
+
+::ng-deep .form-check {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+::ng-deep .dropdown-divider {
+  height: 0;
+  margin: .5rem 0;
+  overflow: hidden;
+  border-top: 1px solid #e9ecef;
+}
+
+::ng-deep svg {
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+// 隱藏collapse符號
+::ng-deep .treeview-header .row-all .bi {
+  display: none;
+}
+
+@media (min-width: 576px) {
+  ::ng-deep .form-inline .form-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    padding-left: 0;
+  }
+
+  ::ng-deep .form-inline .form-check-input {
+    position: relative;
+    flex-shrink: 0;
+    margin-top: 0;
+    margin-right: .25rem;
+    margin-left: 0;
+  }
+
+  ::ng-deep .form-inline label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+  }
+}
+
+button, input {
+  overflow: visible;
+}
+
+::ng-deep .form-check-label {
+  margin-bottom: 0;
+}
+::ng-deep label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+::ng-deep .form-check-inline .form-check-input {
+  position: static;
+  margin-top: 0;
+  margin-right: .3125rem;
+  margin-left: 0;
+}
+
+::ng-deep .form-inline {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+
+::ng-deep input[type=checkbox], input[type=radio] {
+    box-sizing: border-box;
+    padding: 0;
+}
+::ng-deep .form-check-input {
+    position: absolute;
+    margin-top: .3rem;
+    margin-left: -1.25rem;
+}
+::ng-deep button, input {
+    overflow: visible;
+}
+::ng-deep button, input, optgroup, select, textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+::ng-deep ::after, ::before {
+    box-sizing: border-box;
+}
+
+ngx-treeview {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+// 自訂filter樣式
+.road_input input {
+  position: relative; // 不做邊框hover效果
+  box-sizing: border-box;
+  // background-color: #C7B299;
+  // border: 1px solid #C7B299;
+  border-radius: .25rem;
+  width: 100%;
+  height: 32px;
+  margin-bottom: 7.65px;
+  color: #000;
+  font-size: 1rem;
+  padding: 12px;
+  margin-top: 6px;
+
+  // &::placeholder {
+  //   color: #000;
+  //   font-size: 1rem;
+  // }
+
+  background-color: #E4E4E4;
+  border: 1px solid #E4E4E4;
+  border-radius: 18px;
+  &::placeholder {
+    padding-left: 4px; // 待調整
+    font-weight: 600;
+    color: #000;
+  }
+}

@@ -1,0 +1,93 @@
+<div id="list-road-form" [class]='setPosition()'>
+  <div class="list-road-form-container">
+    <!-- 按鈕 -->
+    <div class="btn-section">
+      <div class="left-result">
+        <span>篩選結果</span>
+      </div>
+    </div>
+
+    <!-- 表格 -->
+    <div class="table">
+      <nz-table #sortTable [nzData]="listOfData" [nzLoading]="loading" nzTableLayout="fixed" [nzSize]="tableSize"
+      [nzShowPagination]="showPagination" [nzPageSize]="pageSize" [nzSimple]="true" [nzPageIndex]="pageIndex"
+      [nzScroll]="{ y: scrollY, x: scrollX }">
+        <thead>
+          <tr>
+            <ng-container *ngFor="let column of listOfColumn">
+              <th [nzSortFn]="column.compare" [nzSortPriority]="column.priority" [nzWidth]="column.width"
+              [nzFilterMultiple]="column.filterMultiple"
+              [nzFilters]="column.listOfFilter"
+              [nzFilterFn]="column.filterFn">
+              {{ column.title }}
+              </th>
+            </ng-container>
+          </tr>
+        </thead>
+        <!-- 末列固定 -->
+        <tfoot class="tfoot">
+          <tr>
+            <td>
+              <button class="insert-button">
+                <img src="./assets/icons/insert-row.svg">
+              </button>
+            </td>
+            <td><input class="input" id="new_city" type="text" placeholder="縣市"/></td>
+            <td><input class="input" id="new_tc_id" type="text" placeholder="TC編號"/></td>
+            <td><input class="input" id="new_road_name" type="text" placeholder="路口名稱"/></td>
+            <td><input class="input" id="new_district" type="text" placeholder="行政區"/></td>
+            <td><input class="input" id="new_lat" type="text" placeholder="路口緯度"/></td>
+            <td><input class="input" id="new_lng" type="text" placeholder="路口經度"/></td>
+            <td><button class="button" (click)="InsertData()">確認</button></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <tr *ngFor="let data of sortTable.data">
+            <ng-container *ngFor="let column of listOfColumn">
+              <td nzEllipsis *ngIf="column.value === 'edit_tc'">
+                <button class="edit-btn" (click)="RemoveRow(data)">
+                  <img src="./assets/icons/remove.svg">
+                </button>
+                <button class="edit-btn" (click)="EditRow(data)">
+                  <img [src]="data.isEditing ? './assets/icons/checked_edit.svg' : './assets/icons/edit.svg'">
+                </button>
+              </td>
+              <td nzEllipsis *ngIf="column.value == 'city'">
+                <input [id]="'input_' + data.tc_id + '_' + column.value"
+                      [class.data-edit]="data.isEditing && data.status === 'initial'"
+                      [class.data-view]="!data.isEditing || data.status === 'file'"
+                      type="text" [readonly]="data['status'] === 'file' || !data.isEditing"
+                      [value]="data[column.value]"
+                      (change)="onRoadInputChange(column.value, $event.target.value, data)"
+                      (blur)="checkRowFocus($event, data)"
+                      autocomplete="off"/>
+              </td>
+              <td nzEllipsis *ngIf="column.value == 'tc_id'">{{ data['tc_id'] }}</td>
+              <td nzEllipsis *ngIf="column.value == 'road' || column.value == 'district'">
+                <input [id]="'input_' + data.tc_id + '_' + column.value"
+                      [class.data-edit]="data.isEditing && data.status === 'initial'"
+                      [class.data-view]="!data.isEditing || data.status === 'file'"
+                      type="text" [readonly]="data['status'] === 'file' || !data.isEditing"
+                      [value]="data[column.value]"
+                      (change)="onRoadInputChange(column.value, $event.target.value, data)"
+                      (blur)="checkRowFocus($event, data)"
+                      autocomplete="off"/>
+              </td>
+              <td nzEllipsis *ngIf="column.value == 'lat' || column.value == 'lng'">
+                <input [id]="'input_' + data.tc_id + '_' + column.value"
+                      [class.data-edit]="data.isEditing" [class.data-view]="!data.isEditing"
+                      type="text" [readonly]="!data.isEditing" [value]="data[column.value]"
+                      (change)="onRoadInputChange(column.value, $event.target.value, data)"
+                      (blur)="checkRowFocus($event, data)"
+                      autocomplete="off"/>
+              </td>
+              <td nzEllipsis *ngIf="column.value == 'update_time'">{{ data['update_time'] }}</td>
+              <td nzEllipsis *ngIf="column.value == 'last_editor'">{{ data['last_editor'] }}</td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>

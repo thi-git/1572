@@ -1,0 +1,95 @@
+<div id="db-search-form" class="db-search-form">
+  <div class="db-search-form-container">
+    <!-- 按鈕 -->
+    <div class="btn-section">
+      <div class="left-result">
+        <span>查詢結果</span>
+      </div>
+      <div class="right-btn">
+        <span class="item">已選 <span class="count">{{selectCount }}</span> 項</span>
+        <button class="item download-btn list" (click)="downloadList()">
+          <img src="./assets/icons/list-btn.png" alt="">清單下載</button>
+        <button class="item download-btn file" (click)="downloadFile()">
+          <img src="./assets/icons/file-btn.png" alt="">檔案下載</button>
+        <button *ngIf="canDelete" class="item download-btn delete" (click)="deleteFile()">
+          <img src="./assets/icons/delete-btn.png" alt="">檔案刪除</button>
+      </div>
+    </div>
+
+    <!-- 表格 -->
+    <div class="table">
+      <nz-table #sortTable [nzData]="listOfData" [nzLoading]="loading" nzTableLayout="fixed" [nzSize]="tableSize"
+      [nzShowPagination]="showPagination" [nzPageSize]="pageSize" [nzSimple]="true"
+      [nzScroll]="{ y: scrollY, x: scrollX }">
+      <thead>
+        <tr>
+          <ng-container *ngFor="let column of listOfColumn">
+            <th [nzSortFn]="column.compare" [nzSortPriority]="column.priority" [nzWidth]="column.width"
+            [nzFilterMultiple]="column.filterMultiple"
+            [nzFilters]="column.listOfFilter"
+            [nzFilterFn]="column.filterFn"
+            *ngIf="column.value !== 'download_format' && column.value !== 'is_checked'">
+            {{ column.title }}
+            </th>
+            <!-- 下載格式 -->
+            <th [nzSortFn]="column.compare" [nzSortPriority]="column.priority" [nzWidth]="column.width"
+            [nzFilterMultiple]="column.filterMultiple"
+            [nzFilters]="column.listOfFilter"
+            [nzFilterFn]="column.filterFn"
+            *ngIf="column.value === 'download_format'">
+            {{ column.title }}
+            <!-- 一鍵選擇下載格式 -->
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="selectAllFileFormat"
+            *ngIf="listOfData.length > 0" (ngModelChange)="selectAllFormat($event)">
+              <nz-option nzLabel="下載檔" nzValue="下載檔"></nz-option>
+              <nz-option nzLabel="上傳檔" nzValue="上傳檔"></nz-option>
+            </nz-select>
+            </th>
+            <!-- 勾選欄位 -->
+            <th [nzSortFn]="column.compare" [nzSortPriority]="column.priority" [nzWidth]="column.width"
+            [nzFilterMultiple]="column.filterMultiple"
+            [nzFilters]="column.listOfFilter"
+            [nzFilterFn]="column.filterFn"
+            *ngIf="column.value === 'is_checked'">
+            <div class="img-section" [ngClass]="eventControl()" *ngIf="checkboxType === 'none'">
+              <img src="./assets/icons/select-none.svg" alt="" (click)="selectAll('all')">
+            </div>
+            <div class="img-section" [ngClass]="eventControl()" *ngIf="checkboxType === 'all'">
+              <img src="./assets/icons/select-all.svg" alt="" (click)="selectAll('none')">
+            </div>
+            <div class="img-section" [ngClass]="eventControl()" *ngIf="checkboxType === 'some'">
+              <img src="./assets/icons/select-some.svg" alt="" (click)="selectAll('all')">
+            </div>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody >
+        <tr *ngFor="let data of sortTable.data">
+          <ng-container *ngFor="let column of listOfColumn">
+            <td nzEllipsis *ngIf="column.value !== 'download_format' && column.value !== 'is_checked' && column.value !== 'commit'">{{ data[column.value] }}</td>
+            <!-- 下載格式 -->
+            <td nzEllipsis *ngIf="column.value === 'download_format'">
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="data.download_format" (ngModelChange)="selectFormat($event, data)">
+                <nz-option *ngIf="data.data_type !== '其他'" nzLabel="下載檔" nzValue="下載檔"></nz-option>
+                <nz-option *ngIf="data.data_type !== '其他'" nzLabel="上傳檔" nzValue="上傳檔"></nz-option>
+                <nz-option *ngIf="data.data_type === '其他'" nzLabel="其他" nzValue="其他"></nz-option>
+              </nz-select>
+            </td>
+            <!-- 下載勾選 -->
+            <td nzEllipsis *ngIf="column.value === 'is_checked'">
+              <mat-checkbox class="example-margin" [checked]="allSelect" (change)="selectCountChange($event, data)"></mat-checkbox>
+            </td>
+            <!-- 內容 -->
+            <td nzEllipsis *ngIf="column.value === 'commit'">
+              <img *ngIf="data[column.value].length > 0" src="./assets/icons/info-display.svg" alt="" matTooltip={{data[column.value]}} [matTooltipPosition]="'above'">
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
+
+
+

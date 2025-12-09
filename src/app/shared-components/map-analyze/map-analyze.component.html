@@ -1,0 +1,20 @@
+<!-- 框選按鈕-->
+<button class="marker_select btn_yellow" (click)="selectBtn()" *ngIf="page === '/view/analyze' && selectModeOpen && !isSelecting">
+  <mat-icon>edit</mat-icon>
+  <span class="word">自訂圈選範圍</span>
+</button>
+<button class="marker_select btn_yellow cancel" (click)="cancelBtn()" *ngIf="page === '/view/analyze' && selectModeOpen && isSelecting">
+  <mat-icon>clear</mat-icon>
+  <span class="word">取消圈選</span>
+</button>
+
+<!-- 地圖 -->
+<div class="mainMap" id="analyze_page_map" leaflet [leafletOptions]='MapOptions' (leafletMapReady)='onMapReady($event)'
+  [leafletLayers]='CurrentMapLayers' [(leafletZoom)]="mapCenter.zoom" [(leafletCenter)]="mapCenter.latlng">
+  <div *ngIf="theme==='dark-theme'" [leafletLayer]="baseMap"></div>
+  <div *ngIf="theme==='light-theme'" [leafletLayer]="lightMap"></div>
+</div>
+
+<!-- 時間軸 -->
+<app-time-line-template *ngIf="showTimeLine" [timeArr]="this.timeArr" [currentIndex]="this.timeArr.length - 1"
+  (getCurrentInd)="getCurrentInd($event)"></app-time-line-template>

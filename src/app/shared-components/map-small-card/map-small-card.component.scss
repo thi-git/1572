@@ -1,0 +1,103 @@
+.map-small-card {
+  width: 20vw;
+  height: 28vh;
+
+  background: #A9DEF1;
+  margin-top: 0.7vh;
+  // margin-bottom: 0.7vh;
+  margin-right: 1vw;
+  border-radius: 6px;
+
+  .smallTitle {
+    font-size: 18px;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+  }
+
+  // 地圖
+  .smallMap {
+    width: 97%;
+    height: 82.5%;
+    margin: 0 auto;
+    border-radius: 6px;
+  }
+
+
+  .leftRightControl {
+    display: flex;
+    align-items: center;
+  }
+
+  .arrowMarker {
+    width: 30px;
+    height: 30px;
+    color: rgb(180, 180, 180);
+    font-size: 30px;
+    padding: 0;
+  }
+
+  .point {
+    cursor: pointer;
+  }
+
+}
+
+::ng-deep {
+  .my-div-span-straight {
+    background-color: transparent;
+    border: transparent;
+    box-shadow: none;
+    font-weight: 800;
+    font-size: 20px;
+    color: #fff;
+    position: relative;
+    top: -100px;
+    display: block;
+    width: 30px;
+    -webkit-text-stroke: 1px black;
+  }
+  .my-div-span-right {
+    background-color: transparent;
+    border: transparent;
+    box-shadow: none;
+    font-weight: 800;
+    font-size: 20px;
+    color: #fff;
+    position: relative;
+    top: -80px;
+    left: 20px;
+    display: block;
+    z-index: 999;
+    width: 15px;
+    -webkit-text-stroke: 1px black;
+  }
+  .my-div-span-left {
+    background-color: transparent;
+    border: transparent;
+    box-shadow: none;
+    font-weight: 800;
+    font-size: 20px;
+    color: #fff;
+    position: relative;
+    top: -80px;
+    left: 20px;
+    display: block;
+    z-index: 999;
+    width: 20px;
+    -webkit-text-stroke: 1px black;
+  }
+
+}
+
+.select {
+  background: #0d47a1;
+  color: #fff;
+}
+
+.org {
+  background-color: #A9DEF1;
+  color: #000;
+}
+

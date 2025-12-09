@@ -1,0 +1,14 @@
+<div [class]="setDisplay()">
+  <mat-expansion-panel [(expanded)]="panelOpen" class="panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+       縣市
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-checkbox-tree
+      *ngIf="isData"
+      [treeList]="treeList"
+      (getName)="getName($event)">
+    </app-checkbox-tree>
+  </mat-expansion-panel>
+</div>

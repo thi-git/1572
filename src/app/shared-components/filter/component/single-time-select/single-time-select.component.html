@@ -1,0 +1,16 @@
+<div [ngClass]="setDisplay()">
+  <div class="title">
+    <span>檢核時段：</span>
+  </div>
+  <mat-expansion-panel [(expanded)]="panelOpen" class="panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{start_time}} - {{end_time}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ngx-mat-timepicker-field class="time-picker-set" [format]="24" [(ngModel)]="a" (ngModelChange)="timePickerStartChange($event)"></ngx-mat-timepicker-field>
+    <ngx-mat-timepicker-field class="time-picker-set" [format]="24" [(ngModel)]="b" (ngModelChange)="timePickerEndChange($event)"></ngx-mat-timepicker-field>
+  </mat-expansion-panel>
+</div>
+
+

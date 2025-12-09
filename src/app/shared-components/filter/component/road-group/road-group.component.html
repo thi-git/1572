@@ -1,0 +1,16 @@
+<div class="main-road">
+  <mat-expansion-panel [(expanded)]="panelOpen" class="panel">
+    <ng-container *ngIf="isData">
+      <app-checkbox-tree
+      [custom]="'main_road'"
+      [treeList]="treeList"
+      (getName)="getName($event)">
+      </app-checkbox-tree>
+    </ng-container>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+       道路範圍
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+  </mat-expansion-panel>
+</div>

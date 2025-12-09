@@ -1,0 +1,376 @@
+.edit {
+  width: 650px;
+  height: calc(100vh - 160px);
+  padding: 20px;
+  border-radius: 8px 0 0 8px;
+  background: linear-gradient(#FFF6E5, #DBF0F7);
+  color: #000;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  h2 {
+    font-size: 20px;
+  }
+
+  // 路口名稱
+  .intersection-name {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 8px;
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+  }
+
+  // 道路群組
+  .road-group {
+    width: 100%;
+    height: 42px;
+
+    .container {
+      width: 100%;
+
+      .type {
+        display: flex;
+
+        .info {
+          margin-top: 0;
+          margin-bottom: 0;
+          margin-right: 17px;
+          margin-left: 8px;
+          line-height: 36px; // 垂直置中
+          color: #000;
+          font-size: 18px;
+          font-family: "Noto Sans CJK TC", sans-serif;
+        }
+
+        .mat-expansion-panel {
+          width: 425px;
+
+          mat-panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: -2px; // 待調整
+          }
+
+          .checked-text {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
+
+          .search-section {
+            width: 100%;
+            height: 32px;
+            margin-bottom: 16px;
+
+            input {
+              width: 100%;
+              height: 100%;
+              font-size: 16px;
+              padding: 3px 0 2px 6px;
+              background-color: #E4E4E4;
+              border: 1px solid #E4E4E4;
+              border-radius: 18px;
+
+              &::placeholder {
+                padding-left: 4px;
+                font-weight: 600;
+                color: #000;
+              }
+            }
+          }
+
+          ul {
+            list-style-type: none;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            padding-left: 0;
+            height: 195px;
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            .option-set {
+              color: #000;
+              font-weight: 600;
+              margin-bottom: 2px;
+              font-size: 16px;
+            }
+          }
+
+          // 按鈕
+          .add-group {
+            .add, .save, .cancel {
+              padding: 6px 9px;
+              color: #fff;
+              background-color: #005581;
+              border: 1px solid #005581;
+              border-radius: 5px;
+              font-size: 16px;
+              cursor: pointer;
+            }
+
+            input {
+              width: 98%;
+              height: 36px;
+              border: 1px solid #005581;
+              border-radius: 4px;
+              outline: none; // outline-color
+              font-size: 16px;
+              font-family: "Noto Sans CJK TC", sans-serif;
+              padding: 2px 8px;
+            }
+
+            input::placeholder {
+              color: #000;
+            }
+
+            .add {
+              width: 100%;
+              height: 40px;
+              font-size: 16px;
+            }
+
+            .res {
+              display: flex;
+              justify-content: flex-end;
+              margin-top: 12px;
+              .cancel {
+                margin-right: 10px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 示意圖
+  .intersection-img {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 270px;
+    margin-top: 30px;
+
+    .bg-setting {
+      width: 45%;
+      background-color: #fff;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      svg {
+        width: 75%;
+        height: 75%;
+        margin-top: 10px;
+      }
+
+      h2 {
+        color: #404040;
+        margin-bottom: 0;
+        margin-top: 9px;
+      }
+    }
+  }
+
+  // 編輯路段
+  .road-select {
+    position: relative;
+    z-index: 9999;
+    width: 100%;
+    height: 42px;
+    margin-top: 40px;
+
+    .container {
+      width: 100%;
+
+      .type {
+        display: flex;
+
+        .info {
+          margin-top: 0;
+          margin-bottom: 0;
+          margin-right: 17px;
+          margin-left: 8px;
+          line-height: 36px; // 垂直置中
+          color: #000;
+          font-size: 18px;
+          font-family: "Noto Sans CJK TC", sans-serif;
+        }
+
+        .mat-expansion-panel {
+          width: 490px;
+
+          mat-panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: -2px; // 待調整
+          }
+
+          ul {
+            list-style-type: none;
+            margin-top: 4px;
+            padding-left: 0;
+
+            .option-set {
+              color: #000;
+              font-weight: 600;
+              margin-bottom: 2px;
+              font-size: 15.5px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 編輯箭頭
+  .edit-section {
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 100px; // 預留空間給下拉選單
+
+    .direction {
+      display: flex;
+      flex-wrap: wrap;
+      margin-left: 8px;
+      position: relative;
+
+      .type {
+        width: 25%;
+
+        // 用於設定每個expansion panel的高度，讓panel開合不影響其他元件位置
+        .container-setting {
+          width: 100%;
+          height: 120px;
+
+          .info {
+            margin-top: 10px;
+            margin-left: 0;
+            color: #000;
+            height: 22px !important;
+          }
+
+          .mat-expansion-panel {
+            width: 90%;
+
+            mat-panel-title {
+              font-size: 16px;
+              font-weight: 600;
+              margin-bottom: -2px; // 待調整
+            }
+
+            img {
+              width: 20px;
+              height: 20px;
+            }
+
+            .arrow-info {
+              font-size: 16px;
+              margin-left: 6px;
+              margin-top: 2px;
+            }
+
+            ul {
+              list-style-type: none;
+              margin-top: 4px;
+              padding-left: 0;
+
+              .option-set {
+                color: #000;
+                font-weight: 600;
+                margin-bottom: 2px;
+              }
+            }
+          }
+        }
+      }
+
+      // 以列為單位
+      .type0 {
+        position: relative;
+        z-index: 9995;
+      }
+
+      .type1 {
+        position: relative;
+        z-index: 9994;
+      }
+
+      .type2 {
+        position: relative;
+        z-index: 9993;
+      }
+
+      .type3 {
+        position: relative;
+        z-index: 9992;
+      }
+
+      .type4 {
+        position: relative;
+        z-index: 9991;
+      }
+    }
+  }
+}
+
+::ng-deep .custom-panel .mat-expansion-panel-body {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+::ng-deep .custom-panel .mat-expansion-panel-content {
+  max-height: 135px !important;
+  overflow-y: auto;
+  padding-left: 0;
+}
+
+::ng-deep .road-group-panel .mat-expansion-panel-content {
+  max-height: 350px !important;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  padding-left: 0;
+}
+
+// 設定小幫手樣式
+::ng-deep snack-bar-container.snack-bar-setting-red {
+  background-color: #AC2222 !important;
+}
+
+::ng-deep snack-bar-container.snack-bar-setting-green {
+  background-color: #008000 !important;
+}
+
+::ng-deep snack-bar-container.snack-bar-setting-brown {
+  background-color: #C7B299 !important;
+
+  .mat-simple-snackbar {
+    font-weight: 500;
+    color: #000 !important;
+
+    button {
+      border-color: #000;
+    }
+  }
+
+  .mat-simple-snackbar-action button .mat-button-wrapper {
+    color: #000 !important;
+  }
+}
+
+// expansion設定
+::ng-deep .edit .mat-expansion-panel-header {
+  height: 36px !important; // 展開時高度不隨著改變
+}
+
+// checkbox設定
+:host ::ng-deep .road-group .mat-checkbox-checked .mat-checkbox-background {
+  background-color: #005581 !important;
+}
+
+

@@ -1,0 +1,20 @@
+<mat-sidenav-container class="layout" [hasBackdrop]="false">
+  <mat-sidenav
+    *ngIf="!loginPage"
+    class="layout-sidebar"
+    [class]="isShowSidebar ? 'open' : 'close'"
+    [opened]="true"
+    mode="side"
+    #sidenav>
+    <app-sidebar (check)="sidebarShow($event)"></app-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content
+    class="layout-content"
+    [class]="isShowSidebar ? 'open' : 'close'">
+    <app-header class="header-setting" [hidden]="loginPage"></app-header>
+    <router-outlet #outlet="outlet"></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+

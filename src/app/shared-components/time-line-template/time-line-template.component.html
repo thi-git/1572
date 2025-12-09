@@ -1,0 +1,20 @@
+<div class="time-line-template">
+  <div class="big-border">
+    <div class="left-button">
+      <button mat-icon-button *ngIf="show_auto_icon" (click)="autoPlay()">
+        <mat-icon>play_circle_filled</mat-icon>
+      </button>
+      <button mat-icon-button *ngIf="show_stop_icon" (click)="stopAutoPlay(false)">
+        <mat-icon>pause_circle_filled</mat-icon>
+      </button>
+    </div>
+    <div id="container" class="small-border" (wheel)="onMouseWheel($event)">
+      <div echarts [theme]="theme" [options]="chartOption" (chartInit)="onChartInit($event)"
+        [ngStyle]="{'width': timeWidth + 'px'}" class="time-line"></div>
+    </div>
+    <div class="right-button">
+      <button mat-icon-button (click)="prev()"><mat-icon>fast_rewind</mat-icon></button>
+      <button mat-icon-button (click)="next()"><mat-icon>fast_forward</mat-icon></button>
+    </div>
+  </div>
+</div>

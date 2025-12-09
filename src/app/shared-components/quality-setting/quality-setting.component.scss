@@ -1,0 +1,353 @@
+.quality-setting {
+  // width: calc(100vw - 69px);
+  width: 100%;
+  height: calc(100vh - 161px);
+  padding: 16px;
+  border-radius: 8px 0 0 8px;
+  background-image: url('../../../assets/icons/background.png');
+  color: #000;
+  padding-bottom: 23px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .next-btn {
+    position: absolute;
+    z-index: 99999;
+    top: 17px;
+    right: 40px;
+    border: 1px solid #FFF;
+    border-radius: 4px;
+    background: #005581;
+    cursor: pointer;
+    padding: 8px 10px;
+    color: #FFF;
+    font-family: "Noto Sans CJK TC";
+    font-size: 16px;
+  }
+
+  .all-section {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+
+    .each-section {
+      position: relative;
+      display: flex;
+      margin-bottom: 15px;
+      margin-right: 15px;
+      height: 380px;
+      // border: 2px solid #fa0; // 測試
+
+      // 左側
+      .left-section {
+        width: 28%;
+        // border: 1px solid green; // 測試
+
+        // 路口序號
+        .idx {
+          width: 450px;
+          font-size: 16px;
+          margin-bottom: 0;
+          padding: 6px 10px;
+          font-family: "Noto Sans CJK TC", sans-serif;
+          font-weight: 500;
+          color: #000;
+          background: linear-gradient(90deg, #A9DEF1 0%, rgba(169, 222, 241, 0.00) 100%);
+        }
+
+        // 路口名稱
+        .road {
+          font-size: 18px;
+          margin-bottom: 0;
+          padding: 6px 10px;
+          font-family: "Noto Sans CJK TC", sans-serif;
+          font-weight: 500;
+          color: #000;
+
+          @media (max-width: 1500px) {
+            font-size: 15px;
+          }
+        }
+      }
+
+      // 路口示意圖
+      .main-section {
+        display: flex;
+        justify-content: center;
+
+        .img-container {
+          height: 265px;
+          // border: 1px solid red; // 測試
+
+          svg {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+
+      // 右側編輯區塊
+      .edit-section {
+        position: relative;
+        width: 72%;
+        background-image: url('../../../assets/icons/basic-road.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        // border: 1px solid blue; // 測試
+
+        .direction-info {
+          position: absolute;
+          z-index: 10;
+          top: 72px;
+          right: 172px;
+
+          .west {
+            transform: rotate(90deg);
+            margin-bottom: 4px; // 待調整
+          }
+
+          span {
+            font-size: 18px;
+            color: #000;
+            font-family: "Noto Sans CJK TC";
+            font-weight: 400;
+          }
+
+          .text-west {
+            margin-left: 8px;
+          }
+
+          .text-north {
+            margin-left: -2px;
+            margin-bottom: 8px;
+            display: block;
+          }
+        }
+
+        // 下拉選單
+        // 上
+        .test-panel-top {
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          height: 90px;
+          margin-top: 35px;
+          // background-color: #A9DEF1; // 測試
+
+          .section {
+            position: relative;
+
+            .panel-top1 {
+              position: absolute;
+              z-index: 9999;
+              width: 160px;
+            }
+
+            .panel-top2 {
+              margin-top: 50px;
+              z-index: 9998;
+              width: 160px;
+            }
+
+            .top-setting {
+              position: absolute;
+              z-index: 9997;
+              width: 100%;
+              height: 36px;
+              top: 90px; // 待調整(避免panel影響)
+              text-align: center;
+              line-height: 36px;
+              font-size: 16px;
+              font-family: "Noto Sans CJK TC";
+              // background-color: #A9DEF1;
+            }
+          }
+        }
+
+        // 中
+        .test-panel-center {
+          width: 100%;
+          height: 36px;
+          margin-top: 50px;
+          // background-color: #d0f4de; // 測試
+
+          .section-left {
+            display: flex;
+            position: relative;
+            top: 45%;
+
+            // 待調整
+            .panel-left1 {
+              position: absolute;
+              z-index: 100000;
+              left: 60px;
+              margin-right: 20px;
+              width: 160px;
+
+              @media (max-width: 1500px) {
+                left: 10px;
+              }
+            }
+
+            // 待調整
+            .panel-left2 {
+              position: absolute;
+              z-index: 100000;
+              left: 240px;
+              width: 160px;
+
+              @media (max-width: 1500px) {
+                left: 145px;
+              }
+            }
+
+            .left-setting {
+              height: 36px;
+              text-align: center;
+              line-height: 36px;
+              position: absolute;
+              z-index: 100000;
+              left: 480px;
+              font-size: 16px;
+              font-family: "Noto Sans CJK TC";
+            }
+          }
+
+          .section-right {
+            display: flex;
+            position: relative;
+            top: 45%;
+
+            // 待調整
+            .panel-right1 {
+              position: absolute;
+              z-index: 100000;
+              right: 60px;
+              margin-left: 20px;
+              width: 160px;
+
+              @media (max-width: 1500px) {
+                right: 10px;
+              }
+            }
+
+            // 待調整
+            .panel-right2 {
+              position: absolute;
+              z-index: 100000;
+              right: 240px;
+              width: 160px;
+
+              @media (max-width: 1500px) {
+                right: 145px;
+              }
+            }
+
+            .right-setting {
+              height: 36px;
+              text-align: center;
+              line-height: 36px;
+              position: absolute;
+              z-index: 100000;
+              right: 480px;
+              font-size: 16px;
+              font-family: "Noto Sans CJK TC";
+            }
+          }
+        }
+
+        // 下
+        .test-panel-bottom {
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          height: 90px;
+          margin-top: 25px;
+          // background-color: #e7c6ff; // 測試
+
+          .section {
+            position: relative;
+
+            .panel-bottom1 {
+              position: absolute;
+              z-index: 99999;
+              width: 160px;
+            }
+
+            .panel-bottom2 {
+              margin-top: 50px;
+              z-index: 99998;
+              width: 160px;
+            }
+
+            .bottom-setting {
+              // position: absolute;
+              // z-index: 99997;
+              // width: 100%;
+              height: 36px;
+              text-align: center;
+              line-height: 36px;
+              font-size: 16px;
+              font-family: "Noto Sans CJK TC";
+              // background-color: #A9DEF1;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .all-section:last-child {
+    margin-bottom: 0;
+  }
+}
+
+mat-expansion-panel-header {
+  width: 160px;
+  height: 36px !important; // 展開時高度不隨著改變
+
+  @media (max-width: 1500px) {
+    width: 120px;
+  }
+
+  mat-panel-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: -2px; // 待調整
+  }
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  font-size: 15.5px;
+  font-weight: 700;
+
+  .radio-button {
+    margin-top: 5px;
+  }
+}
+
+::ng-deep .panel-top1 .mat-expansion-panel-content,
+::ng-deep .panel-bottom2 .mat-expansion-panel-content,
+::ng-deep .panel-left1 .mat-expansion-panel-content,
+::ng-deep .panel-right1 .mat-expansion-panel-content
+{
+  max-height: 148px !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-left: 0;
+}
+
+
+
+
+
+
+
+
+
+
+

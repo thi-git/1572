@@ -1,0 +1,34 @@
+<div class="sider_all">
+  <!-- 漢堡選單 -->
+  <div class="sider_menu">
+    <button mat-icon-button color="primary" (click)="menuToggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+  <div class="all-option">
+  <!-- 選項列表 -->
+  <ul *ngFor="let page of all_page_cfgs" [ngClass]="{'border': page.border, '': !page.border}">
+    <li>
+      <!-- 第一層分頁 -->
+      <div class="lv1" [ngClass]="setMargin()" style="cursor: none;">
+        <span *ngIf="sidebarOpen">{{ page.name }}</span>
+      </div>
+      <!-- 第二層分頁 -->
+      <div class="">
+        <ul *ngFor="let child_page of page.child_page">
+          <li (mouseover)=" child_page.icon = child_page.icon_hover" (mouseout)=" child_page.icon = child_page.icon_not_hover">
+            <div class="lv2" routerLink="{{child_page.router}}" routerLinkActive="active" [class]="uploadStatus ? 'is-uploading' : ''">
+              <div class="menu-icon" >
+                <img [src]="child_page.icon" [alt]="child_page.name" (mouseover)=" child_page.icon = child_page.icon_hover"
+                (mouseout)=" child_page.icon = child_page.icon_not_hover">
+              </div>
+              <span *ngIf="sidebarOpen">{{ child_page.name }}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+  </div>
+</div>
+

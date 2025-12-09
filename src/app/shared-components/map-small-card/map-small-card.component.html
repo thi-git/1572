@@ -1,0 +1,19 @@
+<div class="map-small-card" [ngClass]="selectChange()" (click)="selectTC(cardTitle)">
+  <div style="display: flex;justify-content: space-between;">
+    <div class="smallTitle">
+      {{ cardTitle }}
+    </div>
+    <div class="leftRightControl">
+      <mat-icon matTooltip="往左" class="arrowMarker point" (click)="changePosition('left')">arrow_left</mat-icon>
+      <mat-icon matTooltip="往右" class="arrowMarker point" (click)="changePosition('right')">arrow_right</mat-icon>
+    </div>
+  </div>
+
+  <!-- 地圖 -->
+  <div class="smallMap" id="search_page_map" leaflet [leafletOptions]='MapOptions'
+    (leafletMapReady)='onMapReady($event)' [leafletLayers]='CurrentMapLayers' [(leafletZoom)]="mapCenter.zoom"
+    [(leafletCenter)]="mapCenter.latlng">
+    <div *ngIf="theme==='dark-theme'" [leafletLayer]="baseMap"></div>
+    <div *ngIf="theme==='light-theme'" [leafletLayer]="lightMap"></div>
+  </div>
+</div>

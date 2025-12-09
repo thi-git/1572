@@ -1,0 +1,24 @@
+<div class="table">
+  <button class='btn btn-blue2 clicked' (click)="create()">＋新增群組</button>
+  <nz-table #basicTable [nzData]="dataSet" [nzScroll]="{ y: scrollY }" [nzWidthConfig] = "widthConfig">
+    <thead>
+      <tr>
+        <th *ngFor="let column of dataColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{data.idx}}</td>
+        <td>{{data.groupName}}</td>
+        <td>{{data.description}}</td>
+        <td>
+          <button class="btn btn-img" (click)="edit(data)"><img src="./assets/icons/edit_blue.svg"></button>
+          <button class="btn btn-img" nz-popconfirm nzPopconfirmTitle="確定刪除此群組?" nzOkText="確認" nzCancelText="取消" (nzOnConfirm)="delete(data)"><img src="./assets/icons/delete_red.svg"></button>
+        </td>
+        <td>{{data.updatetime}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

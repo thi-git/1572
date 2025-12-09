@@ -1,0 +1,87 @@
+.time-date {
+  position: relative;
+  width: 230px;
+  height: 60px;
+
+  // @media (max-width: 1500px) {
+  //   width: 180px;
+  // }
+
+  .test {
+    position: absolute;
+    width: 100%;
+
+    mat-expansion-panel-header {
+      height: 36px !important; // 展開時高度不隨著改變
+
+      // @media (max-width: 1500px) {
+      //   padding: 0 14px;
+      // }
+    }
+
+    mat-panel-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: -2px; // 待調整
+
+      // @media (max-width: 1500px) {
+      //   font-size: 14px;
+      // }
+
+      .time-range {
+        font-size: 14.5px;
+      }
+    }
+
+    mat-form-field {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+
+      mat-label {
+        color: #000;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+        font-size: 15px;
+      }
+
+      input {
+        color: #000;
+        font-size: 15px;
+      }
+
+      .date-input {
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+        font-size: 15px;
+        font-weight: 400;
+      }
+
+      .input-right {
+        padding-left: 4px;
+      }
+    }
+
+    mat-checkbox {
+      font-size: 15px;
+      font-weight: 600;
+    }
+  }
+}
+
+// 指定time-date class底下的才作此設定
+::ng-deep .time-date .mat-checkbox-checked .mat-checkbox-background {
+  background-color: #005581 !important;
+}
+
+::ng-deep .time-date .mat-datepicker-toggle-default-icon {
+  margin-bottom: 7px;
+  color: #000;
+}
+
+::ng-deep .time-date .mat-expansion-panel-body {
+  padding: 0 18px 16px 24px;
+}
+
+.none {
+  display: none;
+}
+

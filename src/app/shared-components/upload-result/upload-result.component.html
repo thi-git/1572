@@ -1,0 +1,18 @@
+<div id="upload-result" class="upload-result" *ngIf="allUploadFile.length > 0">
+  <div class="upload-result-container">
+    <div class="header">
+      <div class="title">檔案上傳結果</div>
+      <button mat-button mat-dialog-close class="dialog-close" (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="content">
+      <ul>
+        <li *ngFor="let data of allUploadFile">
+          {{ data.name }} -
+          <span [ngClass]="data.color">{{ data.status }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

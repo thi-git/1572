@@ -1,0 +1,8 @@
+<!-- 使用者可搜尋兩組以上關鍵字(暫不使用) -->
+<!-- <div *ngIf="custom === 'main_road'" class="road_input">
+  <input type="text" placeholder="請輸入關鍵字" (keyup)="multipleFilter($event)">
+</div> -->
+
+<ngx-treeview #treeDOM [config]="config" [items]="items" (filterChange)="onFilterChange($event)"
+  (selectedChange)="onSelect($event)">
+</ngx-treeview>

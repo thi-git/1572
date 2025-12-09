@@ -1,0 +1,159 @@
+// 詳細資料視窗
+.data-list {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: calc(100vh - 96px);
+  z-index: 9999;
+  background-color: #fff;
+  padding: 12px 8px;
+  width: 350px;
+
+  @media (max-width: 1500px) {
+    width: 280px;
+  }
+
+  // 下載格式選擇
+  .select-format {
+    display: flex;
+
+    .format-option {
+      width: 50%;
+      text-align: center;
+      margin-right: 7px;
+      padding: 10px 11px 18px;
+      font-size: 20px;
+      cursor: pointer;
+
+    }
+
+    .is-select {
+      color: #005581;
+      border-bottom: 3px solid #005581;
+      font-weight: bold;
+
+      @media (max-width: 1500px) {
+        border-bottom: 2px solid #005581;
+      }
+    }
+
+    .no-select {
+      color: #000;
+    }
+  }
+
+  // 按鈕
+  .btn_section {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+    margin-bottom: 18px;
+
+    .all_btn {
+      display: flex;
+
+      .btn_sm_two {
+        .btn_sm {
+          margin-left: 6px;
+          padding: 4px 12px;
+        }
+      }
+
+      .download {
+        cursor: pointer;
+        height: 35px;
+        margin-left: 6px;
+        margin-top: -1px;
+      }
+    }
+  }
+
+  // 資料列表
+  .data_section {
+    height: calc(100vh - 245px);
+    overflow: hidden auto;
+    display: flex;
+    justify-content: center;
+    margin-top: 0; // 20px;
+    margin-bottom: 10px;
+
+    .all_data {
+      width: 96%;
+
+      .card {
+        padding-left: 10px;
+        color: #393939;
+
+        .title {
+          display: block;
+          font-size: 22px;
+          font-weight: 600;
+          margin-top: 18px;
+          margin-bottom: 12px;
+          line-height: 1.25;
+
+          @media (max-width: 1500px) {
+            font-size: 18px;
+          }
+        }
+
+        .subtitle {
+          display: block;
+          font-size: 18px;
+          margin-top: 14px;
+          margin-bottom: 0;
+        }
+
+        .example-margin {
+          display: block;
+          margin: 0;
+          padding-left: 3px;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}
+
+// 修改checkbox樣式
+:host ::ng-deep .data-list .mat-checkbox-frame {
+  border: 1px solid 000;
+}
+
+::ng-deep .data-list .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: #005581 !important;
+}
+
+// // sidebar關閉
+// .close {
+//   width: 350px;
+
+//   @media (max-width: 1500px) {
+//     width: 280px;
+//   }
+// }
+
+// // sidebar打開
+// .open {
+//   width: 350px; // 280px
+
+//   @media (max-width: 1500px) {
+//     width: 280px; // 待調整
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

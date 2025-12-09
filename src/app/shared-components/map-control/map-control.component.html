@@ -1,0 +1,38 @@
+<div *ngIf="showMapControl && (page === '/view/search' || page === '/view/analyze' || page === '/setting/edit' || page === '/view/quality') && user !== 'eland_gov'"
+  [ngClass]="page === '/view/analyze' ? 'tc-map-control-analyze' : 'tc-map-control'" class="map-control">
+  <!-- 有上傳未編輯(橘色) -->
+  <button (click)="changeDisplayStatus('upload_data')" (mouseenter)="toggleOpen('upload')"
+    (mouseleave)="toggleClose('upload')" matTooltip="">
+    <img [hidden]="!mapCrontrol.upload" src="assets/icons/map_tc_upload.png" alt="">
+    <img [hidden]="mapCrontrol.upload" src="assets/icons/map_tc_upload.png" style="opacity: 0.5;" alt="">
+  </button>
+  <!-- 有上傳已編輯(藍色) -->
+  <button (click)="changeDisplayStatus('setting_data')" (mouseenter)="toggleOpen('setting')"
+    (mouseleave)="toggleClose('setting')" matTooltip="">
+    <img [hidden]="!mapCrontrol.setting" src="assets/icons/map_tc_setting.svg" alt="">
+    <img [hidden]="mapCrontrol.setting" src="assets/icons/map_tc_setting.svg" style="opacity: 0.5;" alt="">
+  </button>
+  <!-- 無資料(灰色) -->
+  <button (click)="changeDisplayStatus('no_data')" (mouseenter)="toggleOpen('no_data')"
+    (mouseleave)="toggleClose('no_data')" matTooltip="">
+    <img [hidden]="!mapCrontrol.no_data" src="assets/icons/map_tc_no.png" alt="">
+    <img [hidden]="mapCrontrol.no_data" src="assets/icons/map_tc_no.png" style="opacity: 0.5;" alt="">
+  </button>
+</div>
+
+
+<div *ngIf="showMapControl && (page === '/view/search' || page === '/view/analyze' || page === '/setting/edit' || page === '/view/quality')"
+  [ngClass]="page === '/view/analyze' ? 'map-control-bottom-analyze' : 'map-control-bottom'">
+  <div *ngIf="display_control.upload" [@openClose150]="mapCrontrol_explan.upload ? 'open' : 'closed'"
+    class="hover-bar flex">
+    <span>有資料，無基本設定</span>
+  </div>
+  <div *ngIf="display_control.setting" [@openClose150]="mapCrontrol_explan.setting ? 'open' : 'closed'"
+    class="hover-bar flex">
+    <span>有資料，有基本設定</span>
+  </div>
+  <div *ngIf="display_control.no_data" [@openClose150]="mapCrontrol_explan.no_data ? 'open' : 'closed'"
+    class="hover-bar flex">
+    <span>無資料，無基本設定</span>
+  </div>
+</div>

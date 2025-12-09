@@ -1,0 +1,16 @@
+<div class="edit-step">
+  <div class="step-section">
+    <span class="step start" [ngClass]="selectEditStep === 'select' ? 'is-page' : 'no-page'" (click)="changePage('select')">路口選擇</span>
+    <span class="step" [ngClass]="selectEditStep === 'definition' ? 'is-page' : 'no-page'" (click)="changePage('definition')">路口定義</span>
+    <img [ngClass]="editStatus['p1'] ? 'display' : 'none'" src="./assets/icons/success.svg" alt="">
+    <span class="step" [ngClass]="selectEditStep === 'params' ? 'is-page' : 'no-page'" (click)="changePage('params')">參數設定</span>
+    <img [ngClass]="editStatus['p2'] ? 'display' : 'none'" src="./assets/icons/success.svg" alt="">
+    <span class="step" [ngClass]="selectEditStep === 'drawing' ? 'is-page' : 'no-page'" (click)="changePage('drawing')">路段繪製</span>
+    <img [ngClass]="editStatus['p3'] ? 'display' : 'none'" src="./assets/icons/success.svg" alt="">
+  </div>
+  <div class="btn-section" *ngIf="openEdit">
+    <button class="btn_yellow" (click)="saveResult('cancel')">取消</button>
+    <button  class="btn_yellow" (click)="saveResult('save')">儲存</button>
+    <button  class="btn_yellow" (click)="saveResult('back')">結束編輯</button>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="single-date" [ngClass]="test()">
+  <div class="test">
+    <mat-expansion-panel [(expanded)]="panelOpen" class="panel" #panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+         選擇日期<span *ngIf="page === '/view/quality'" class="need-select">*</span> | {{ selectTime }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-radio-group class="radio-group" [(ngModel)]="selectTime">
+        <mat-radio-button class="radio-button" *ngFor="let option of timeOption" [value]="option" (change)="selectChange(option)" (click)="close()">
+          {{ option }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </mat-expansion-panel>
+  </div>
+</div>
+
+
+

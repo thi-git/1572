@@ -1,0 +1,135 @@
+@import "src/app/styles/default/colors";
+
+// TC圖層開關
+.tc-map-control {
+  position: absolute;
+  z-index: 999;
+  bottom: 175px;
+  left: 28px;
+  cursor: pointer;
+
+  @media (max-height: 750px) {
+    bottom: 155px;
+  }
+}
+
+// TC圖層開關
+.tc-map-control-analyze {
+  position: absolute;
+  z-index: 999;
+  bottom: 390px;
+  left: 28px;
+  cursor: pointer;
+}
+
+.map-control {
+  // width: 5vh;
+  // height: 10vh;
+  padding: 5px 3px;
+  background-color: #fff;
+  border-radius: 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid #005581;
+  // box-shadow: 5px 7px 5px rgba(0, 0, 0, 0.5);
+
+  button{
+    width: 30px;
+    // height: 45px;
+    padding: 1px;
+    background-color: transparent;
+    box-shadow: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+}
+
+// 1個button 36px
+.map-control-bottom {
+  position: absolute;
+  z-index: 777;
+  bottom: 175px;
+  left: 60px;
+  color: $light-font-color;
+  user-select: none;
+  width: 52px;
+  padding: 5px 0;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-height: 750px) {
+    bottom: 155px;
+  }
+
+  .hover-bar {
+    width: 0px;
+    height: 30px;
+    padding-left: 0px;
+    padding-right: 8px;
+    background-color: rgba(#FFFFFF, 0.8);
+    margin-left: 5px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    line-height: 17px;
+    white-space: nowrap;
+
+    .block-color {
+      width: 30px;
+      height: 15px;
+    }
+
+  }
+}
+
+.map-control-bottom-analyze {
+  position: absolute;
+  z-index: 777;
+  // top: 45vh;
+  bottom: 390px;
+  left: 60px;
+  color: $light-font-color;
+  user-select: none;
+  width: 52px;
+  padding: 5px 0;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+
+  .hover-bar {
+    width: 0px;
+    height: 30px;
+    padding-left: 0px;
+    padding-right: 8px;
+    background-color: rgba(#FFFFFF, 0.8);
+    margin-left: 5px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    line-height: 17px;
+    white-space: nowrap;
+
+    .block-color {
+      width: 30px;
+      height: 15px;
+    }
+
+  }
+}
+

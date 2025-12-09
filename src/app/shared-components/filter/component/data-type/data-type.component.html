@@ -1,0 +1,17 @@
+<div class="data-type" [ngClass]="types.includes('其他資料') ? 'long' : 'normal'">
+  <div class="test">
+    <mat-expansion-panel [expanded]="panelOpen" class="panel" #panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+         資料類型 <span *ngIf="page === '/view/analyze'" class="need-select"class="need-select">*</span> | {{ select }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-radio-group class="radio-group" [(ngModel)]="select">
+        <mat-radio-button class="radio-button" *ngFor="let type of types" [value]="type" (change)="selectChange(type)" (click)="close()">
+          {{ type }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </mat-expansion-panel>
+  </div>
+</div>
+

@@ -1,0 +1,14 @@
+<div class="holiday-select">
+  <div class="test">
+    <mat-expansion-panel [(expanded)]="panelOpen" class="panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+         平假日
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-checkbox-tree [treeList]="treeList" (getName)="getName($event)">
+      </app-checkbox-tree>
+    </mat-expansion-panel>
+  </div>
+</div>
+

@@ -1,0 +1,147 @@
+<div class="edit" *ngIf="selectEditStep === 'definition'">
+  <!-- 路口名稱 -->
+  <div class="intersection-name">
+    <h1>{{ intersectionName }}</h1>
+  </div>
+
+  <!-- 道路群組 -->
+  <div class="road-group">
+    <div class="container">
+      <div class="type">
+        <h2 class="info">道路群組(非必要)</h2>
+        <mat-expansion-panel
+        [(expanded)]="panelOpenGroup"
+        class="panel road-group-panel"
+        collapsedHeight="20px"
+        expandedHeight="20px"
+        id="grouptest">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="checked-text">
+            {{ selectedRoadGroupText }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <!-- 關鍵字搜尋 -->
+        <div class="search-section">
+          <input type="text" placeholder="關鍵字搜尋" (keyup)="selectData($event)">
+        </div>
+        <!-- checkbox選單 -->
+        <section class="example-section">
+          <span class="example-list-section">
+            <ul>
+              <li *ngFor="let group of roadGroupArr" class="option-set">
+                <mat-checkbox class="checkbox" [(ngModel)]="group.is_enable" (change)="changeStatus($event, group.groupName)">{{ group.groupName }}</mat-checkbox>
+              </li>
+            </ul>
+            <!-- 新增群組按鈕 -->
+            <div class="add-group">
+              <button class="add" *ngIf="!addRoadGroup" (click)="addNewRoadGroup()">新增群組</button>
+              <input type="text" *ngIf="addRoadGroup" placeholder="請輸入群組名稱" [(ngModel)]="addRoadGroupName">
+              <div class="res" *ngIf="addRoadGroup">
+                <button class="cancel" (click)="addRoadGroupRes('cancel')">取消</button>
+                <button class="save" (click)="addRoadGroupRes('save')">新增</button>
+              </div>
+            </div>
+          </span>
+        </section>
+        </mat-expansion-panel>
+      </div>
+    </div>
+  </div>
+
+  <!-- 示意圖 -->
+  <div class="intersection-img">
+    <div class="bg-setting">
+      <svg xmlns="http://www.w3.org/2000/svg" width="204.761" height="205.791" viewBox="0 0 204.761 205.791">
+        <g id="组_2630" data-name="组 2630" transform="translate(-466 -124)">
+          <g id="组_1770" data-name="组 1770" transform="translate(466 124)">
+            <g id="组_1768" data-name="组 1768" transform="translate(0 132.361)">
+              <path id="路径_2109" data-name="路径 2109" d="M146.726,292.117h73.43v73.43" transform="translate(-146.726 -292.117)" fill="none" stroke="#404040" stroke-width="2"/>
+              <path id="路径_2110" data-name="路径 2110" d="M228.54,365.548v-73.43h73.431" transform="translate(-97.209 -292.117)" fill="none" stroke="#404040" stroke-width="2"/>
+            </g>
+            <g id="组_1769" data-name="组 1769" transform="translate(0 0)">
+              <path id="路径_2111" data-name="路径 2111" d="M301.971,283.092H228.54v-73.43" transform="translate(-97.209 -209.661)" fill="none" stroke="#404040" stroke-width="2"/>
+              <path id="路径_2112" data-name="路径 2112" d="M220.156,209.661v73.43H146.726" transform="translate(-146.726 -209.661)" fill="none" stroke="#404040" stroke-width="2"/>
+            </g>
+          </g>
+          <text id="D" transform="translate(562 170)" fill="#404040" font-size="18" font-family="NotoSansCJKtc-Regular, Noto Sans CJK TC"><tspan x="0" y="0">{{ intersectionTestArr[2] }}</tspan></text>
+          <text id="A" transform="translate(630 234)" fill="#404040" font-size="18" font-family="NotoSansCJKtc-Regular, Noto Sans CJK TC"><tspan x="0" y="0">{{ intersectionTestArr[3] }}</tspan></text>
+          <text id="B" transform="translate(562 302)" fill="#404040" font-size="18" font-family="NotoSansCJKtc-Regular, Noto Sans CJK TC"><tspan x="0" y="0">{{ intersectionTestArr[0] }}</tspan></text>
+          <text id="C" transform="translate(495 234)" fill="#404040" font-size="18" font-family="NotoSansCJKtc-Regular, Noto Sans CJK TC"><tspan x="0" y="0">{{ intersectionTestArr[1] }}</tspan></text>
+        </g>
+      </svg>
+      <h2>起始方向</h2>
+    </div>
+  </div>
+
+  <!-- 編輯路段 -->
+  <div class="road-select">
+    <div class="container">
+      <div class="type">
+        <h2 class="info">編輯路段</h2>
+        <mat-expansion-panel
+        [(expanded)]="panelOpenRoad"
+        class="panel"
+        collapsedHeight="20px"
+        expandedHeight="20px">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="title">
+            {{ selectedRoadName }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <!-- radio選單 -->
+        <section class="example-section">
+          <span class="example-list-section">
+            <ul>
+              <mat-radio-group [(ngModel)]="selectedValue">
+                <li *ngFor="let data of arrowDataGroup" class="option-set" (click)="findMarkerMsg(data)">
+                  <mat-radio-button value="{{ data.markerDir }}">
+                    <span class="road-name">({{ data.markerDir }}) {{ data.eachRoad }}</span>
+                  </mat-radio-button>
+                </li>
+              </mat-radio-group>
+            </ul>
+          </span>
+        </section>
+        </mat-expansion-panel>
+      </div>
+    </div>
+  </div>
+
+  <!-- 編輯箭頭 -->
+  <div class="edit-section" *ngIf="haveSelectedRoad" >
+    <div class="direction">
+      <div class="type" [ngClass]="typeSetting(idx)" *ngFor="let arrowType of arrowSetting; let idx = index">
+        <div class="container-setting">
+          <h2 class="info">往{{ arrowType['direction_name'] }}方向</h2>
+          <mat-expansion-panel
+          [(expanded)]="panelOpenArr[idx]"
+          class="custom-panel"
+          collapsedHeight="20px"
+          expandedHeight="20px">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="title">
+              <img *ngIf="selectedTypeName[idx] !== '無'" src="./assets/icons/{{ selectedTypeName[idx] }}.svg" alt="">
+              <span class="arrow-info">{{ selectedTypeName[idx] }}</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <!-- radio選單 -->
+          <section class="example-section">
+            <span class="example-list-section">
+              <ul>
+                <mat-radio-group [(ngModel)]="selectedTypeName[idx]">
+                  <li *ngFor="let typeName of allTypeName" class="option-set">
+                    <mat-radio-button value="{{ typeName }}" (click)="selectOption(arrowType, typeName, idx)">
+                      <img *ngIf="typeName !== '無'" src="./assets/icons/{{ typeName }}.svg" alt="">
+                      <span class="arrow-info">{{ typeName }}</span>
+                    </mat-radio-button>
+                  </li>
+                </mat-radio-group>
+              </ul>
+            </span>
+          </section>
+        </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

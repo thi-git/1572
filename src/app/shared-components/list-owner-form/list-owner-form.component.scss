@@ -1,0 +1,294 @@
+@import "../../styles/nz-style-custom.scss";
+
+.list-owner-form {
+  height: calc(100% - 56px);
+  padding-top: 65px;
+  width: 70%;
+  margin: 0 auto; // 置中
+  // overflow: auto;
+
+  @media (max-width: 1500px) {
+    padding-top: 50px;
+  }
+
+  .list-owner-form-container {
+    // width: 96%;
+    // margin: 0 auto; // 置中
+    padding-top: 30px;
+
+    .btn-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: "Noto Sans CJK TC", sans-serif;
+
+      .left-result {
+        font-size: 25px;
+        font-weight: 1000;
+
+        @media (max-width: 1500px) {
+          font-size: 18px;
+        }
+      }
+    }
+
+    .table {
+      width: 100%;
+      padding: 0;
+      margin-top: 5px;
+      font-family: "Noto Sans CJK TC", sans-serif;
+      font-size: 18px;
+      border-collapse: separate;
+      border-spacing: 0;
+
+      @media (max-width: 1500px) {
+        font-size: 12px;
+      }
+
+
+      nz-select {
+        width: 80%;
+      }
+
+      // 編輯刪除按鈕
+      .edit-btn {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        width: 40px;
+        position: relative;
+
+        // RWD待調整
+        @media (max-width: 1500px) {
+          width: 25px;
+          padding: 0 3px;
+        }
+
+        img {
+          max-width: 100%;
+        }
+      }
+
+      .edit-btn-none {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        width: 40px;
+        position: relative;
+        pointer-events: none;
+        opacity: 0.5;
+
+        // RWD待調整
+        @media (max-width: 1500px) {
+          width: 25px;
+          padding: 0 3px;
+        }
+
+        img {
+          max-width: 100%;
+        }
+      }
+
+      .edit-btn:focus {
+        border: 0.5px solid rgba(#005581, 0.5);
+      }
+
+      // 新增專案編號
+      .edit-input {
+        text-align: center;
+        width: 100%;
+        background-color: #fff;
+        border: none;
+        font-size: 15px;
+        outline-color: #0256ab;
+        height: 34px;
+        padding: 0;
+
+        @media (max-width: 1500px) {
+          font-size: 11px;
+          height: 26px;
+        }
+      }
+
+      .edit-checked-btn {
+        cursor: pointer;
+        font-size: 14px;
+        color: #000;
+        background-color: #A9DEF1;
+        border: 1px solid #fff;
+        border-radius: 5px;
+        padding: 1px 10px 1px ;
+        margin:  0 5px;
+        box-sizing: border-box;
+        height: 32px;
+
+        @media (max-width: 1500px) {
+          padding: 0 10px;
+          font-size: 11px;
+          height: 26px;
+        }
+      }
+
+      // 表格內容編輯
+      .data-view {
+        font-size: 15px;
+        color: #000;
+        text-align: center;
+        border: none;
+        background-color: transparent;
+        width: 80%;
+        outline-color: transparent;
+
+        @media (max-width: 1500px) {
+          font-size: 12px;
+        }
+      }
+
+      .data-edit {
+        font-size: 15px;
+        color: #000;
+        text-align: center;
+        border: none;
+        outline-color: #0256ab;
+        background-color: #e0e0e0;
+        width: 80%;
+
+        @media (max-width: 1500px) {
+          font-size: 12px;
+        }
+      }
+
+      // 底色
+      .odd-row {
+        background-color: rgba(#A9DEF1, 0.25);
+      }
+
+      .even-row {
+        background-color: #fff;
+      }
+    }
+
+    .tfoot {      // scroll待調整
+      background-color: #A9DEF1;
+      font-family: "Noto Sans CJK TC", sans-serif;
+      position: sticky;
+      bottom: 0;
+      z-index: 1;
+      flex: 0 0 auto;
+
+      td {
+        text-align: center;
+        color: #000;
+        font-weight: normal;
+        border: 0.5px solid rgba(#005581, 0.5);
+        padding: 4px 6px;
+
+        @media (max-width: 1500px) {
+          padding: 0px 4px;
+        }
+      }
+
+      input {
+        text-align: center;
+        width: 100%;
+        background-color: #fff;
+        border: none;
+        font-size: 16px;
+        outline-color: #0256ab;
+        height: 42px;
+        padding: 0;
+
+        @media (max-width: 1500px) {
+          font-size: 13px;
+          height: 30px;
+        }
+      }
+
+      .insert-btn {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        width: 40px;
+        padding: 0;
+
+        // RWD待調整
+        @media (max-width: 1500px) {
+          width: 28px;
+        }
+        img {
+          max-width: 100%;
+        }
+      }
+
+      button {
+        cursor: pointer;
+        font-size: 16px;
+        color: #fff;
+        background-color: #005581;
+        border: 1px solid #fff;
+        border-radius: 5px;
+        padding: 7px 14px 6px ;
+        margin:  0 5px;
+        box-sizing: border-box;
+        height: 38px;
+
+        @media (max-width: 1500px) {
+          padding: 6px 7px 6px ;
+          font-size: 12px;
+          height: 32px;
+        }
+      }
+    }
+  }
+}
+
+.list-owner-form-none {
+  display: none;
+}
+
+// 小幫手內容換行設定
+::ng-deep .mat-tooltip {
+  white-space: pre-line !important; // 換行設定
+  font-size: 14.6px;
+  line-height: 1.5;
+}
+
+// remind
+::ng-deep snack-bar-container.snack-bar-setting-red {
+  background-color: #AC2222 !important;
+  display: flex;
+
+  .mat-simple-snackbar-btn-container {
+    font-weight: 500;
+    float: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .mat-simple-snackbar-action {
+    margin-right: 8px;
+  }
+
+  .snack-bar-cancel-button {
+    border: 1px solid #FFFFFF;
+    color: rgba(#FFFFFF, 0.5);
+  }
+}
+
+::ng-deep snack-bar-container.snack-bar-setting-brown {
+  background-color: #C7B299 !important;
+
+  .mat-simple-snackbar {
+    font-weight: 500;
+    color: #000 !important;
+
+    button {
+      border-color: #000;
+    }
+  }
+
+  .mat-simple-snackbar-action button .mat-button-wrapper {
+    color: #000 !important;
+  }
+}

@@ -1,0 +1,17 @@
+@import "src/app/styles/nz-style-custom";
+
+.role-setting {
+  .checkbox {
+    margin: 20px 0px;
+
+    h3 {
+      color: black;
+      font-size: 1.2rem;
+      height: 45px;
+    }
+  }
+
+  .btn-container {
+    text-align: end;
+  }
+}

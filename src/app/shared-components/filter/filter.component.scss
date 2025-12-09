@@ -1,0 +1,80 @@
+.filter {
+  position: relative;
+  z-index: 9999;
+  display: flex;
+  flex-wrap: wrap;
+  height: 96px;
+  padding: 28px 28px;
+
+  .commit-section {
+    display: flex;
+    align-items: center;
+    width: 28%;
+    height: 40px;
+    margin-left: 20px;
+
+    .title {
+      width: 14%;
+      font-size: 16px;
+      font-family: "Noto Sans CJK TC", sans-serif;
+
+      @media (max-width: 1500px) {
+        width: 18%;
+      }
+    }
+
+    input {
+      width: 90%;
+      height: 90%;
+      border: 1px solid #005581;
+      border-radius: 4px;
+      outline: none; // outline-color
+      font-size: 16px;
+      font-family: "Noto Sans CJK TC", sans-serif;
+      padding: 2px 8px;
+
+      @media (max-width: 1500px) {
+        width: 84%;
+      }
+    }
+  }
+}
+
+// 正常
+.filter_general {
+  top: 0;
+}
+
+// 往下
+.filter_down {
+  top: 65px;
+}
+
+// 不顯示
+.filter_none {
+  display: none;
+}
+
+// 上傳中按鈕設定
+.is-uploading {
+  pointer-events: none;
+  cursor: default;
+}
+
+// 編輯頁面取消/儲存按鈕
+.btn-none {
+  display: none;
+}
+
+// [清單內容管理]取消/儲存按鈕
+.list-result-btn {
+  position: absolute;
+  z-index: 10000;
+  right: 20px;
+  top: -51px; // 待調整
+
+  // RWD，待調整
+  @media (max-width: 1500px) {
+    top: 103px;
+  }
+}

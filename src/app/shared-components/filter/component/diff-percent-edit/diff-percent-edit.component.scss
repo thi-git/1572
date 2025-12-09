@@ -1,0 +1,35 @@
+.display {
+  position: absolute;
+  z-index: 12000;
+  top: 84px;
+  left: 300px;
+  display: flex;
+  align-items: center;
+  width: 180px;
+  margin-left: 20px;
+  height: 36px;
+
+  .title {
+    font-size: 16px;
+    font-family: "Noto Sans CJK TC", sans-serif;
+  }
+
+  .setting {
+    margin-left: 5px;
+  }
+
+  input {
+    width: 40px;
+    height: 100%;
+    border: 1px solid #005581;
+    border-radius: 4px;
+    outline: none; // outline-color
+    font-size: 16px;
+    font-family: "Noto Sans CJK TC", sans-serif;
+    padding: 2px 8px;
+  }
+}
+
+.none {
+  display: none;
+}

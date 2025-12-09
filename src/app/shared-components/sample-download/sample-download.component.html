@@ -1,0 +1,7 @@
+<div id="sample-download" class="sample-download">
+  <div class="sample-container">
+    <div class="sample" *ngFor="let item of filter">
+      <div class="sample-img"><img [src]="BACKEND_SERVER + item.img_path" [alt]="item.name"></div>
+      <div class="sample-title">{{ item.name }} ({{ item.version }})<span (click)="download(item.file_path)"><img src="./assets/icons/sample_download.png" alt="範例下載按鈕"></span></div>
+  </div>
+</div>

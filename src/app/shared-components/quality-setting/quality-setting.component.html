@@ -1,0 +1,205 @@
+<div class="quality-setting" *ngIf="selectEditStep === 'setting'">
+  <button class="next-btn" (click)="goNext()">下一步</button>
+  <div class="all-section">
+    <div class="each-section" *ngFor="let road of roadArr; let i = index">
+      <!-- 左側資訊區塊 -->
+      <div class="left-section">
+        <!-- 標題 -->
+        <div class="title">
+          <h1 class="idx">路口{{ road.index }}</h1>
+          <h2 class="road">{{ road.road }}</h2>
+        </div>
+        <!-- 路口示意圖 -->
+        <div class="main-section">
+          <div class="img-container">
+            <svg width="360" height="288" viewBox="0 0 360 288" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0.5" y="0.5" width="359" height="287" rx="6.7" fill="white"/>
+              <rect x="0.5" y="0.5" width="359" height="287" rx="6.7" stroke="#005581"/>
+              <!-- 路段 -->
+              <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="307.787" y="148.896">{{left_test_arr[i]['each_road'][0]}}</tspan></text>
+              <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="159.016" y="269.495">{{left_test_arr[i]['each_road'][1]}}</tspan></text>
+              <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="13.5156" y="148.896">{{left_test_arr[i]['each_road'][2]}}</tspan></text>
+              <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="159.016" y="29.1963">{{left_test_arr[i]['each_road'][3]}}</tspan></text>
+              <line x1="139.957" y1="45.0044" x2="139.957" y2="104.404" stroke="black" stroke-width="0.9"/>
+              <line x1="64.3553" y1="104.403" x2="64.3553" y2="183.603" stroke="black" stroke-width="0.9"/>
+              <path d="M219.601 242.555L139.501 242.555" stroke="black" stroke-width="0.9"/>
+              <path d="M219.601 45.4558L139.501 45.4558" stroke="black" stroke-width="0.9"/>
+              <line x1="295.653" y1="104.405" x2="295.653" y2="183.605" stroke="black" stroke-width="0.9"/>
+              <line x1="219.151" y1="45.0054" x2="219.151" y2="104.405" stroke="black" stroke-width="0.9"/>
+              <line x1="139.957" y1="183.604" x2="139.957" y2="242.104" stroke="black" stroke-width="0.9"/>
+              <line x1="295.203" y1="104.855" x2="218.703" y2="104.855" stroke="black" stroke-width="0.9"/>
+              <line x1="140.403" y1="104.854" x2="63.9034" y2="104.854" stroke="black" stroke-width="0.9"/>
+              <line x1="219.151" y1="183.605" x2="219.151" y2="242.105" stroke="black" stroke-width="0.9"/>
+              <line x1="295.203" y1="184.054" x2="218.703" y2="184.054" stroke="black" stroke-width="0.9"/>
+              <line x1="140.404" y1="184.054" x2="63.9044" y2="184.054" stroke="black" stroke-width="0.9"/>
+              <!-- 方向 -->
+              <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="265.506" y="148.896">{{left_test_arr[i]['each_dir'][0]}}</tspan></text>
+              <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="170.602" y="225.397">{{left_test_arr[i]['each_dir'][1]}}</tspan></text>
+              <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="85.5039" y="148.896">{{left_test_arr[i]['each_dir'][2]}}</tspan></text>
+              <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Noto Sans CJK TC" font-size="12.6" letter-spacing="0em"><tspan x="170.602" y="73.2959">{{left_test_arr[i]['each_dir'][3]}}</tspan></text>
+              </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右側編輯區塊 -->
+      <div class="edit-section">
+        <div class="direction-info" *ngIf="directionSetting === '東西向'">
+          <img class="west" src="./assets/icons/Vector.svg" alt="">
+          <span class="text-west">北</span>
+        </div>
+        <div class="direction-info" *ngIf="directionSetting === '南北向'">
+          <span class="text-north">北</span>
+          <img class="north" src="./assets/icons/Vector.svg" alt="">
+        </div>
+        <!-- 下拉選單 -->
+        <!-- 上區塊 -->
+        <div class="test-panel-top">
+          <!-- 上區塊 -->
+          <div class="section">
+            <!-- 固定方向 -->
+            <div class="top-setting">
+              <span>{{right_test_arr[i]['each_dir'][3]}}</span>
+            </div>
+            <!-- 對應方向(上) -->
+            <mat-expansion-panel [expanded]="panelOpen" class="panel panel-top1" #panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                 {{ dir_top[i]  }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-radio-group class="radio-group" [(ngModel)]="dir_top[i]">
+                <mat-radio-button class="radio-button" *ngFor="let each_dir of top_test_arr[i]" [value]="each_dir" (change)="selectChange('top', 'dir', each_dir, road)" (click)="close()">
+                  {{ each_dir }}
+                </mat-radio-button>
+              </mat-radio-group>
+            </mat-expansion-panel>
+            <!-- 路段 -->
+            <mat-expansion-panel [expanded]="panelOpen" class="panel panel-top2" #panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ road_top[i]  }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-radio-group class="radio-group" [(ngModel)]="road_top[i]">
+                <mat-radio-button class="radio-button" *ngFor="let each_road of right_test_arr[i]['each_road']" [value]="each_road" (change)="selectChange('top', 'road', each_road, road)" (click)="close()">
+                  {{ each_road }}
+                </mat-radio-button>
+              </mat-radio-group>
+            </mat-expansion-panel>
+          </div>
+        </div>
+        <div class="test-panel-center">
+          <!-- 中區塊 -->
+          <div class="section">
+            <div class="section-center section-left">
+               <!-- 對應方向(左) -->
+               <mat-expansion-panel [expanded]="panelOpen" class="panel-left panel-left1" #panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ dir_left[i] }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-radio-group class="radio-group" [(ngModel)]="dir_left[i]">
+                  <mat-radio-button class="radio-button" *ngFor="let each_dir of left_test_arr_2[i]" [value]="each_dir" (change)="selectChange('left', 'dir', each_dir, road)" (click)="close()">
+                    {{ each_dir }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </mat-expansion-panel>
+              <!-- 路段(左) -->
+              <mat-expansion-panel [expanded]="panelOpen" class="panel-left panel-left2" #panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ road_left[i]  }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-radio-group class="radio-group" [(ngModel)]="road_left[i]">
+                  <mat-radio-button class="radio-button" *ngFor="let each_road of right_test_arr[i]['each_road']" [value]="each_road" (change)="selectChange('left', 'road', each_road, road)" (click)="close()">
+                    {{ each_road }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </mat-expansion-panel>
+              <!-- 固定方向(左) -->
+              <div class="left-setting">
+                <span>{{right_test_arr[i]['each_dir'][2]}}</span>
+              </div>
+            </div>
+            <div class="section-center section-right">
+              <!-- 對應方向(右) -->
+              <mat-expansion-panel [expanded]="panelOpen" class="panel-right panel-right1" #panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ dir_right[i] }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-radio-group class="radio-group" [(ngModel)]="dir_right[i]">
+                  <mat-radio-button class="radio-button" *ngFor="let each_dir of right_test_arr_2[i]" [value]="each_dir" (change)="selectChange('right', 'dir', each_dir, road)" (click)="close()">
+                    {{ each_dir }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </mat-expansion-panel>
+              <!-- 路段(右) -->
+              <mat-expansion-panel [expanded]="panelOpen" class="panel-right panel-right2" #panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ road_right[i] }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-radio-group class="radio-group" [(ngModel)]="road_right[i]">
+                  <mat-radio-button class="radio-button" *ngFor="let each_road of right_test_arr[i]['each_road']" [value]="each_road" (change)="selectChange('right', 'road', each_road, road)" (click)="close()">
+                    {{ each_road }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </mat-expansion-panel>
+              <!-- 固定方向(右) -->
+              <div class="right-setting">
+                <span>{{right_test_arr[i]['each_dir'][0]}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="test-panel-bottom">
+          <!-- 下區塊 -->
+         <div class="section">
+          <!-- 固定方向 -->
+          <div class="bottom-setting">
+            <span>{{right_test_arr[i]['each_dir'][1]}}</span>
+          </div>
+          <!-- 路段 -->
+          <mat-expansion-panel [expanded]="panelOpen" class="panel panel-bottom1" #panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ road_bottom[i] }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-radio-group class="radio-group" [(ngModel)]="road_bottom[i]">
+              <mat-radio-button class="radio-button" *ngFor="let each_road of right_test_arr[i]['each_road']" [value]="each_road" (change)="selectChange('bottom', 'road', each_road, road)" (click)="close()">
+                {{ each_road }}
+              </mat-radio-button>
+            </mat-radio-group>
+          </mat-expansion-panel>
+          <!-- 對應方向(下) -->
+          <mat-expansion-panel [expanded]="panelOpen" class="panel panel-bottom2" #panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ dir_bottom[i]  }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-radio-group class="radio-group" [(ngModel)]="dir_bottom[i]">
+              <mat-radio-button class="radio-button" *ngFor="let each_dir of bottom_test_arr[i]" [value]="each_dir" (change)="selectChange('bottom', 'dir', each_dir, road)" (click)="close()">
+                {{ each_dir }}
+              </mat-radio-button>
+            </mat-radio-group>
+          </mat-expansion-panel>
+         </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+

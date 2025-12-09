@@ -1,0 +1,23 @@
+<div class="filter" [class]="pageWithSubpage()">
+  <ng-container appDynamicComponentHost>
+  </ng-container>
+  <!-- 左側確認按鈕 -->
+  <button *ngIf="page === 'search'" class="btn_yellow search_btn" (click)="search()">確認</button>
+  <button *ngIf="page === 'analyze'" class="btn_yellow search_btn" (click)="analyze()">確認</button>
+  <button *ngIf="page === 'db_search'" class="btn_yellow search_btn" (click)="db_search()">
+    <img src="./assets/icons/filter-search.png" alt="">查詢
+  </button>
+  <button *ngIf="page === 'quality' && step === 'basic'" class="btn_yellow search_btn" (click)="quality()">確認</button>
+  <button *ngIf="page === 'upload'" class="btn_yellow" (click)="upload()">確認上傳</button>
+  <div *ngIf="page === 'upload'" class="commit-section">
+    <span class="title">內容：</span>
+    <input type="text" [(ngModel)]="uploadCommit">
+  </div>
+  <button *ngIf="page === 'edit'" class="btn_yellow search_btn" [ngClass]="setSearchBtnDisplay()" (click)="edit()">確認</button>
+  <button *ngIf="page === 'list_manage'" class="btn_yellow search_btn" (click)="list_search()">確認</button>
+  <!-- [清單內容管理]右側取消編輯/儲存按鈕 -->
+  <div class="set-list-btn" [ngClass]="setListSaveBtnPosition()" *ngIf="selectSubpage">
+    <button *ngIf="page === 'list_manage'" class="btn_white" (click)="saveResult('cancel_update')">取消編輯</button>
+    <button *ngIf="page === 'list_manage'" class="btn_yellow" (click)="saveResult('update')">儲存</button>
+  </div>
+</div>

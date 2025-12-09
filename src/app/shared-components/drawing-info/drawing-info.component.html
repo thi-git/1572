@@ -1,0 +1,36 @@
+<div class="drawing-info" *ngIf="selectEditStep === 'drawing' && roadTitle.length > 0">
+  <div class="title-section">
+    <img src="./assets/icons/pin.svg" alt="">
+    <h1 class="all-title">{{ roadTitle }}</h1>
+  </div>
+  <!-- 路段選擇 -->
+  <div class="road-choose">
+    <h2 class="dir">路段選擇</h2>
+    <mat-expansion-panel
+    [(expanded)]="panelOpenRoad"
+    class="panel"
+    collapsedHeight="20px"
+    expandedHeight="20px">
+    <mat-expansion-panel-header>
+      <mat-panel-title class="title">
+        {{ selectedRoadName }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <!-- radio選單 -->
+    <section class="example-section">
+      <span class="example-list-section">
+        <ul>
+          <mat-radio-group [(ngModel)]="selectedValue">
+            <li *ngFor="let data of roadSectionGroup" class="option-set" (click)="selectRoad(data)">
+              <mat-radio-button value="{{ data.direction }}">
+                <span class="road-name">({{ data.direction }}) {{ data.roadName }}</span>
+              </mat-radio-button>
+            </li>
+          </mat-radio-group>
+        </ul>
+      </span>
+    </section>
+    </mat-expansion-panel>
+  </div>
+</div>
+

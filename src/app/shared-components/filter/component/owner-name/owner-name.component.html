@@ -1,0 +1,18 @@
+<div class="owner-name" [class]="setDisplay()">
+  <div class="test">
+    <mat-expansion-panel [(expanded)]="panelOpen" class="panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+        業主名稱
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-container *ngIf="isData">
+        <app-checkbox-tree
+        [custom]="'owner_name'"
+        [treeList]="treeList"
+        (getName)="getName($event)">
+        </app-checkbox-tree>
+      </ng-container>
+    </mat-expansion-panel>
+  </div>
+</div>

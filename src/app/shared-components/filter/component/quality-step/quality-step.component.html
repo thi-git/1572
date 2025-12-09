@@ -1,0 +1,5 @@
+<div class="edit-step" *ngIf="selectEditStep !== 'basic'">
+  <span class="step start" [ngClass]="selectEditStep === 'basic' ? 'is-page' : 'no-page'" (click)="changePage('basic')">路口定義</span>
+  <span class="step" [ngClass]="selectEditStep === 'setting' ? 'is-page' : 'no-page'" (click)="changePage('setting')">方向設定</span>
+  <span class="step" [ngClass]="selectEditStep === 'result' ? 'is-page' : 'no-page'" (click)="changePage('result')">結果產出</span>
+</div>

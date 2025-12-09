@@ -1,0 +1,106 @@
+<div id="list-owner-form" [class]='setPosition()'>
+  <div class="list-owner-form-container">
+    <!-- 按鈕 -->
+    <div class="btn-section">
+      <div class="left-result">
+        <span>篩選結果</span>
+      </div>
+    </div>
+
+    <!-- 表格 -->
+    <div class="table">
+      <nz-table #sortTable [nzData]="listOfData" [nzLoading]="loading" nzTableLayout="fixed" [nzSize]="tableSize"
+      [nzShowPagination]="showPagination" [nzPageSize]="pageSize" [nzSimple]="true"
+      [nzScroll]="{ y: scrollY, x: scrollX }">
+        <thead>
+          <tr>
+            <ng-container *ngFor="let column of listOfColumn">
+              <th [nzSortFn]="column.compare" [nzSortPriority]="column.priority" [nzWidth]="column.width"
+              [nzFilterMultiple]="column.filterMultiple"
+              [nzFilters]="column.listOfFilter"
+              [nzFilterFn]="column.filterFn">
+              {{ column.title }}
+              </th>
+            </ng-container>
+          </tr>
+        </thead>
+        <!-- 末列固定 -->
+        <tfoot class="tfoot">
+          <tr>
+            <td>
+              <button class="insert-btn">
+                <img src="./assets/icons/insert-row.svg">
+              </button>
+            </td>
+            <td><input class="input" id="new_owner_name" type="text" placeholder="新增業主名稱"/></td>
+            <td>
+              <button class="insert-btn">
+                <img src="./assets/icons/insert-row.svg">
+              </button>
+            </td>
+            <td><input class="input" id="new_project_number" type="text" placeholder="新增專案編號"/></td>
+            <td><button class="button" (click)="InsertData()">確認</button></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <ng-container *ngFor="let owner of ownerCountKeys; let i = index">
+            <ng-container  *ngIf="ownerCount && ownerCount[owner]">
+              <tr [ngClass]="{ 'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0 }">
+                <td nzEllipsis [attr.rowspan]="ownerCount[owner]?.count || 0">
+                  <button [class]="setEditBtn(ownerCount[owner]?.status || '')" (click)="DeleteOwner(owner)">
+                    <img src="./assets/icons/remove.svg">
+                  </button>
+                  <button [class]="setEditBtn(ownerCount[owner]?.status || '')" (click)="EditOwner(owner)">
+                    <img [src]="editing[owner] ? './assets/icons/checked_edit.svg' : './assets/icons/edit.svg'">
+                  </button>
+                </td>
+                <td nzEllipsis [attr.rowspan]="ownerCount[owner]?.count || 0">
+                  <input [id]="owner"
+                         [class.data-view]="!editing[owner]"
+                         [class.data-edit]="editing[owner]"
+                         type="text" [readonly]="!editing[owner]" [value]="owner"
+                         (change)="onOwnerInputChange($event.target.value, owner)" autocomplete="off">
+                </td>
+              </tr>
+              <ng-container *ngFor="let data of sortTable.data">
+                <ng-container *ngIf="data['owner_name'] === owner">
+                  <tr [ngClass]="{ 'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0 }">
+                    <td nzEllipsis>
+                      <button [class]="setEditBtn(data['status'])" (click)="DeleteProject(owner, data['project_num'])">
+                        <img src="./assets/icons/remove.svg">
+                      </button>
+                      <button [class]="setEditBtn(data['status'])" (click)="EditProject(owner, data['project_num'])">
+                        <img [src]="editing[owner + '_' + data['project_num']] ? './assets/icons/checked_edit.svg' : './assets/icons/edit.svg'">
+                      </button>
+                    </td>
+                    <td nzEllipsis>
+                      <input [id]="owner +'_' + data['project_num']"
+                             [class.data-view]="!editing[owner + '_' + data['project_num']]"
+                             [class.data-edit]="editing[owner + '_' + data['project_num']]"
+                             type="text" [readonly]="data['status'] === 'file' || !editing[owner + '_' + data['project_num']]"
+                             [value]="data['project_num']"
+                             (change)="onProjectInputChange($event.target.value, data['project_num'], owner)" autocomplete="off"/>
+                      <img src="./assets/icons/info-display.svg" alt=""
+                      [matTooltip]="display_info[data['project_num']]" [matTooltipPosition]="'above'">
+                    </td>
+                    <td nzEllipsis>{{ data['update_time'] }}</td>
+                    <td nzEllipsis>{{ data['last_editor'] }}</td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+              <tr [ngClass]="{ 'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0 }">
+                <td><button class="edit-btn" (click)="AddProject(owner)"><img src="./assets/icons/insert-row.svg"></button></td>
+                <td><input class="edit-input" type="text" id="insert_project_{{owner}}" placeholder="新增專案編號"/></td>
+                <td><button class="edit-checked-btn" (click)="AddProject(owner)">新增</button></td>
+                <td></td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
+
+

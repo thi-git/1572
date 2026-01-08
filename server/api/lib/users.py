@@ -11,7 +11,8 @@ from api.utils.responses import response_with
 
 # 取得使用者設定的權限
 def get_user_info():
-    res = pd.read_sql('users', con=db.engine)
+    with db.engine.connect() as connection:
+        res = pd.read_sql('users', con=connection)
     return response_with(resp.SUCCESS_200, value={"data": res.to_dict('records')})
 
 

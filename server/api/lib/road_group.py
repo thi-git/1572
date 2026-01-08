@@ -51,15 +51,11 @@ def get_road_group_data():
                 from
                     public.delay_basic x
                 join 
-                                public.tc_uploaded_file y
-                            on
-                    x.tc_id = y.tc_id
+                    public.tc_uploaded_file y
+                    on x.tc_id = y.tc_id
                     and x.date = y.date
                 where
-                    y.status = 'active'
-                            ) b
-                        on
-                a.tc_id = b.tc_id
+                    y.status = 'active) b on a.tc_id = b.tc_id
             left join (
                 select
                     distinct x.tc_id,
@@ -67,15 +63,10 @@ def get_road_group_data():
                 from
                     public.volume_basic x
                 join 
-                                public.tc_uploaded_file y
-                            on
-                    x.tc_id = y.tc_id
-                    and x.date = y.date
-                where
-                    y.status = 'active'
-                            ) c
-                        on
-                a.tc_id = c.tc_id
+                    public.tc_uploaded_file y 
+                on x.tc_id = y.tc_id 
+                and x.date = y.date
+                where y.status = 'active') c on a.tc_id = c.tc_id
             left join (
                 select
                     distinct tc_id,svg_detail
@@ -84,19 +75,16 @@ def get_road_group_data():
                 where
                     (svg_detail <> '' and svg_detail is not null)
                     and (road_param <> ''and road_param is not null)
-                    and (road_section <> ''and road_section is not null)) d
-                        on
-                a.tc_id = d.tc_id
+                    and (road_section <> ''and road_section is not null)) d on a.tc_id = d.tc_id
+        '''
 
-                '''
-
-    df = pd.read_sql(sql, con=db.engine)
+    with db.engine.connect() as connection:
+        df = pd.read_sql(sql, con=connection)
+        # 取得縣市欄位資料
+        df_tc_road_info = pd.read_sql('tc_road_info', con=connection)
 
     # 將流量/延滯資料都沒有的tc過濾掉
     df = df[~((df['delay'] == False) & (df['volume'] == False))]
-
-    # 取得縣市欄位資料
-    df_tc_road_info = pd.read_sql('tc_road_info', con=db.engine)
     df_res = pd.merge(df, df_tc_road_info[['tc_id', 'city']], on='tc_id', how='left')
 
     # df = df.filter(items=['tc_id', 'road', 'turning', 'delay', 'volume'])

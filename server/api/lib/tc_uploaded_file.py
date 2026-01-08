@@ -52,8 +52,9 @@ def search_record(request):
     # 選出status為active的資料(待調整)
     # df_first = pd.read_sql('tc_uploaded_file', con=db.engine)
     # df = df_first[df_first['status'] == 'active']
-    df = pd.read_sql_query("""select id, tc_id, data_type, owner_name, project_num, date, date_group FROM tc_uploaded_file WHERE "status" = 'active'""",con=db.engine)
 
+    with db.engine.connect() as connection:
+        df = pd.read_sql_query("""select id, tc_id, data_type, owner_name, project_num, date, date_group FROM tc_uploaded_file WHERE "status" = 'active'""", con=connection)
     # 用參數過濾後的資料(如果沒有參數，等於不用走以下過濾流程 => 就會保留全部資料)
     # 如果給的tc參數有資料
     if tc_list and len(tc_list) > 0:
@@ -73,8 +74,9 @@ def search_record(request):
 
     # 如果給的縣市參數有資料
     if district_new_list and len(district_new_list) > 0:
-        # 讀取tc_road_info資料表
-        tc_road_info = pd.read_sql('tc_road_info', con=db.engine)
+        with db.engine.connect() as connection:
+            # 讀取tc_road_info資料表
+            tc_road_info = pd.read_sql('tc_road_info', con=connection)
         merged_df = pd.merge(df, tc_road_info, on='tc_id')
         df = merged_df[merged_df['city'].isin(district_new_list)]
 
@@ -121,7 +123,9 @@ def search_record_v2(request):
              tc_uploaded_file.date, tc_uploaded_file.date_group,
              tc_uploaded_file.commit, tc_road_info.road, tc_road_info.lat, tc_road_info.lng, tc_road_info.city
              FROM tc_uploaded_file LEFT JOIN tc_road_info USING (tc_id) WHERE status = 'active'"""
-    df = pd.read_sql_query(sql, con=db.engine)
+    
+    with db.engine.connect() as connection:
+        df = pd.read_sql_query(sql, con=connection)
 
     # 用參數過濾後的資料(如果沒有參數，等於不用走以下過濾流程 => 就會保留全部資料)
     # 如果給的tc參數有資料
@@ -259,92 +263,93 @@ def get_page_two_data_volume(path):
     if '路口基本資料(IN)' in all_sheet:
         df = pd.read_excel(path, sheet_name='路口基本資料(IN)')
 
-        # 從sample_file找出該檔案的當前version
-        df_sample = pd.read_sql('sample_file', con=db.engine)
-        intersection_type = str(df.loc[df['※請填入'] == '路口類型：'].iat[0, 1]).split(' ')[0]
-        if intersection_type in ['正交四叉路口', '五叉路口', '六叉路口']:
-            # 路口類型防呆
-            now_version = df_sample[(df_sample['name'] == intersection_type) & (df_sample['data_type'] == 'volume')]['version'].values[0]
-            version_info = df.loc[df['※請填入'] == '版本號：'].iat[0, 1]
+        with db.engine.connect() as connection:
+            # 從sample_file找出該檔案的當前version
+            df_sample = pd.read_sql('sample_file', con=connection)
+            intersection_type = str(df.loc[df['※請填入'] == '路口類型：'].iat[0, 1]).split(' ')[0]
+            if intersection_type in ['正交四叉路口', '五叉路口', '六叉路口']:
+                # 路口類型防呆
+                now_version = df_sample[(df_sample['name'] == intersection_type) & (df_sample['data_type'] == 'volume')]['version'].values[0]
+                version_info = df.loc[df['※請填入'] == '版本號：'].iat[0, 1]
 
-            # 如果版本號欄位符合當前最新版
-            if version_info == now_version:
-                # 檢查所填TC是否在所有TC編號中:
-                tc_list = pd.read_sql('tc_road_info', con=db.engine)['tc_id'].tolist()
-                tc_id = df.loc[df['※請填入'] == 'TC編號：'].iat[0, 1]
-                if tc_id in tc_list:
-                    # 檢查業主名稱和專案編號是否存在
-                    owner_list = pd.read_sql('owner_project', con=db.engine)['owner_name'].drop_duplicates().tolist()
-                    project_list = pd.read_sql('owner_project', con=db.engine)['project_num'].tolist()
-                    owner_name = df.loc[df['※請填入'] == '業主名稱：'].iat[0, 1]
-                    project_num = str(df.loc[df['※請填入'] == '專案編號：'].iat[0, 1])
-                    if owner_name not in owner_list and project_num not in project_list:
-                        return {"res_type": "error",
-                                "error_str": f"所填寫之業主名稱與專案編號均不存在，請先前往清單管理頁面設定"}
-                    if owner_name not in owner_list:
-                        return {"res_type": "error", "error_str": f"所填寫之業主名稱不存在，請先前往清單管理頁面設定"}
-                    if project_num not in project_list:
-                        return {"res_type": "error", "error_str": f"所填寫之專案編號不存在，請先前往清單管理頁面設定"}
-                    else:
-                        road = df.loc[df['※請填入'] == '路口名稱：'].iat[0, 1]
-                        area_name = df.loc[df['※請填入'] == '行政區域：'].iat[0, 1]
-                        # 上傳檔案中，日期可能吃到'-'或'/'的情況，針對'/'做處理(原因待查明)
-                        if '/' in str(df.loc[df['※請填入'] == '日期：'].iat[0, 1]):
-                            test = str(df.loc[df['※請填入'] == '日期：'].iat[0, 1]).replace("/", "-")
+                # 如果版本號欄位符合當前最新版
+                if version_info == now_version:
+                    # 檢查所填TC是否在所有TC編號中:
+                    tc_list = pd.read_sql('tc_road_info', con=connection)['tc_id'].tolist()
+                    tc_id = df.loc[df['※請填入'] == 'TC編號：'].iat[0, 1]
+                    if tc_id in tc_list:
+                        # 檢查業主名稱和專案編號是否存在
+                        owner_list = pd.read_sql('owner_project', con=connection)['owner_name'].drop_duplicates().tolist()
+                        project_list = pd.read_sql('owner_project', con=connection)['project_num'].tolist()
+                        owner_name = df.loc[df['※請填入'] == '業主名稱：'].iat[0, 1]
+                        project_num = str(df.loc[df['※請填入'] == '專案編號：'].iat[0, 1])
+                        if owner_name not in owner_list and project_num not in project_list:
+                            return {"res_type": "error",
+                                    "error_str": f"所填寫之業主名稱與專案編號均不存在，請先前往清單管理頁面設定"}
+                        if owner_name not in owner_list:
+                            return {"res_type": "error", "error_str": f"所填寫之業主名稱不存在，請先前往清單管理頁面設定"}
+                        if project_num not in project_list:
+                            return {"res_type": "error", "error_str": f"所填寫之專案編號不存在，請先前往清單管理頁面設定"}
                         else:
-                            test = str(df.loc[df['※請填入'] == '日期：'].iat[0, 1])
-                        date = test.split(' ')[0]
-                        holiday_type = df.loc[df['※請填入'] == '平假日：'].iat[0, 1]
-                        investigate_time = df.loc[df['※請填入'] == '調查時段：'].iat[0, 1]
-                        weather = df.loc[df['※請填入'] == '天候：'].iat[0, 1]
-                        intersection_type = str(df.loc[df['※請填入'] == '路口類型：'].iat[0, 1]).split(' ')[0]
-
-                        # 檢查資訊是否填寫完整
-                        message_arr = []
-                        type_arr = [
-                            {"name": '業主名稱', "input_value": owner_name},
-                            {"name": '專案編號', "input_value": project_num},
-                            {"name": 'TC編號', "input_value": tc_id},
-                            {"name": '路口名稱', "input_value": road},
-                            {"name": '行政區域', "input_value": area_name},
-                            {"name": '日期', "input_value": date},
-                            {"name": '平假日', "input_value": holiday_type},
-                            {"name": '調查時段', "input_value": investigate_time},
-                            {"name": '天候', "input_value": weather},
-                            {"name": '路口類型', "input_value": intersection_type},
-                        ]
-
-                        # 表格有空值
-                        test = {'正交四叉路口': 5, '五叉路口': 6, '六叉路口': 7}
-
-                        subset = df.iloc[15:19, 1:test[intersection_type]]
-                        if not subset.isna().any().any():
-                            for data in type_arr:
-                                if data['name'] == '日期':
-                                    if data['input_value'] == 'nan':
-                                        message_arr.append(data['name'])
-                                else:
-                                    if not isinstance(data['input_value'], str):
-                                        message_arr.append(data['name'])
-
-                            # 如果message_arr沒有內容，代表所有內容都有填寫完整，否則需提供未填寫的內容給前端顯示
-                            if len(message_arr) == 0:
-                                return {"res_type": "ok",
-                                        "res_obj": {'owner_name': owner_name, 'project_num': project_num,
-                                                    'tc_id': tc_id, 'road': road,
-                                                    'date': date, 'holiday_type': holiday_type,
-                                                    'intersection_type': intersection_type,
-                                                    'page_two_df': df}}
+                            road = df.loc[df['※請填入'] == '路口名稱：'].iat[0, 1]
+                            area_name = df.loc[df['※請填入'] == '行政區域：'].iat[0, 1]
+                            # 上傳檔案中，日期可能吃到'-'或'/'的情況，針對'/'做處理(原因待查明)
+                            if '/' in str(df.loc[df['※請填入'] == '日期：'].iat[0, 1]):
+                                test = str(df.loc[df['※請填入'] == '日期：'].iat[0, 1]).replace("/", "-")
                             else:
-                                return {"res_type": "error", "error_str": f"【{'、'.join(message_arr)}】未填寫完整"}
-                        else:
-                            return {"res_type": "error", "error_str": '請確認各方向路口填寫完整'}
+                                test = str(df.loc[df['※請填入'] == '日期：'].iat[0, 1])
+                            date = test.split(' ')[0]
+                            holiday_type = df.loc[df['※請填入'] == '平假日：'].iat[0, 1]
+                            investigate_time = df.loc[df['※請填入'] == '調查時段：'].iat[0, 1]
+                            weather = df.loc[df['※請填入'] == '天候：'].iat[0, 1]
+                            intersection_type = str(df.loc[df['※請填入'] == '路口類型：'].iat[0, 1]).split(' ')[0]
+
+                            # 檢查資訊是否填寫完整
+                            message_arr = []
+                            type_arr = [
+                                {"name": '業主名稱', "input_value": owner_name},
+                                {"name": '專案編號', "input_value": project_num},
+                                {"name": 'TC編號', "input_value": tc_id},
+                                {"name": '路口名稱', "input_value": road},
+                                {"name": '行政區域', "input_value": area_name},
+                                {"name": '日期', "input_value": date},
+                                {"name": '平假日', "input_value": holiday_type},
+                                {"name": '調查時段', "input_value": investigate_time},
+                                {"name": '天候', "input_value": weather},
+                                {"name": '路口類型', "input_value": intersection_type},
+                            ]
+
+                            # 表格有空值
+                            test = {'正交四叉路口': 5, '五叉路口': 6, '六叉路口': 7}
+
+                            subset = df.iloc[15:19, 1:test[intersection_type]]
+                            if not subset.isna().any().any():
+                                for data in type_arr:
+                                    if data['name'] == '日期':
+                                        if data['input_value'] == 'nan':
+                                            message_arr.append(data['name'])
+                                    else:
+                                        if not isinstance(data['input_value'], str):
+                                            message_arr.append(data['name'])
+
+                                # 如果message_arr沒有內容，代表所有內容都有填寫完整，否則需提供未填寫的內容給前端顯示
+                                if len(message_arr) == 0:
+                                    return {"res_type": "ok",
+                                            "res_obj": {'owner_name': owner_name, 'project_num': project_num,
+                                                        'tc_id': tc_id, 'road': road,
+                                                        'date': date, 'holiday_type': holiday_type,
+                                                        'intersection_type': intersection_type,
+                                                        'page_two_df': df}}
+                                else:
+                                    return {"res_type": "error", "error_str": f"【{'、'.join(message_arr)}】未填寫完整"}
+                            else:
+                                return {"res_type": "error", "error_str": '請確認各方向路口填寫完整'}
+                    else:
+                        return {"res_type": "error", "error_str": 'TC編號填寫有誤或留有多餘空白'}
                 else:
-                    return {"res_type": "error", "error_str": 'TC編號填寫有誤或留有多餘空白'}
+                    return {"res_type": "error", "error_str": '此範例檔為舊版，請先至下載頁面取得最新版範例檔'}
             else:
-                return {"res_type": "error", "error_str": '此範例檔為舊版，請先至下載頁面取得最新版範例檔'}
-        else:
-            return {"res_type": "error", "error_str": '請檢查路口類型是否填寫正確'}
+                return {"res_type": "error", "error_str": '請檢查路口類型是否填寫正確'}
     else:
         return {"res_type": "error", "error_str": '請將資料類型設定為延滯'}
 
@@ -358,95 +363,96 @@ def get_page_two_data_delay(path):
     if '基本資料' in all_sheet:
         df = pd.read_excel(path, sheet_name='基本資料')
 
-        # 從sample_file找出該檔案的當前version
-        df_sample = pd.read_sql('sample_file', con=db.engine)
-        intersection_type = str(df.loc[df['※請填入'] == '路口類型：'].iat[0, 1]).split(' ')[0]
-        if intersection_type in ['四叉路口', '五叉路口', '六叉路口']:
-            # 路口類型防呆
-            now_version = df_sample[(df_sample['name'] == intersection_type) & (df_sample['data_type'] == 'delay')]['version'].values[0]
-            version_info = df.loc[df['※請填入'] == '版本號：'].iat[0, 1]
+        with db.engine.connect() as connection:
+            # 從sample_file找出該檔案的當前version
+            df_sample = pd.read_sql('sample_file', con=connection)
+            intersection_type = str(df.loc[df['※請填入'] == '路口類型：'].iat[0, 1]).split(' ')[0]
+            if intersection_type in ['四叉路口', '五叉路口', '六叉路口']:
+                # 路口類型防呆
+                now_version = df_sample[(df_sample['name'] == intersection_type) & (df_sample['data_type'] == 'delay')]['version'].values[0]
+                version_info = df.loc[df['※請填入'] == '版本號：'].iat[0, 1]
 
-            # 如果版本號欄位符合當前最新版
-            if version_info == now_version:
-                # 檢查所填TC是否在所有TC編號中:
-                tc_list = pd.read_sql('tc_road_info', con=db.engine)['tc_id'].tolist()
-                tc_id = df.loc[df['※請填入'] == 'TC編號：'].iat[0, 1]
-                if tc_id in tc_list:
-                    # 檢查業主名稱和專案編號是否存在
-                    owner_list = pd.read_sql('owner_project', con=db.engine)['owner_name'].drop_duplicates().tolist()
-                    project_list = pd.read_sql('owner_project', con=db.engine)['project_num'].tolist()
-                    owner_name = df.loc[df['※請填入'] == '業主名稱：'].iat[0, 1]
-                    project_num = df.loc[df['※請填入'] == '專案編號：'].iat[0, 1]
-                    if owner_name not in owner_list and project_num not in project_list:
-                        return {"res_type": "error", "error_str": f"所填寫之業主名稱與專案編號均不存在，請先前往清單內容管理頁面設定"}
-                    if owner_name not in owner_list:
-                        return {"res_type": "error", "error_str": f"所填寫之業主名稱不存在，請先前往清單內容管理頁面設定"}
-                    if project_num not in project_list:
-                        return {"res_type": "error", "error_str": f"所填寫之專案編號不存在，請先前往清單內容管理頁面設定"}
-                    else:
-                        road = df.loc[df['※請填入'] == '路口名稱：'].iat[0, 1]
-                        area_name = df.loc[df['※請填入'] == '行政區域：'].iat[0, 1]
-                        intersection_type = str(df.loc[df['※請填入'] == '路口類型：'].iat[0, 1]).split(' ')[0]
-
-                        # 取得日期和天候資料(不過濾重複日期) => 最少一筆，最多九筆
-                        date_arr = []
-                        weather_arr = []
-                        day_peak_arr = []
-                        day_peak_test = []
-                        for idx in range(11):
-                            date_ele = str(df.loc[df['※請填入'] == '日期：'].iat[0, idx + 1]).split(' ')[0]
-                            weather_ele = str(df.loc[df['※請填入'] == '天候：'].iat[0, idx + 1]).split(' ')[0]
-                            day_peak_ele = str(df.loc[df['藍底'] == '平日晨峰(0630-0830)'].iat[0, idx + 1]).split(' ')[0]
-                            if date_ele != 'nan':
-                                date_arr.append(date_ele)
-                                day_peak_test.append(True)
-                                day_peak_arr.append(day_peak_ele)
-                            else:
-                                day_peak_test.append(False)
-                            if weather_ele != 'nan':
-                                weather_arr.append(weather_ele)
-
-                        # 檢查資訊是否填寫完整
-                        message_arr = []
-                        type_arr = [
-                            {"name": '路口名稱', "input_value": road},
-                            {"name": '行政區域', "input_value": area_name},
-                            {"name": '日期', "input_value": date_arr},  # 至少要填一筆
-                            {"name": '路口類型', "input_value": intersection_type},
-                        ]
-
-                        # 表格有空值
-                        test = {'四叉路口': 5, '五叉路口': 6, '六叉路口': 7}
-                        subset = df.iloc[16:20, 1:test[intersection_type]]
-                        if not subset.isna().any().any():
-                            for data in type_arr:
-                                if data['name'] == '日期':
-                                    if len(data['input_value']) == 0:
-                                        message_arr.append(data['name'])  # 至少要填一筆
-                                else:
-                                    if not isinstance(data['input_value'], str):
-                                        message_arr.append(data['name'])
-
-                            # message_arr沒有內容，代表所有內容都有填寫完整，否則需提供未填寫的內容給前端顯示
-                            if len(message_arr) == 0:
-                                return {"res_type": "ok",
-                                        "res_obj": {'owner_name': owner_name, 'project_num': project_num,
-                                                    'tc_id': tc_id, 'road': road, 'area_name': area_name,
-                                                    'date': date_arr, 'weather': weather_arr,
-                                                    'day_peak': day_peak_arr,
-                                                    'intersection_type': intersection_type,
-                                                    'page_two_df': df, 'day_peak_test': day_peak_test
-                                                    }}
-                            else:
-                                return {"res_type": "error", "error_str": f"【{'、'.join(message_arr)}】未填寫完整"}
+                # 如果版本號欄位符合當前最新版
+                if version_info == now_version:
+                    # 檢查所填TC是否在所有TC編號中:
+                    tc_list = pd.read_sql('tc_road_info', con=connection)['tc_id'].tolist()
+                    tc_id = df.loc[df['※請填入'] == 'TC編號：'].iat[0, 1]
+                    if tc_id in tc_list:
+                        # 檢查業主名稱和專案編號是否存在
+                        owner_list = pd.read_sql('owner_project', con=connection)['owner_name'].drop_duplicates().tolist()
+                        project_list = pd.read_sql('owner_project', con=connection)['project_num'].tolist()
+                        owner_name = df.loc[df['※請填入'] == '業主名稱：'].iat[0, 1]
+                        project_num = df.loc[df['※請填入'] == '專案編號：'].iat[0, 1]
+                        if owner_name not in owner_list and project_num not in project_list:
+                            return {"res_type": "error", "error_str": f"所填寫之業主名稱與專案編號均不存在，請先前往清單內容管理頁面設定"}
+                        if owner_name not in owner_list:
+                            return {"res_type": "error", "error_str": f"所填寫之業主名稱不存在，請先前往清單內容管理頁面設定"}
+                        if project_num not in project_list:
+                            return {"res_type": "error", "error_str": f"所填寫之專案編號不存在，請先前往清單內容管理頁面設定"}
                         else:
-                            return {"res_type": "error", "error_str": '請確認各方向路口填寫完整'}
+                            road = df.loc[df['※請填入'] == '路口名稱：'].iat[0, 1]
+                            area_name = df.loc[df['※請填入'] == '行政區域：'].iat[0, 1]
+                            intersection_type = str(df.loc[df['※請填入'] == '路口類型：'].iat[0, 1]).split(' ')[0]
+
+                            # 取得日期和天候資料(不過濾重複日期) => 最少一筆，最多九筆
+                            date_arr = []
+                            weather_arr = []
+                            day_peak_arr = []
+                            day_peak_test = []
+                            for idx in range(11):
+                                date_ele = str(df.loc[df['※請填入'] == '日期：'].iat[0, idx + 1]).split(' ')[0]
+                                weather_ele = str(df.loc[df['※請填入'] == '天候：'].iat[0, idx + 1]).split(' ')[0]
+                                day_peak_ele = str(df.loc[df['藍底'] == '平日晨峰(0630-0830)'].iat[0, idx + 1]).split(' ')[0]
+                                if date_ele != 'nan':
+                                    date_arr.append(date_ele)
+                                    day_peak_test.append(True)
+                                    day_peak_arr.append(day_peak_ele)
+                                else:
+                                    day_peak_test.append(False)
+                                if weather_ele != 'nan':
+                                    weather_arr.append(weather_ele)
+
+                            # 檢查資訊是否填寫完整
+                            message_arr = []
+                            type_arr = [
+                                {"name": '路口名稱', "input_value": road},
+                                {"name": '行政區域', "input_value": area_name},
+                                {"name": '日期', "input_value": date_arr},  # 至少要填一筆
+                                {"name": '路口類型', "input_value": intersection_type},
+                            ]
+
+                            # 表格有空值
+                            test = {'四叉路口': 5, '五叉路口': 6, '六叉路口': 7}
+                            subset = df.iloc[16:20, 1:test[intersection_type]]
+                            if not subset.isna().any().any():
+                                for data in type_arr:
+                                    if data['name'] == '日期':
+                                        if len(data['input_value']) == 0:
+                                            message_arr.append(data['name'])  # 至少要填一筆
+                                    else:
+                                        if not isinstance(data['input_value'], str):
+                                            message_arr.append(data['name'])
+
+                                # message_arr沒有內容，代表所有內容都有填寫完整，否則需提供未填寫的內容給前端顯示
+                                if len(message_arr) == 0:
+                                    return {"res_type": "ok",
+                                            "res_obj": {'owner_name': owner_name, 'project_num': project_num,
+                                                        'tc_id': tc_id, 'road': road, 'area_name': area_name,
+                                                        'date': date_arr, 'weather': weather_arr,
+                                                        'day_peak': day_peak_arr,
+                                                        'intersection_type': intersection_type,
+                                                        'page_two_df': df, 'day_peak_test': day_peak_test
+                                                        }}
+                                else:
+                                    return {"res_type": "error", "error_str": f"【{'、'.join(message_arr)}】未填寫完整"}
+                            else:
+                                return {"res_type": "error", "error_str": '請確認各方向路口填寫完整'}
+                    else:
+                        return {"res_type": "error", "error_str": 'TC編號填寫有誤或留有多餘空白'}
                 else:
-                    return {"res_type": "error", "error_str": 'TC編號填寫有誤或留有多餘空白'}
+                    return {"res_type": "error", "error_str": '此範例檔為舊版，請先至範例檔案下載頁面取得最新版範例檔'}
             else:
-                return {"res_type": "error", "error_str": '此範例檔為舊版，請先至範例檔案下載頁面取得最新版範例檔'}
-        else:
-            return {"res_type": "error", "error_str": '請檢查路口類型是否填寫正確'}
+                return {"res_type": "error", "error_str": '請檢查路口類型是否填寫正確'}
     else:
         return {"res_type": "error", "error_str": '請將資料類型設定為流量'}
 
@@ -500,7 +506,8 @@ def save_uploaded_data(path, page_two_data, data_type, commit):
     # 存入資料
     if data_type == 'volume':
         # 如果目前上傳的tc_id/data_type/date已有相同一筆在資料表中，並且status是active => 提醒使用者先刪除再上傳(不覆蓋資料)
-        df = pd.read_sql('tc_uploaded_file', con=db.engine)
+        with db.engine.connect() as connection:
+            df = pd.read_sql('tc_uploaded_file', con=connection)
         df = df[(df['tc_id'] == tc_id) & (df['data_type'] == 'volume') & (df['status'] == 'active')]
         df['date'] = df['date'].astype(str)  # 日期轉換為字串
         df_search = df.loc[df['date'] == date_result]
@@ -523,7 +530,8 @@ def save_uploaded_data(path, page_two_data, data_type, commit):
 
     elif data_type == 'delay':
         # 如果目前上傳的tc_id/data_type/date_group已有相同一筆在資料表中，並且status是active => 提醒使用者先刪除再上傳(不覆蓋資料)
-        df = pd.read_sql('tc_uploaded_file', con=db.engine)
+        with db.engine.connect() as connection:
+            df = pd.read_sql('tc_uploaded_file', con=connection)
         df = df[(df['tc_id'] == tc_id) & (df['data_type'] == 'delay') & (df['status'] == 'active')]
         df['date_group'] = df['date_group'].astype(str)  # 日期轉換為字串
         df_search = df.loc[df['date_group'] == date_result]
@@ -566,13 +574,14 @@ def save_uploaded_data_other(org_filename, commit):
 
     # 取得剛存入的資料
     sql = f"SELECT * FROM tc_uploaded_file WHERE id = '{get_id}'"
-    df = pd.read_sql_query(sql, con=db.engine)
+    with db.engine.connect() as connection:
+        df = pd.read_sql_query(sql, con=connection)
 
-    # 設定下載路徑欄位
-    other_export_path = 'res/upload_record/' + org_filename
-    df.at[0, 'export_excel_path'] = [other_export_path]
-    db.engine.execute(f"DELETE FROM tc_uploaded_file WHERE id = '{get_id}'")
-    df.to_sql('tc_uploaded_file', db.engine, if_exists='append', index=False, chunksize=500)
+        # 設定下載路徑欄位
+        other_export_path = 'res/upload_record/' + org_filename
+        df.at[0, 'export_excel_path'] = [other_export_path]
+        db.engine.execute(f"DELETE FROM tc_uploaded_file WHERE id = '{get_id}'")
+        df.to_sql('tc_uploaded_file', connection, if_exists='append', index=False, chunksize=500)
 
 
 # 讀取流量excel分頁一資料並轉成固定欄位存入資料表
@@ -620,8 +629,10 @@ def save_upload_volume_turning(page_one_df_test, page_two_data):
 
     # 如果目前上傳的tc_id/date已有相同多筆在資料表中，就先砍掉原本的資料
     db.engine.execute(f"DELETE FROM volume_turning WHERE tc_id = '{tc_id}' AND date = '{date}'")
-    # 寫入資料表
-    res_change_col_name.to_sql('volume_turning', db.engine, if_exists='append', index=False, chunksize=500)
+    
+    with db.engine.connect() as connection:
+        # 寫入資料表
+        res_change_col_name.to_sql('volume_turning', connection, if_exists='append', index=False, chunksize=500)
 
 
 # 讀取流量excel分頁二資料並轉成固定欄位存入資料表
@@ -718,8 +729,10 @@ def save_upload_volume_basic(page_two_df_test, page_two_data):
 
     # 如果目前上傳的tc_id/date/data_type已有相同一筆在資料表中，就先砍掉原本的資料
     db.engine.execute(f"DELETE FROM volume_basic WHERE tc_id = '{tc_id}' AND date = '{date}'")
-    # 寫入資料表
-    res_change_col_name.to_sql('volume_basic', db.engine, if_exists='append', index=False, chunksize=500)
+
+    with db.engine.connect() as connection:
+        # 寫入資料表
+        res_change_col_name.to_sql('volume_basic', connection, if_exists='append', index=False, chunksize=500)
 
 
 # 讀取延滯excel分頁一資料並轉成固定欄位存入資料表
@@ -756,8 +769,10 @@ def save_upload_delay_save(page_one_df_test, page_two_data):
 
     # 如果目前上傳的tc_id/date已有相同一筆在資料表中，就先砍掉原本的資料
     db.engine.execute(f"DELETE FROM delay_save WHERE tc_id = '{tc_id}' AND date_group = '{date_str}'")
-    # 寫入資料表
-    res_change_col_name.to_sql('delay_save', db.engine, if_exists='append', index=False, chunksize=500)
+
+    with db.engine.connect() as connection:
+        # 寫入資料表
+        res_change_col_name.to_sql('delay_save', connection, if_exists='append', index=False, chunksize=500)
 
 
 # 讀取延滯excel分頁二資料並轉成固定欄位存入資料表
@@ -839,7 +854,9 @@ def save_upload_delay_basic(page_two_df_test, page_two_data):
         res_change_col_name['date'] = date[ele]
         res_change_col_name['weather'] = weather[ele]
         res_change_col_name['day_peak'] = day_peak[ele]
-        res_change_col_name.to_sql('delay_basic', db.engine, if_exists='append', index=False, chunksize=500)
+
+        with db.engine.connect() as connection:
+            res_change_col_name.to_sql('delay_basic', connection, if_exists='append', index=False, chunksize=500)
 
 
 # 產生下載檔案
@@ -869,7 +886,9 @@ def generate_download_excel(page_two_data, data_type, path, test):
     elif data_type == 'delay':
         # 得到多筆資料
         sql = f"SELECT * FROM tc_uploaded_file WHERE status = 'active' and tc_id = '{tc_id}' and data_type = '{data_type}' AND date_group = '{date_result}'"
-    df = pd.read_sql_query(sql, con=db.engine)
+    
+    with db.engine.connect() as connection:
+        df = pd.read_sql_query(sql, con=connection)
 
     # 取得索引&相關欄位資料
     intersection_type = df.at[0, 'intersection_type']
@@ -996,7 +1015,9 @@ def generate_download_excel(page_two_data, data_type, path, test):
                         ws.cell(row=r_idx, column=c_idx, value=value)
             elif intersection_type in ['五叉路口', '六叉路口']:
                 sql = f"SELECT * FROM volume_basic WHERE tc_id = '{tc_id}' AND date = '{date_result}'"
-                df_test = pd.read_sql_query(sql, con=db.engine)
+
+                with db.engine.connect() as connection:
+                    df_test = pd.read_sql_query(sql, con=connection)
                 test_data = json.loads(df_test.at[0, 't_for_five_up'])
 
                 # 查詢值後，將該值設定到正確欄位(待優化)
@@ -1063,7 +1084,9 @@ def generate_download_excel(page_two_data, data_type, path, test):
 
         # 如果目前上傳的tc_id/date/data_type已有相同一筆在資料表中，就砍掉原本的資料
         db.engine.execute(f"DELETE FROM tc_uploaded_file WHERE tc_id = '{tc_id}' AND data_type = '{data_type}' AND date = '{date_result}'")
-        df.to_sql('tc_uploaded_file', db.engine, if_exists='append', index=False, chunksize=500)
+
+        with db.engine.connect() as connection:
+            df.to_sql('tc_uploaded_file', connection, if_exists='append', index=False, chunksize=500)
 
         # 改成檔案上傳時 直接轉換
         try:
@@ -1073,7 +1096,7 @@ def generate_download_excel(page_two_data, data_type, path, test):
 
     elif data_type == 'delay':
         # 如果目前上傳的tc_id/date/data_type已有相同一筆在資料表中，就砍掉原本的資料
-        db.engine.execute(f"DELETE FROM tc_uploaded_file WHERE tc_id = '{tc_id}' AND data_type = '{data_type}' AND date_group = '{date_result}'")
+        db.engine.execute(text("DELETE FROM tc_uploaded_file WHERE tc_id = :tc_id AND data_type = :data_type AND date_group = :date_result"), params={'tc_id': tc_id, 'data_type': data_type, 'date_result': date_result})
 
         for idx in range(len(date_arr)):
             export_path = f"{CFG.STATIC_FOLDER}/{save_path}/{file_name}"
@@ -1082,8 +1105,8 @@ def generate_download_excel(page_two_data, data_type, path, test):
             shutil.copyfile(path, export_path_v2)  # 上傳檔(複製/改名/存取)
             df.at[idx, 'export_excel_path'] = [export_path, export_path_v2]  # 下載檔0,上傳檔1
 
-        df.to_sql('tc_uploaded_file', db.engine, if_exists='append', index=False, chunksize=500)
-        
+        with db.engine.connect() as connection:
+            df.to_sql('tc_uploaded_file', connection, if_exists='append', index=False, chunksize=500)
         
         # 改成檔案上傳時 直接轉換
         try:
@@ -1092,7 +1115,6 @@ def generate_download_excel(page_two_data, data_type, path, test):
             print(f'檔案轉換錯誤: {type(e).__name__}: {str(e)}')
             import traceback
             traceback.print_exc()
-        
         
     res = response_with(resp.SUCCESS_200, value={"message": "ok"})
     return res
@@ -1655,7 +1677,9 @@ def search_download_path(data_list):
 
     export_list = []
     sql = """SELECT id, export_excel_path FROM tc_uploaded_file WHERE status = 'active'"""
-    df = pd.read_sql_query(sql, con=db.engine)
+
+    with db.engine.connect() as connection:
+        df = pd.read_sql_query(sql, con=connection)
     df_all = df[df['id'].isin(id_list)]
 
     for item in data_list:

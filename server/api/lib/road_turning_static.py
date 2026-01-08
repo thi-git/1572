@@ -27,26 +27,30 @@ def get_turning_data(type, tc_id):
     type_list = ['svg_detail', 'road_param', 'road_section']
     if type not in type_list:
         return response_with(resp.INVALID_FIELD_NAME_SENT_422)
-    # 取得路口基本資料
-    tc_df = pd.read_sql('tc_road_info', con=db.engine)
+    
+    delay_vb_df_sql = f"SELECT * FROM public.delay_basic where tc_id = '{tc_id}'"
+    volume_vb_df_sql = f"SELECT * FROM public.volume_basic where tc_id = '{tc_id}'"
+    
+    with db.engine.connect() as connection:
+        # 取得路口基本資料
+        tc_df = pd.read_sql('tc_road_info', con=connection)
+
+        # 取得轉向量資料
+        turning_df = pd.read_sql('road_turning_static', con=connection)
+
+        # 讀delay
+        delay_vb_df = pd.read_sql(delay_vb_df_sql, con=db.engine)
+
+        # 讀volume
+        volume_vb_df = pd.read_sql(volume_vb_df_sql, con=db.engine)
+
     tc_df = tc_df[tc_df['tc_id'] == tc_id]
     tc = tc_df.iloc[-1]
-
-    # 取得轉向量資料
-    turning_df = pd.read_sql('road_turning_static', con=db.engine)
     turning_df.set_index('tc_id', inplace=True)
 
     # 取得匯入資料
     # 建一個空df
     vb_df = pd.DataFrame()
-
-    # 讀delay
-    delay_vb_df_sql = f"SELECT * FROM public.delay_basic where tc_id = '{tc_id}'"
-    delay_vb_df = pd.read_sql(delay_vb_df_sql, con=db.engine)
-
-    # 讀volume
-    volume_vb_df_sql = f"SELECT * FROM public.volume_basic where tc_id = '{tc_id}'"
-    volume_vb_df = pd.read_sql(volume_vb_df_sql, con=db.engine)
 
     if not delay_vb_df.empty:
         vb_df = delay_vb_df
@@ -279,212 +283,214 @@ def get_statistics_data(request):
     date_range = param['date_range']  # 時間範圍(空值或單一日期)
     is_holiday = param['weekday']  # 時段選擇(平日/假日)
 
-    # 流量類型
-    if data_type == 'volume':
-        # 路口編號
-        if len(tc_id) == 1:
-            sql_tuple_tc = f"('{tc_id[0]}')"
-        else:
-            sql_tuple_tc = tuple(tc_id)
+    with db.engine.connect() as connection:
 
-        # 業主名稱
-        if len(owner_name) == 0:
-            df = pd.read_sql('owner_project', con=db.engine)
-            if len(df.axes[0]) == 1:
-                sql_tuple_owner = f"('{df['owner_name'].to_list()[0]}')"
+        # 流量類型
+        if data_type == 'volume':
+            # 路口編號
+            if len(tc_id) == 1:
+                sql_tuple_tc = f"('{tc_id[0]}')"
             else:
-                sql_tuple_owner = tuple(df['owner_name'].drop_duplicates().to_list())
-        elif len(owner_name) == 1:
-            sql_tuple_owner = f"('{owner_name[0]}')"
-        else:
-            sql_tuple_owner = tuple(owner_name)
+                sql_tuple_tc = tuple(tc_id)
 
-        # 專案編號
-        if len(project_num) == 0:
-            df = pd.read_sql('owner_project', con=db.engine)
-            if len(df.axes[0]) == 1:
-                sql_tuple_project = f"('{df['project_num'].to_list()[0]}')"
+            # 業主名稱
+            if len(owner_name) == 0:
+                df = pd.read_sql('owner_project', con=connection)
+                if len(df.axes[0]) == 1:
+                    sql_tuple_owner = f"('{df['owner_name'].to_list()[0]}')"
+                else:
+                    sql_tuple_owner = tuple(df['owner_name'].drop_duplicates().to_list())
+            elif len(owner_name) == 1:
+                sql_tuple_owner = f"('{owner_name[0]}')"
             else:
-                sql_tuple_project = tuple(df['project_num'].to_list())
-        elif len(project_num) == 1:
-            sql_tuple_project = f"('{project_num[0]}')"
-        else:
-            sql_tuple_project = tuple(project_num)
+                sql_tuple_owner = tuple(owner_name)
 
-        # 若回傳之日期為空值(沒有共同日期或使用者沒選)=>各TC選擇所選平假日種類資料中最新一筆/有日期:使用該日期做查詢
-        if date_range == '':
-            # print('空值: 沒有共同日期或使用者沒選')
-            sql = f'''with
-                cte1 as
-                (
-                    select tc_id, max("date") as latest_date
-                    FROM public.volume_basic
-                    where tc_id in {sql_tuple_tc}
-                    and owner_name in {sql_tuple_owner}
-                    and project_num in {sql_tuple_project}
-                    and holiday_type LIKE %s
-                    group by tc_id
-                ),
-                cte2 as
-                (
-                    select tc_id, road_param, road_section, svg_detail
-                    FROM public.road_turning_static
-                    where tc_id in {sql_tuple_tc}
-                )
-                select a.tc_id, a.road, a.export_excel_path, a.intersection_type, a.excel_data , c.road_param, c.road_section, c.svg_detail
-                from public.tc_uploaded_file a
-                join cte1 b
-                on a.tc_id = b.tc_id and a.date = b.latest_date
-                join cte2 c
-                on a.tc_id = c.tc_id
-                where data_type = '{data_type}';'''
-            df = pd.read_sql(sql, con=db.engine, params=(f'%{is_holiday}%',))
-        else:
-            # print(f"取所有TC之{date_range}做查詢")
-            sql = f'''with
-                cte1 as
-                (
-                    select tc_id, date
-                    FROM public.volume_basic
-                    where tc_id in {sql_tuple_tc}
-                    and owner_name in {sql_tuple_owner}
-                    and project_num in {sql_tuple_project}
-                    and holiday_type LIKE %s
-                ),
-                cte2 as
-                (
-                    select tc_id, road_param, road_section, svg_detail
-                    FROM public.road_turning_static
-                    where tc_id in {sql_tuple_tc}
-                )
-                select a.tc_id, a.road, a.export_excel_path, a.intersection_type, a.excel_data , c.road_param, c.road_section, c.svg_detail, b.date
-                from public.tc_uploaded_file a
-                join cte1 b
-                on a.tc_id = b.tc_id and a.date = b.date
-                join cte2 c
-                on a.tc_id = c.tc_id
-                where data_type = '{data_type}';'''
-            res = pd.read_sql(sql, con=db.engine, params=(f'%{is_holiday}%',))
-            # 過濾出所選日期
-            res['date'] = res['date'].astype(str)
-            df = res.loc[res['date'] == date_range]
-
-        set1 = set(tc_id)
-        set2 = set(df['tc_id'].tolist())
-        difference = set1 - set2
-        check_sql_result = list(difference)
-
-        # 沒找到對應資料
-        if check_sql_result:
-            res_msg = is_holiday + "的" + ",".join(check_sql_result) + "不存在於資料庫中，請解除勾選!"
-            return response_with(resp.SUCCESS_200, value={'data': {}, 'message': res_msg})
-
-        # 有找到對應資料
-        try:
-            res = read_excel_function_volume_v2(df)  # 讀取excel
-            return response_with(resp.SUCCESS_200, value={'data': res, 'message': "資料取得正常"})
-        except Exception as e:
-            print(e)
-            return response_with(resp.SUCCESS_200, value={'data': {}, 'message': "資料取得異常"})
-
-    elif data_type == 'delay':
-        # 路口編號
-        if len(tc_id) == 1:
-            sql_tuple_tc = f"('{tc_id[0]}')"
-        else:
-            sql_tuple_tc = tuple(tc_id)
-
-        # 業主名稱
-        if len(owner_name) == 0:
-            df = pd.read_sql('owner_project', con=db.engine)
-            if len(df.axes[0]) == 1:
-                sql_tuple_owner = f"('{df['owner_name'].to_list()[0]}')"
+            # 專案編號
+            if len(project_num) == 0:
+                df = pd.read_sql('owner_project', con=connection)
+                if len(df.axes[0]) == 1:
+                    sql_tuple_project = f"('{df['project_num'].to_list()[0]}')"
+                else:
+                    sql_tuple_project = tuple(df['project_num'].to_list())
+            elif len(project_num) == 1:
+                sql_tuple_project = f"('{project_num[0]}')"
             else:
-                sql_tuple_owner = tuple(df['owner_name'].drop_duplicates().to_list())
-        elif len(owner_name) == 1:
-            sql_tuple_owner = f"('{owner_name[0]}')"
-        else:
-            sql_tuple_owner = tuple(owner_name)
+                sql_tuple_project = tuple(project_num)
 
-        # 專案編號
-        if len(project_num) == 0:
-            df = pd.read_sql('owner_project', con=db.engine)
-            if len(df.axes[0]) == 1:
-                sql_tuple_project = f"('{df['project_num'].to_list()[0]}')"
-            else:
-                sql_tuple_project = tuple(df['project_num'].to_list())
-        elif len(project_num) == 1:
-            sql_tuple_project = f"('{project_num[0]}')"
-        else:
-            sql_tuple_project = tuple(project_num)
-
-        # 若回傳之日期為空值(沒有共同日期或使用者沒選)=>各TC選擇所選平假日種類資料中最新一筆/有日期:使用該日期做查詢
-        if date_range == '':
-            # print('空值: 沒有共同日期或使用者沒選')
-            sql = f'''with
+            # 若回傳之日期為空值(沒有共同日期或使用者沒選)=>各TC選擇所選平假日種類資料中最新一筆/有日期:使用該日期做查詢
+            if date_range == '':
+                # print('空值: 沒有共同日期或使用者沒選')
+                sql = f'''with
                     cte1 as
                     (
                         select tc_id, max("date") as latest_date
-                        FROM public.delay_basic
+                        FROM public.volume_basic
                         where tc_id in {sql_tuple_tc}
                         and owner_name in {sql_tuple_owner}
                         and project_num in {sql_tuple_project}
-                        and day_peak LIKE %s
+                        and holiday_type LIKE %s
                         group by tc_id
                     ),
                     cte2 as
                     (
-                        select tc_id, road_section
+                        select tc_id, road_param, road_section, svg_detail
                         FROM public.road_turning_static
                         where tc_id in {sql_tuple_tc}
                     )
-                    select a.tc_id, a.road, a.export_excel_path, a.intersection_type, c.road_section
+                    select a.tc_id, a.road, a.export_excel_path, a.intersection_type, a.excel_data , c.road_param, c.road_section, c.svg_detail
                     from public.tc_uploaded_file a
                     join cte1 b
                     on a.tc_id = b.tc_id and a.date = b.latest_date
                     join cte2 c
                     on a.tc_id = c.tc_id
                     where data_type = '{data_type}';'''
-
-            df = pd.read_sql(sql, con=db.engine, params=(f'%{is_holiday}%',))
-        else:
-            # print(f"取所有TC之{date_range}做查詢")
-            sql = f'''with
+                df = pd.read_sql(sql, con=connection, params=(f'%{is_holiday}%',))
+            else:
+                # print(f"取所有TC之{date_range}做查詢")
+                sql = f'''with
                     cte1 as
                     (
                         select tc_id, date
-                        FROM public.delay_basic
+                        FROM public.volume_basic
                         where tc_id in {sql_tuple_tc}
                         and owner_name in {sql_tuple_owner}
                         and project_num in {sql_tuple_project}
-                        and day_peak LIKE %s
+                        and holiday_type LIKE %s
                     ),
                     cte2 as
                     (
-                        select tc_id, road_section
+                        select tc_id, road_param, road_section, svg_detail
                         FROM public.road_turning_static
                         where tc_id in {sql_tuple_tc}
                     )
-                    select a.tc_id, a.road, a.export_excel_path, a.intersection_type, c.road_section, b.date
+                    select a.tc_id, a.road, a.export_excel_path, a.intersection_type, a.excel_data , c.road_param, c.road_section, c.svg_detail, b.date
                     from public.tc_uploaded_file a
                     join cte1 b
                     on a.tc_id = b.tc_id and a.date = b.date
                     join cte2 c
                     on a.tc_id = c.tc_id
                     where data_type = '{data_type}';'''
-            res = pd.read_sql(sql, con=db.engine, params=(f'%{is_holiday}%',))
-            # 過濾出所選日期
-            res['date'] = res['date'].astype(str)
-            df = res.loc[res['date'] == date_range][:1]  # 先暫時只取第一筆資料，反正每筆都長一樣(之後優化)
+                res = pd.read_sql(sql, con=connection, params=(f'%{is_holiday}%',))
+                # 過濾出所選日期
+                res['date'] = res['date'].astype(str)
+                df = res.loc[res['date'] == date_range]
 
-        try:
-            res = read_excel_function_delay_v2(df)
-            return response_with(resp.SUCCESS_200, value={'data': res, 'message': "資料取得正常"})
-        except Exception as e:
-            print(e)
-            return response_with(resp.SUCCESS_200, value={'data': {}, 'message': "資料取得異常"})
-    else:
-        return response_with(resp.SUCCESS_200, value={'data': {}, 'message': "參數錯誤"})
+            set1 = set(tc_id)
+            set2 = set(df['tc_id'].tolist())
+            difference = set1 - set2
+            check_sql_result = list(difference)
+
+            # 沒找到對應資料
+            if check_sql_result:
+                res_msg = is_holiday + "的" + ",".join(check_sql_result) + "不存在於資料庫中，請解除勾選!"
+                return response_with(resp.SUCCESS_200, value={'data': {}, 'message': res_msg})
+
+            # 有找到對應資料
+            try:
+                res = read_excel_function_volume_v2(df)  # 讀取excel
+                return response_with(resp.SUCCESS_200, value={'data': res, 'message': "資料取得正常"})
+            except Exception as e:
+                print(e)
+                return response_with(resp.SUCCESS_200, value={'data': {}, 'message': "資料取得異常"})
+
+        elif data_type == 'delay':
+            # 路口編號
+            if len(tc_id) == 1:
+                sql_tuple_tc = f"('{tc_id[0]}')"
+            else:
+                sql_tuple_tc = tuple(tc_id)
+
+            # 業主名稱
+            if len(owner_name) == 0:
+                df = pd.read_sql('owner_project', con=connection)
+                if len(df.axes[0]) == 1:
+                    sql_tuple_owner = f"('{df['owner_name'].to_list()[0]}')"
+                else:
+                    sql_tuple_owner = tuple(df['owner_name'].drop_duplicates().to_list())
+            elif len(owner_name) == 1:
+                sql_tuple_owner = f"('{owner_name[0]}')"
+            else:
+                sql_tuple_owner = tuple(owner_name)
+
+            # 專案編號
+            if len(project_num) == 0:
+                df = pd.read_sql('owner_project', con=connection)
+                if len(df.axes[0]) == 1:
+                    sql_tuple_project = f"('{df['project_num'].to_list()[0]}')"
+                else:
+                    sql_tuple_project = tuple(df['project_num'].to_list())
+            elif len(project_num) == 1:
+                sql_tuple_project = f"('{project_num[0]}')"
+            else:
+                sql_tuple_project = tuple(project_num)
+
+            # 若回傳之日期為空值(沒有共同日期或使用者沒選)=>各TC選擇所選平假日種類資料中最新一筆/有日期:使用該日期做查詢
+            if date_range == '':
+                # print('空值: 沒有共同日期或使用者沒選')
+                sql = f'''with
+                        cte1 as
+                        (
+                            select tc_id, max("date") as latest_date
+                            FROM public.delay_basic
+                            where tc_id in {sql_tuple_tc}
+                            and owner_name in {sql_tuple_owner}
+                            and project_num in {sql_tuple_project}
+                            and day_peak LIKE %s
+                            group by tc_id
+                        ),
+                        cte2 as
+                        (
+                            select tc_id, road_section
+                            FROM public.road_turning_static
+                            where tc_id in {sql_tuple_tc}
+                        )
+                        select a.tc_id, a.road, a.export_excel_path, a.intersection_type, c.road_section
+                        from public.tc_uploaded_file a
+                        join cte1 b
+                        on a.tc_id = b.tc_id and a.date = b.latest_date
+                        join cte2 c
+                        on a.tc_id = c.tc_id
+                        where data_type = '{data_type}';'''
+
+                df = pd.read_sql(sql, con=connection, params=(f'%{is_holiday}%',))
+            else:
+                # print(f"取所有TC之{date_range}做查詢")
+                sql = f'''with
+                        cte1 as
+                        (
+                            select tc_id, date
+                            FROM public.delay_basic
+                            where tc_id in {sql_tuple_tc}
+                            and owner_name in {sql_tuple_owner}
+                            and project_num in {sql_tuple_project}
+                            and day_peak LIKE %s
+                        ),
+                        cte2 as
+                        (
+                            select tc_id, road_section
+                            FROM public.road_turning_static
+                            where tc_id in {sql_tuple_tc}
+                        )
+                        select a.tc_id, a.road, a.export_excel_path, a.intersection_type, c.road_section, b.date
+                        from public.tc_uploaded_file a
+                        join cte1 b
+                        on a.tc_id = b.tc_id and a.date = b.date
+                        join cte2 c
+                        on a.tc_id = c.tc_id
+                        where data_type = '{data_type}';'''
+                res = pd.read_sql(sql, con=connection, params=(f'%{is_holiday}%',))
+                # 過濾出所選日期
+                res['date'] = res['date'].astype(str)
+                df = res.loc[res['date'] == date_range][:1]  # 先暫時只取第一筆資料，反正每筆都長一樣(之後優化)
+
+            try:
+                res = read_excel_function_delay_v2(df)
+                return response_with(resp.SUCCESS_200, value={'data': res, 'message': "資料取得正常"})
+            except Exception as e:
+                print(e)
+                return response_with(resp.SUCCESS_200, value={'data': {}, 'message': "資料取得異常"})
+        else:
+            return response_with(resp.SUCCESS_200, value={'data': {}, 'message': "參數錯誤"})
 
 
 # 取得所有TC狀態資料
@@ -559,7 +565,8 @@ def get_all_tc_turning_status():
 
                 '''
 
-    result_df = pd.read_sql(sql, con=db.engine)
+    with db.engine.connect() as connection:
+        result_df = pd.read_sql(sql, con=connection)
 
     return response_with(resp.SUCCESS_200, value={"data": result_df.to_dict('records')})
 
@@ -572,8 +579,9 @@ def get_ref_volume(request):
     is_separate = param['is_separate']
     lane_num = param['lane_num']
 
-    # 依條件查詢建議容量
-    search_df = pd.read_sql('road_volume_static', con=db.engine)
+    with db.engine.connect() as connection:
+        # 依條件查詢建議容量
+        search_df = pd.read_sql('road_volume_static', con=connection)
     search_df = search_df[(search_df['road_type'] == road_type) & (search_df['is_separate'] == is_separate) & (search_df['lane_num'] == lane_num)]
     if search_df.empty:
         ref_volume = -999
@@ -742,8 +750,6 @@ def read_excel_function_delay_v2(input_df):
             # 抓取線段座標
             output_final[row['tc_id']]['volume_data'][key]['location'] = [item for item in road_section['lines'] if item['direction'] == key][0]['location']
             
-        
-
     result_dict = replace_nan_with_string(output_final)
 
     return result_dict

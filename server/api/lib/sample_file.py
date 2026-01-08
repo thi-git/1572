@@ -10,5 +10,6 @@ from api.utils.database import db
 
 # 取得所有範例檔案
 def get_all_sample():
-    res = pd.read_sql('sample_file', con=db.engine)
+    with db.engine.connect() as connection:
+        res = pd.read_sql('sample_file', con=connection)
     return response_with(resp.SUCCESS_200, value={"data": res.to_dict('records')})

@@ -15,10 +15,12 @@ def get_all_info(request):
     data = request.get_json()
     user_name = data.get('user_name')
 
-    # 讀取users資料，找出該帳需要過濾的縣市和業主
-    selected_auth = pd.read_sql(f"SELECT * FROM users WHERE user_name = '{user_name}'", con=db.engine).loc[0, 'selected_auth']
+    with db.engine.connect() as connection:
+        # 讀取users資料，找出該帳需要過濾的縣市和業主
+        selected_auth = pd.read_sql(text("SELECT * FROM users WHERE user_name = :user_name"), con=connection, params={'user_name': user_name}).loc[0, 'selected_auth']
 
-    df = pd.read_sql('tc_road_info', con=db.engine)
+        df = pd.read_sql('tc_road_info', con=connection)
+
     res = df.filter(items=['tc_id', 'road', 'district', 'city'])
 
     # 過濾縣市(不用過濾業主，單純用縣市就好)
@@ -32,24 +34,27 @@ def get_uploaded_info(request):
     data = request.get_json()
     user_name = data.get('user_name')
 
-    # 讀取users資料，找出該帳需要過濾的縣市和業主
-    selected_auth = pd.read_sql(f"SELECT * FROM users WHERE user_name = '{user_name}'", con=db.engine).loc[0, 'selected_auth']
+    with db.engine.connect() as connection:
+        # 讀取users資料，找出該帳需要過濾的縣市和業主
+        selected_auth = pd.read_sql(text("SELECT * FROM users WHERE user_name = :user_name"), con=connection, params={'user_name': user_name}).loc[0, 'selected_auth']
 
-    # 讀取轉向量資料(過濾掉值為NULL的資料，並查看是否有編輯紀錄)
-    df_turning = pd.read_sql('road_turning_static', con=db.engine).dropna()
+        # 讀取轉向量資料(過濾掉值為NULL的資料，並查看是否有編輯紀錄)
+        df_turning = pd.read_sql('road_turning_static', con=connection).dropna()
+
+        # 讀取TC靜態表資料，過濾出該帳號需要的縣市
+        df_info = pd.read_sql('tc_road_info', con=connection)
+
+        # 取得有上傳紀錄的TC
+        sql = text("SELECT DISTINCT(tc_id), owner_name, project_num, data_type FROM tc_uploaded_file WHERE status = :status")
+        df2 = pd.read_sql_query(sql, con=connection, params={"status": "active"})
 
     # 找出編輯完成的路口
     edit_list = df_turning[(df_turning['svg_detail'].notna() & df_turning['svg_detail'] != '') &
                            (df_turning['road_param'].notna() & df_turning['road_param'] != '') &
                            (df_turning['road_section'].notna() & df_turning['road_section'] != '')]['tc_id'].tolist()
 
-    # 讀取TC靜態表資料，過濾出該帳號需要的縣市
-    df_info = pd.read_sql('tc_road_info', con=db.engine)
+    
     df_info = df_info[df_info['city'].isin(selected_auth['city'])]
-
-    # 取得有上傳紀錄的TC
-    sql = text("SELECT DISTINCT(tc_id), owner_name, project_num, data_type FROM tc_uploaded_file WHERE status = :status")
-    df2 = pd.read_sql_query(sql, con=db.engine, params={"status": "active"})
 
     result_df = df2.groupby('tc_id').agg(owner_name=('owner_name', 'first'), project_num=('project_num', 'unique'), data_type=('data_type', 'unique')).reset_index()
     result_df['project_num'] = result_df['project_num'].apply(lambda x: x.tolist())
@@ -72,8 +77,9 @@ def get_all_city(request):
     # 所有縣市(暫時這樣設定，之後優化)
     all_city = [{"city":"台北市","area":"北部"},{"city":"新北市","area":"北部"},{"city":"桃園市","area":"北部"},{"city":"基隆市","area":"北部"},{"city":"新竹市","area":"北部"},{"city":"新竹縣","area":"北部"},{"city":"宜蘭縣","area":"北部"},{"city":"台中市","area":"中部"},{"city":"苗栗縣","area":"中部"},{"city":"彰化縣","area":"中部"},{"city":"南投縣","area":"中部"},{"city":"雲林縣","area":"中部"},{"city":"高雄市","area":"南部"},{"city":"台南市","area":"南部"},{"city":"嘉義市","area":"南部"},{"city":"嘉義縣","area":"南部"},{"city":"屏東縣","area":"南部"},{"city":"花蓮縣","area":"東部"},{"city":"台東縣","area":"東部"},{"city":"澎湖縣","area":"離島"},{"city":"金門縣","area":"離島"},{"city":"連江縣","area":"離島"}]
 
-    # 讀取users資料，找出該帳需要過濾的縣市
-    selected_auth = pd.read_sql(f"SELECT * FROM users WHERE user_name = '{user_name}'", con=db.engine).loc[0, 'selected_auth']
+    with db.engine.connect() as connection:
+        # 讀取users資料，找出該帳需要過濾的縣市
+        selected_auth = pd.read_sql(text("SELECT * FROM users WHERE user_name = :user_name"), con=connection, params={'user_name': user_name}).loc[0, 'selected_auth']
     matched_cities = [item for item in all_city if item["city"] in selected_auth['city']]
 
     return response_with(resp.SUCCESS_200, value={"data": matched_cities})
@@ -84,11 +90,12 @@ def get_all_district(request):
     data = request.get_json()
     user_name = data.get('user_name')
 
-    # 讀取users資料，找出該帳需要過濾的縣市和業主
-    selected_auth = pd.read_sql(f"SELECT * FROM users WHERE user_name = '{user_name}'", con=db.engine).loc[0, 'selected_auth']
+    with db.engine.connect() as connection:
+        # 讀取users資料，找出該帳需要過濾的縣市和業主
+        selected_auth = pd.read_sql(text("SELECT * FROM users WHERE user_name = :user_name"), con=connection, params={'user_name': user_name}).loc[0, 'selected_auth']
 
-    # 讀取tc_road_info，過濾出該帳號需要的縣市
-    tc_road_info = pd.read_sql('tc_road_info', con=db.engine)
+        # 讀取tc_road_info，過濾出該帳號需要的縣市
+        tc_road_info = pd.read_sql('tc_road_info', con=connection)
     tc_road_info = tc_road_info[tc_road_info['city'].isin(selected_auth['city'])]
 
     df_filter = tc_road_info.drop_duplicates(subset=['district'])
@@ -174,7 +181,8 @@ def search_road_info(request):
 
                 '''
 
-    df = pd.read_sql(sql, con=db.engine)
+    with db.engine.connect() as connection:
+        df = pd.read_sql(sql, con=connection)
     res1 = df[df['tc_id'].isin(tc_list)]
     res = res1[res1['city'].isin(district_new_list)]
 
@@ -187,7 +195,9 @@ def road_list_uploaded_data(request):
     city_list = data.get('city')
     district_list = data.get('district')
     tc_list = data.get('tc_id')
-    df_road = pd.read_sql('tc_road_info', con=db.engine)
+
+    with db.engine.connect() as connection:
+        df_road = pd.read_sql('tc_road_info', con=connection)
 
     # 如果给定的地区参数有数据
     if city_list and len(city_list) > 0:
@@ -207,7 +217,9 @@ def road_list_uploaded_data(request):
     table_name = 'tc_uploaded_file'
     where_dict = {'status': 'active'}
     sql_str, params = sql_select(predicate, column_dict, table_name, where_dict)
-    df_upload = pd.read_sql_query(text(sql_str), con=db.engine, params=params)
+
+    with db.engine.connect() as connection:
+        df_upload = pd.read_sql_query(text(sql_str), con=connection, params=params)
 
     df_merged = df_road.merge(df_upload, on=['tc_id'], how='left', indicator=True)
     status_list = []
@@ -370,15 +382,17 @@ def get_uploaded_filter_data(request):
     data = request.get_json()
     user_name = data.get('user_name')
 
-    # 讀取users資料，找出該帳需要過濾的縣市和業主
-    selected_auth = pd.read_sql(f"SELECT * FROM users WHERE user_name = '{user_name}'", con=db.engine).loc[0, 'selected_auth']
+    with db.engine.connect() as connection:
+        # 讀取users資料，找出該帳需要過濾的縣市和業主
+        selected_auth = pd.read_sql(text("SELECT * FROM users WHERE user_name = :user_name"), con=connection, params={'user_name': user_name}).loc[0, 'selected_auth']
 
-    # 讀取tc_uploaded_file資料，過濾出該帳號需顯示的業主
-    tc_uploaded_file = pd.read_sql('SELECT tc_id, data_type, owner_name, project_num FROM tc_uploaded_file', con=db.engine)
+        # 讀取tc_uploaded_file資料，過濾出該帳號需顯示的業主
+        tc_uploaded_file = pd.read_sql('SELECT tc_id, data_type, owner_name, project_num FROM tc_uploaded_file', con=connection)
+
+        # 讀取tc_road_info資料，過濾出該帳號需顯示的縣市
+        tc_road_info = pd.read_sql('SELECT tc_id, city FROM tc_road_info', con=connection)
+
     tc_uploaded_file = tc_uploaded_file[tc_uploaded_file['owner_name'].isin(selected_auth['owner'])]
-
-    # 讀取tc_road_info資料，過濾出該帳號需顯示的縣市
-    tc_road_info = pd.read_sql('SELECT tc_id, city FROM tc_road_info', con=db.engine)
     tc_road_info = tc_road_info[tc_road_info['city'].isin(selected_auth['city'])]
 
     # 過濾掉其他類型的資料

@@ -1,0 +1,398 @@
+[
+    {
+      "icon": "assets/icons/setting.png",
+      "icon_hover": "assets/icons/setting.png",
+      "icon_not_hover": "assets/icons/setting.png",
+      "border": false,
+      "name": "資料檢視及下載",
+      "router": "view",
+      "page_configs": {},
+      "child_page": [
+        {
+          "icon": "assets/icons/search.png",
+          "icon_hover": "assets/icons/search.png",
+          "icon_not_hover": "assets/icons/search.png",
+          "name": "地圖查詢及下載",
+          "router": "view/search",
+          "page_configs": {
+            "components": [
+              {
+                "class": "item1",
+                "name": "Filter",
+                "components": [
+                  {
+                    "name": "DataTypeMultiple"
+                  },
+                  {
+                    "name": "OwnerName"
+                  },
+                  {
+                    "name": "ProjectNumber"
+                  },
+                  {
+                    "name": "CityUpload"
+                  },
+                  {
+                    "name": "TcSelect"
+                  },
+                  {
+                    "name": "TimeDate"
+                  }
+                ]
+              },
+              {
+                "class": "item2",
+                "name": "DataList"
+              },
+              {
+                "class": "bg-map",
+                "name": "MainMap"
+              },
+              {
+                "class": "map-control",
+                "name": "MapControl"
+              }
+            ]
+          }
+        },
+        {
+          "icon": "assets/icons/analyze.png",
+          "icon_hover": "assets/icons/analyze.png",
+          "icon_not_hover": "assets/icons/analyze.png",
+          "name": "資料分析檢視",
+          "router": "view/analyze",
+          "page_configs": {
+            "components": [
+              {
+                "class": "item1",
+                "name": "Filter",
+                "components": [
+                  {
+                    "name": "DataType"
+                  },
+                  {
+                    "name": "OwnerName"
+                  },
+                  {
+                    "name": "ProjectNumber"
+                  },
+                  {
+                    "name": "CityUpload"
+                  },
+                  {
+                    "name": "TcSelect"
+                  },
+                  {
+                    "name": "SingleDate"
+                  },
+                  {
+                    "name": "TimeSelect"
+                  }
+                ]
+              },
+              {
+                "class": "bg-map",
+                "name": "MapAnalyze"
+              },
+              {
+                "class": "map-control",
+                "name": "MapControl"
+              },
+              {
+                "class": "data-analyze",
+                "name": "DataAnalyze"
+              }
+            ]
+          }
+        },
+        {
+          "icon": "assets/icons/db_search.png",
+          "icon_hover": "assets/icons/db_search.png",
+          "icon_not_hover": "assets/icons/db_search.png",
+          "name": "資料庫查詢",
+          "router": "view/db_search",
+          "page_configs": {
+            "components": [
+              {
+                "class": "item1",
+                "name": "Filter",
+                "components": [
+                  {
+                    "name": "OwnerName"
+                  },
+                  {
+                    "name": "ProjectNumber"
+                  },
+                  {
+                    "name": "CityUpload"
+                  },
+                  {
+                    "name": "TcSelect"
+                  },
+                  {
+                    "name": "TimeDate"
+                  },
+                  {
+                    "name": "HolidaySelect"
+                  },
+                  {
+                    "name": "DataTypeMultiple"
+                  }
+                ]
+              },
+              {
+                "class": "item2",
+                "name": "DbSearchForm"
+              }
+            ]
+          }
+        },
+        {
+          "icon": "assets/icons/quality.png",
+          "icon_hover": "assets/icons/quality.png",
+          "icon_not_hover": "assets/icons/quality.png",
+          "name": "資料品質檢核",
+          "router": "view/quality",
+          "page_configs": {
+            "components": [
+              {
+                "class": "item1",
+                "name": "Filter",
+                "components": [
+                  {
+                    "name": "OwnerName"
+                  },
+                  {
+                    "name": "ProjectNumber"
+                  },
+                  {
+                    "name": "CityUpload"
+                  },
+                  {
+                    "name": "TcSelect"
+                  },
+                  {
+                    "name": "SingleDate"
+                  }
+                ]
+              },
+              {
+                "name": "QualityStep"
+              },
+              {
+                "name": "SingleTimeSelect"
+              },
+              {
+                "name": "DiffPercentEdit"
+              },
+              {
+                "class": "bg-map",
+                "name": "MapQuality"
+              },
+              {
+                "class": "map-control",
+                "name": "MapControl"
+              },
+              {
+                "class": "map-control",
+                "name": "MapControl"
+              },
+              {
+                "class": "quality-basic",
+                "name": "QualityBasic"
+              },
+              {
+                "class": "quality-setting",
+                "name": "QualitySetting"
+              },
+              {
+                "class": "quality-result",
+                "name": "QualityResult"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "icon": "assets/icons/setting_brown.png",
+      "icon_hover": "assets/icons/setting_brown.png",
+      "icon_not_hover": "assets/icons/setting_brown.png",
+      "border": true,
+      "name": "路口資料管理及維護",
+      "router": "setting",
+      "page_configs": {},
+      "child_page": [
+        {
+          "icon": "assets/icons/download.png",
+          "icon_hover": "assets/icons/download.png",
+          "icon_not_hover": "assets/icons/download.png",
+          "name": "範例檔案下載",
+          "router": "setting/download",
+          "page_configs": {
+            "components": [
+              {
+                "class": "item1",
+                "name": "Filter",
+                "components": [
+                  {
+                    "name": "DataType"
+                  }
+                ]
+              },
+              {
+                "class": "item2",
+                "name": "SampleDownload"
+              }
+            ]
+          }
+        },
+        {
+          "icon": "assets/icons/upload.png",
+          "icon_hover": "assets/icons/upload.png",
+          "icon_not_hover": "assets/icons/upload.png",
+          "name": "調查檔案上傳",
+          "router": "setting/upload",
+          "page_configs": {
+            "components": [
+              {
+                "class": "item1",
+                "name": "Filter",
+                "components": [
+                  {
+                    "name": "DataType"
+                  },
+                  {
+                    "name": "ExcelSelect"
+                  }
+                ]
+              },
+              {
+                "class": "item2",
+                "name": "ExcelPreview"
+              },
+              {
+                "class": "item3",
+                "name": "UploadResult"
+              }
+            ]
+          }
+        },
+        {
+          "icon": "assets/icons/edit.png",
+          "icon_hover": "assets/icons/edit.png",
+          "icon_not_hover": "assets/icons/edit.png",
+          "name": "路口新增與維護",
+          "router": "setting/edit",
+          "page_configs": {
+            "components": [
+              {
+                "class": "item1",
+                "name": "Filter",
+                "components": [
+                  {
+                    "class": "city-upload",
+                    "name": "CityUpload"
+                  },
+                  {
+                    "class": "tc-select",
+                    "name": "TcSelect"
+                  }
+                ]
+              },
+              {
+                "name": "EditStep"
+              },
+              {
+                "class": "bg-map",
+                "name": "MapEdit"
+              },
+              {
+                "class": "map-control",
+                "name": "MapControl"
+              },
+              {
+                "class": "edit-arrow",
+                "name": "EditArrow"
+              },
+              {
+                "class": "edit-params",
+                "name": "EditParams"
+              },
+              {
+                "class": "drawing-info",
+                "name": "DrawingInfo"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "icon": "assets/icons/setting_brown.png",
+      "icon_hover": "assets/icons/setting_brown.png",
+      "icon_not_hover": "assets/icons/setting_brown.png",
+      "border": true,
+      "name": "後台資料管理",
+      "router": "back",
+      "page_configs": {},
+      "child_page": [
+        {
+          "icon": "assets/icons/list_manage.png",
+          "icon_hover": "assets/icons/list_manage.png",
+          "icon_not_hover": "assets/icons/list_manage.png",
+          "name": "清單內容管理",
+          "router": "back/list_manage",
+          "page_configs": {
+            "components": [
+              {
+                "class": "item1",
+                "name": "Filter",
+                "components": [
+                  {
+                    "class": "owner-name",
+                    "name": "OwnerName"
+                  },
+                  {
+                    "class": "project-number",
+                    "name": "ProjectNumber"
+                  },
+                  {
+                    "class": "city-all",
+                    "name": "CityAll"
+                  },
+                  {
+                    "class": "district",
+                    "name": "District"
+                  },
+                  {
+                    "class": "tc-select",
+                    "name": "TcSelect"
+                  }
+                ]
+              },
+              {
+                "name": "ListManageSubpage"
+              },
+              {
+                "class": "item2",
+                "name": "ListOwnerForm"
+              },
+              {
+                "class": "item2",
+                "name": "ListRoadForm"
+              }
+            ]
+          }
+        },
+        {
+          "icon": "assets/icons/db_manage.png",
+          "icon_hover": "assets/icons/db_manage.png",
+          "icon_not_hover": "assets/icons/db_manage.png",
+          "name": "帳號權限管理",
+          "router": "back/permission",
+          "page_configs": {}
+        }
+      ]
+    }
+]

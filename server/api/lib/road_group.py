@@ -19,7 +19,8 @@ def get_all_group_name(request):
     data = request.get_json()
     city = data.get('city')
 
-    df = pd.read_sql('road_group', con=db.engine)
+    with db.engine.connect() as connection:
+        df = pd.read_sql('road_group', con=connection)
     df = df[(df['active'] == True) & (df['city'] == city)]
     res = df['name'].to_list()
 
@@ -81,16 +82,9 @@ def get_road_group_data():
                 from
                     public.road_turning_static
                 where
-                    (svg_detail <> ''
-                        and svg_detail is not null)
-                    and
-                                (road_param <> ''
-                        and road_param is not null)
-                    and
-                                (road_section <> ''
-                        and road_section is not null)
-                                
-                                ) d
+                    (svg_detail <> '' and svg_detail is not null)
+                    and (road_param <> ''and road_param is not null)
+                    and (road_section <> ''and road_section is not null)) d
                         on
                 a.tc_id = d.tc_id
 

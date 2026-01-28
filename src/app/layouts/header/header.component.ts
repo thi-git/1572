@@ -6,6 +6,7 @@ import { routes } from '../../routes';
 // rxjs調用
 import { takeUntil, filter } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { sign } from 'crypto';
 
 @Component({
   selector: 'app-header',

@@ -37,7 +37,7 @@ export class DataTypeMultipleComponent implements OnInit {
   ngOnInit(): void {
     this.user = this.centerService.user_name;
 
-    if (this.user == 'eland_gov') {
+    if (this.user == 'cy_gov') {
       this.treeList = [
         {
           text: '流量',

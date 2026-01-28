@@ -205,13 +205,13 @@ export class CenterService {
 
   // 讀取使用者設定
   public get_all_page_cfg() {
-    let pages_data = JSON.parse(localStorage.getItem('1493cfg'));
+    let pages_data = JSON.parse(localStorage.getItem('1572cfg'));
     return pages_data;
   }
 
   // 讀取第一層分頁
   public get_lv1_cfg(url) {
-    let pages_data = JSON.parse(localStorage.getItem('1493cfg'));
+    let pages_data = JSON.parse(localStorage.getItem('1572cfg'));
     let path_lv1 = url.split('/')[1];
     let lv1 = _.find(pages_data, { router: path_lv1 });
     if (typeof lv1 == "undefined") return [];
@@ -220,7 +220,7 @@ export class CenterService {
 
   // 讀取第二層分頁
   public get_lv2_cfg(url) {
-    let pages_data = JSON.parse(localStorage.getItem('1493cfg'));
+    let pages_data = JSON.parse(localStorage.getItem('1572cfg'));
     let path_lv1 = url.split('/')[1];
     let lv1 = _.find(pages_data, { router: path_lv1 });
     let path_lv2 = url.split('/')[1] + '/' +  url.split('/')[2];

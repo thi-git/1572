@@ -63,7 +63,7 @@ export class RoleComponent implements OnInit {
   /** Function **/
   init() {
     // this.apiService
-    //   .get_auth('/admin/realms/1493/groups?briefRepresentation=false')
+    //   .get_auth('/admin/realms/1572/groups?briefRepresentation=false')
     //   .then((res) => {
     //     console.log(res);
     //     const subGroups = res
@@ -82,10 +82,10 @@ export class RoleComponent implements OnInit {
     //   });
 
       const promise = new Promise((resolve, reject) => {
-        this.apiService.get_auth('/admin/realms/1493/groups').then((users) => {
+        this.apiService.get_auth('/admin/realms/1572/groups').then((users) => {
           // Create an array of Observables that make HTTP requests for each user's groups
           const observables = users.map((user) =>
-            this.apiService.get_auth(`/admin/realms/1493/groups/${user.id}/children`)
+            this.apiService.get_auth(`/admin/realms/1572/groups/${user.id}/children`)
           );
           // Use forkJoin to wait for all HTTP requests to complete
           forkJoin(observables).subscribe((responses: any) => {
@@ -141,7 +141,7 @@ export class RoleComponent implements OnInit {
       description: role.description ? role.description[0] : '',
     };
     this.apiService
-      .get_auth(`/admin/realms/1493/groups/${role.id}`)
+      .get_auth(`/admin/realms/1572/groups/${role.id}`)
       .then((res) => {
         datas = Object.entries(res.clientRoles).map(([clientId, roles]) =>
           (roles as Array<any>).map((role) => ({
@@ -153,7 +153,7 @@ export class RoleComponent implements OnInit {
 
         const filteredDatas = datas
           .flat() // 將嵌套的陣列平鋪成一個單一的陣列
-          .filter((item) => item.clientId === '1493web');
+          .filter((item) => item.clientId === '1572web');
         const modalRef = this.modalService.create({
           nzWidth: '850px',
           nzTitle: '編輯角色',
@@ -181,7 +181,7 @@ export class RoleComponent implements OnInit {
       content: `刪除角色`, //使用功能(顯示文字)
     };
     this.apiService
-      .delete_auth('/admin/realms/1493/groups/' + role.id)
+      .delete_auth('/admin/realms/1572/groups/' + role.id)
       .then((res) => {
         if (!res) {
           // this.apiService.user_record(user_record);

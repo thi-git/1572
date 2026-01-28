@@ -2,7 +2,7 @@
   <!-- 下載格式選擇 -->
   <div class="select-format">
     <span class="format-option" [ngClass]="selectFormatMode === 0 ? 'is-select' : 'none-select'" (click)="selectFormat(0)">下載檔</span>
-    <span *ngIf="user != 'eland_gov' && user != 'thb001'" class="format-option" [ngClass]="selectFormatMode === 1 ? 'is-select' : 'none-select'" (click)="selectFormat(1)">上傳檔</span>
+    <span *ngIf="user != 'cy_gov'" class="format-option" [ngClass]="selectFormatMode === 1 ? 'is-select' : 'none-select'" (click)="selectFormat(1)">上傳檔</span>
   </div>
   <!-- 按鈕 -->
   <div class="btn_section">

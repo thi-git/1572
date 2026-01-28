@@ -1,4 +1,4 @@
-<div *ngIf="showMapControl && (page === '/view/search' || page === '/view/analyze' || page === '/setting/edit' || page === '/view/quality') && user !== 'eland_gov'"
+<div *ngIf="showMapControl && (page === '/view/search' || page === '/view/analyze' || page === '/setting/edit' || page === '/view/quality') && user !== 'cy_gov'"
   [ngClass]="page === '/view/analyze' ? 'tc-map-control-analyze' : 'tc-map-control'" class="map-control">
   <!-- 有上傳未編輯(橘色) -->
   <button (click)="changeDisplayStatus('upload_data')" (mouseenter)="toggleOpen('upload')"

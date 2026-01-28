@@ -43,7 +43,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
   };
   // 地圖中心
   mapCenter = {
-      latlng: L.latLng(25.0514376, 121.5353965), // 中心位置(台北)
+      latlng: L.latLng(23.501243, 120.435087), // 中心位置(嘉義)
       zoom: 14, // 預設zoom值
     };
 
@@ -88,17 +88,10 @@ export class MainMapComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user = this.centerService.user_name;
 
-    if (this.user == 'eland_gov') {
-      this.mapCenter = {
-        latlng: L.latLng(24.755549, 121.762257), // 中心位置(台北)
+    this.mapCenter = {
+        latlng: L.latLng(23.501243, 120.435087), // 中心位置(嘉義)
         zoom: 14, // 預設zoom值
       };
-    } else {
-      this.mapCenter = {
-        latlng: L.latLng(25.0514376, 121.5353965), // 中心位置(台北)
-        zoom: 14, // 預設zoom值
-      };
-    }
 
     this.page = this.router.url; // 頁面設定
 
@@ -216,6 +209,9 @@ export class MainMapComponent implements OnInit, OnDestroy {
               break;
             case '宜蘭縣':
               this.flyto([24.755549, 121.762257], 14);
+              break;
+            case '嘉義市':
+              this.flyto([23.501243, 120.435087], 14);
               break;
             default:
               this.flyto([25.0514376, 121.5353965], 14);

@@ -68,7 +68,7 @@ export class GroupSettingComponent implements OnInit {
       item: '新增/編輯/刪除群組', //紀錄項目
       content: `新增群組`, //使用功能(顯示文字)
     };
-    this.apiService.post_auth('/admin/realms/1493/groups', res).then((res) => {
+    this.apiService.post_auth('/admin/realms/1572/groups', res).then((res) => {
       if (!res) {
         // this.apiService.user_record(user_record);
         this.message.create('success', '新增群組成功');
@@ -91,7 +91,7 @@ export class GroupSettingComponent implements OnInit {
       content: `編輯群組`, //使用功能(顯示文字)
     };
     this.apiService
-      .put_auth('/admin/realms/1493/groups/' + this.data.id, res)
+      .put_auth('/admin/realms/1572/groups/' + this.data.id, res)
       .then((res) => {
         if (!res) {
           // this.apiService.user_record(user_record);

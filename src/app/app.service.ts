@@ -37,14 +37,14 @@ export class AppService {
     if (url.searchParams.has('code')) {
       // 設定keycloak參數
       let token_param = new HttpParams();
-      token_param = token_param.set("client_id", "1493web")
+      token_param = token_param.set("client_id", "1572web")
         .set("redirect_uri", localStorage.getItem('into_url'))
         .set("code", url.searchParams.get('code'))
         .set("grant_type", "authorization_code");
       // 取得keycloak token需使用application/x-www-form-urlencoded
       let header = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
       // 取得keycloak token
-      return this.http.post<any>(`${environment.authIP}/realms/1493/protocol/openid-connect/token`, token_param, { headers: header }).toPromise().then(res => {
+      return this.http.post<any>(`${environment.authIP}/realms/1572/protocol/openid-connect/token`, token_param, { headers: header }).toPromise().then(res => {
         // 以access token 取得者用者資訊
         access_token = res.access_token;
         let token_data = this.parseJwt(access_token);
@@ -67,11 +67,11 @@ export class AppService {
         })
 
         // 存入local storage
-        localStorage.setItem('1493cfg', JSON.stringify(res.data));
+        localStorage.setItem('1572cfg', JSON.stringify(res.data));
         // 取得轉跳原始的URL
         let loc = new URL(localStorage.getItem('into_url'));
         // 開始轉跳(轉跳路徑需要移除URL前綴)
-        this.router.navigate([loc.pathname.replace('1493', '')]);
+        this.router.navigate([loc.pathname.replace('1572', '')]);
       })
       .catch(err => {
         // 提示使用者後端系統故障
@@ -81,7 +81,7 @@ export class AppService {
       // 記錄欲轉跳URL
       localStorage.setItem('into_url', location.href);
       // 無code參數重新導向
-      window.location.href = `${environment.authIP}/realms/1493/protocol/openid-connect/auth?response_type=code&client_id=1493web&scope=openid&redirect_uri=${localStorage.getItem('into_url')}`;
+      window.location.href = `${environment.authIP}/realms/1572/protocol/openid-connect/auth?response_type=code&client_id=1572web&scope=openid&redirect_uri=${localStorage.getItem('into_url')}`;
     }
   }
 }

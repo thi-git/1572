@@ -68,8 +68,8 @@ export class AccountSettingComponent implements OnInit {
 
   ngOnInit(): void {
     // 之後改為撈資料
-    let city = ['台北市', '新北市', '桃園市', '新竹市', '新竹縣', '宜蘭縣'];
-    let owner = ['公路局', '測試'];
+    let city = ['嘉義市'];
+    let owner = ['嘉義市政府', '鼎漢'];
     this.init[0]['sub'] = city.map(e => {
       return {
         label: e,
@@ -85,17 +85,17 @@ export class AccountSettingComponent implements OnInit {
 
     // 取得所有client資訊
     this.apiService
-      .get_auth(`/admin/realms/1493/clients?clientId=1493web&search=true`)
+      .get_auth(`/admin/realms/1572/clients?clientId=1572web&search=true`)
       .then((res) => {
         this.getRoles(res);
       });
 
     const promise = new Promise((resolve, reject) => {
-      this.apiService.get_auth('/admin/realms/1493/groups').then((users) => {
+      this.apiService.get_auth('/admin/realms/1572/groups').then((users) => {
         // Create an array of Observables that make HTTP requests for each user's groups
         const observables = users.map((user) =>
           this.apiService.get_auth(
-            `/admin/realms/1493/groups/${user.id}/children`
+            `/admin/realms/1572/groups/${user.id}/children`
           )
         );
         // Use forkJoin to wait for all HTTP requests to complete
@@ -133,7 +133,7 @@ export class AccountSettingComponent implements OnInit {
         });
         const promise2 = new Promise((resolve, reject) => {
           this.apiService
-            .get_auth(`/admin/realms/1493/groups/${this.userData.roleId}`)
+            .get_auth(`/admin/realms/1572/groups/${this.userData.roleId}`)
             .then((res) => {
               const permission: Object[] = [];
               Object.entries(res.clientRoles).forEach(([clientId, roles]) => {
@@ -176,7 +176,7 @@ export class AccountSettingComponent implements OnInit {
     try {
       for (const el of data) {
         const res = await this.apiService.get_auth(
-          `/admin/realms/1493/clients/${el.id}/roles`
+          `/admin/realms/1572/clients/${el.id}/roles`
         );
         if (res.length) {
           res.forEach((e) => {
@@ -300,7 +300,7 @@ export class AccountSettingComponent implements OnInit {
       item: '新增/編輯/刪除帳號', //紀錄項目
       content: `新增帳號`, //使用功能(顯示文字)
     };
-    this.apiService.post_auth(`/admin/realms/1493/users`, res).then((res) => {
+    this.apiService.post_auth(`/admin/realms/1572/users`, res).then((res) => {
       if (!res) {
         // this.apiService.user_record(user_record);
         this.message.create('success', '新增帳號成功');
@@ -361,20 +361,20 @@ export class AccountSettingComponent implements OnInit {
       content: `編輯帳號`, //使用功能(顯示文字)
     };
     this.apiService
-      .put_auth('/admin/realms/1493/users/' + this.userData.userId, res)
+      .put_auth('/admin/realms/1572/users/' + this.userData.userId, res)
       .then((res) => {
         if (!res) {
           // 先刪除角色
           this.apiService
             .delete_auth(
-              `/admin/realms/1493/users/${this.userData.userId}/groups/${this.origin}`
+              `/admin/realms/1572/users/${this.userData.userId}/groups/${this.origin}`
             )
             .then((res_user) => {
               if (!res_user) {
                 // 新增角色
                 this.apiService
                   .put_auth(
-                    `/admin/realms/1493/users/${this.userData.userId}/groups/${this.selected}`,
+                    `/admin/realms/1572/users/${this.userData.userId}/groups/${this.selected}`,
                     {}
                   )
                   .then((res_role) => {

@@ -55,7 +55,7 @@ export class GroupComponent implements OnInit {
   /** Function **/
   init() {
     this.apiService
-      .get_auth('/admin/realms/1493/groups?briefRepresentation=false')
+      .get_auth('/admin/realms/1572/groups?briefRepresentation=false')
       .then((res) => {
         this.dataSet = res.map((el, idx) => ({
           idx: idx + 1,
@@ -107,7 +107,7 @@ export class GroupComponent implements OnInit {
       content: `刪除群組`, //使用功能(顯示文字)
     };
     this.apiService
-      .delete_auth('/admin/realms/1493/groups/' + group.id)
+      .delete_auth('/admin/realms/1572/groups/' + group.id)
       .then((res) => {
         if (!res) {
           // this.apiService.user_record(user_record);

@@ -67,10 +67,10 @@ export class AccountComponent implements OnInit {
   /** Function **/
   init() {
     const promise = new Promise((resolve, reject) => {
-      this.apiService.get_auth('/admin/realms/1493/users').then((users) => {
+      this.apiService.get_auth('/admin/realms/1572/users').then((users) => {
         // Create an array of Observables that make HTTP requests for each user's groups
         const observables = users.map((user) =>
-          this.apiService.get_auth(`/admin/realms/1493/users/${user.id}/groups`)
+          this.apiService.get_auth(`/admin/realms/1572/users/${user.id}/groups`)
         );
         // Use forkJoin to wait for all HTTP requests to complete
         forkJoin(observables).subscribe((responses: any) => {
@@ -147,7 +147,7 @@ export class AccountComponent implements OnInit {
       content: `刪除帳號`, //使用功能(顯示文字)
     };
     this.apiService
-      .delete_auth('/admin/realms/1493/users/' + user.id)
+      .delete_auth('/admin/realms/1572/users/' + user.id)
       .then((res) => {
         if (!res) {
           // this.apiService.user_record(user_record);
@@ -159,7 +159,7 @@ export class AccountComponent implements OnInit {
   // 重置密碼
   reset(user) {
     this.apiService
-      .put_auth('/admin/realms/1493/users/' + user.id + '/reset-password', {
+      .put_auth('/admin/realms/1572/users/' + user.id + '/reset-password', {
         temporary: true,
         type: 'password',
         value: user.username,

@@ -48,7 +48,7 @@ export class RoleSettingComponent implements OnInit {
     }
     // 取得所有client資訊
     this.apiService
-      .get_auth(`/admin/realms/1493/clients?clientId=1493web&search=true`)
+      .get_auth(`/admin/realms/1572/clients?clientId=1572web&search=true`)
       .then((res) => {
         this.getRoles(res);
       });
@@ -56,7 +56,7 @@ export class RoleSettingComponent implements OnInit {
     // 取得realm-management資訊
     this.apiService
       .get_auth(
-        `/admin/realms/1493/clients?clientId=realm-management&search=true`
+        `/admin/realms/1572/clients?clientId=realm-management&search=true`
       )
       .then((res) => {
         this.getAdminRoles(res);
@@ -70,7 +70,7 @@ export class RoleSettingComponent implements OnInit {
     data.forEach((el) => {
       //  取得client中的角色資訊
       this.apiService
-        .get_auth(`/admin/realms/1493/clients/${el.id}/roles`)
+        .get_auth(`/admin/realms/1572/clients/${el.id}/roles`)
         .then((res) => {
           if (res.length) {
             res.forEach((e) => {
@@ -106,7 +106,7 @@ export class RoleSettingComponent implements OnInit {
     data.forEach((el) => {
       //  取得client中的角色資訊
       this.apiService
-        .get_auth(`/admin/realms/1493/clients/${el.id}/roles`)
+        .get_auth(`/admin/realms/1572/clients/${el.id}/roles`)
         .then((res) => {
           if (res.length) {
             this.adminPermission = res
@@ -183,7 +183,7 @@ export class RoleSettingComponent implements OnInit {
     };
 
     this.apiService
-      .post_auth(`/admin/realms/1493/groups/${id}/children`, res)
+      .post_auth(`/admin/realms/1572/groups/${id}/children`, res)
       .then((res) => {
         if (res) {
           Object.keys(this.groupByUid(this.selected)).forEach((el) => {
@@ -199,7 +199,7 @@ export class RoleSettingComponent implements OnInit {
             });
             this.apiService
               .post_auth(
-                `/admin/realms/1493/groups/${res.id}/role-mappings/clients/${el}`,
+                `/admin/realms/1572/groups/${res.id}/role-mappings/clients/${el}`,
                 body
               )
               .then((res) => {
@@ -233,7 +233,7 @@ export class RoleSettingComponent implements OnInit {
 
     // 修改角色名稱
     this.apiService
-      .put_auth(`/admin/realms/1493/groups/${this.roleData.id}`, res_body)
+      .put_auth(`/admin/realms/1572/groups/${this.roleData.id}`, res_body)
       .then((res) => {
         if (!res) {
           this.originData.forEach((e) => {
@@ -248,7 +248,7 @@ export class RoleSettingComponent implements OnInit {
             // 先刪除角色的全部權限
             this.apiService
               .delete_auth(
-                `/admin/realms/1493/groups/${this.roleData.id}/role-mappings/clients/${e.client_uid}`,
+                `/admin/realms/1572/groups/${this.roleData.id}/role-mappings/clients/${e.client_uid}`,
                 body
               )
               .then((res) => {
@@ -265,7 +265,7 @@ export class RoleSettingComponent implements OnInit {
   }
   // 處理admin權限
   adminCreate(groupID, data) {
-    // http://220.130.185.37:8081/dev_auth/admin/realms/1493/groups/edba79b5-742a-4372-8d42-7bd383fd3d9b/role-mappings/clients/2b360470-3d19-4cf5-a4d8-4ac4734551c2
+    // http://220.130.185.37:8081/dev_auth/admin/realms/1572/groups/edba79b5-742a-4372-8d42-7bd383fd3d9b/role-mappings/clients/2b360470-3d19-4cf5-a4d8-4ac4734551c2
     //   {
     //     "id": "55282e34-d62d-4e97-88a8-39a73081172f",
     //     "name": "view-events",
@@ -281,7 +281,7 @@ export class RoleSettingComponent implements OnInit {
       })
       this.apiService
       .post_auth(
-        `/admin/realms/1493/groups/${groupID}/role-mappings/clients/${el}`,
+        `/admin/realms/1572/groups/${groupID}/role-mappings/clients/${el}`,
         body
       )
       .then((res) => {
@@ -303,7 +303,7 @@ export class RoleSettingComponent implements OnInit {
       })
       this.apiService
       .delete_auth(
-        `/admin/realms/1493/groups/${groupID}/role-mappings/clients/${el}`,
+        `/admin/realms/1572/groups/${groupID}/role-mappings/clients/${el}`,
         body
       )
       .then((res) => {
@@ -331,7 +331,7 @@ export class RoleSettingComponent implements OnInit {
       });
       this.apiService
         .post_auth(
-          `/admin/realms/1493/groups/${this.roleData.id}/role-mappings/clients/${e.client_uid}`,
+          `/admin/realms/1572/groups/${this.roleData.id}/role-mappings/clients/${e.client_uid}`,
           body
         )
         .then((res) => {

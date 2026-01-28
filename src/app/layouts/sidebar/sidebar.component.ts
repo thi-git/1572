@@ -22,7 +22,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ) {
     // 取得cfg資料
     setTimeout(() => {
-      this.all_page_cfgs = this.centerService.get_all_page_cfg();
+      // this.all_page_cfgs = this.centerService.get_all_page_cfg();
+
+      const allConfigs = this.centerService.get_all_page_cfg();
+      // 過濾只顯示「地圖查詢及下載」
+      this.all_page_cfgs = allConfigs.map(page => ({
+        ...page,
+        child_page: page.child_page.filter(child =>
+          child.name === '地圖查詢及下載'
+        )
+      })).filter(page => page.child_page && page.child_page.length > 0);
     }, 1000);
 
     // 接收正在上傳中的訊息(避免切頁)

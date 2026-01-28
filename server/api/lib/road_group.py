@@ -4,7 +4,7 @@ from ..models.road_group import Road_group
 from ..utils.database import db
 from ..utils import responses as resp
 from ..utils.responses import response_with
-
+from sqlalchemy import text 
 
 # 新增道路群組
 def create_group(request):
@@ -55,7 +55,7 @@ def get_road_group_data():
                     on x.tc_id = y.tc_id
                     and x.date = y.date
                 where
-                    y.status = 'active) b on a.tc_id = b.tc_id
+                    y.status = 'active') b on a.tc_id = b.tc_id
             left join (
                 select
                     distinct x.tc_id,
@@ -79,7 +79,7 @@ def get_road_group_data():
         '''
 
     with db.engine.connect() as connection:
-        df = pd.read_sql(sql, con=connection)
+        df = pd.read_sql(text(sql), con=connection)
         # 取得縣市欄位資料
         df_tc_road_info = pd.read_sql('tc_road_info', con=connection)
 

@@ -54,7 +54,7 @@ def search_record(request):
     # df = df_first[df_first['status'] == 'active']
 
     with db.engine.connect() as connection:
-        df = pd.read_sql_query("""select id, tc_id, data_type, owner_name, project_num, date, date_group FROM tc_uploaded_file WHERE "status" = 'active'""", con=connection)
+        df = pd.read_sql_query(text("""select id, tc_id, data_type, owner_name, project_num, date, date_group FROM tc_uploaded_file WHERE "status" = 'active'"""), con=connection)
     # 用參數過濾後的資料(如果沒有參數，等於不用走以下過濾流程 => 就會保留全部資料)
     # 如果給的tc參數有資料
     if tc_list and len(tc_list) > 0:
@@ -125,7 +125,7 @@ def search_record_v2(request):
              FROM tc_uploaded_file LEFT JOIN tc_road_info USING (tc_id) WHERE status = 'active'"""
     
     with db.engine.connect() as connection:
-        df = pd.read_sql_query(sql, con=connection)
+        df = pd.read_sql_query(text(sql), con=connection)
 
     # 用參數過濾後的資料(如果沒有參數，等於不用走以下過濾流程 => 就會保留全部資料)
     # 如果給的tc參數有資料
@@ -267,7 +267,7 @@ def get_page_two_data_volume(path):
             # 從sample_file找出該檔案的當前version
             df_sample = pd.read_sql('sample_file', con=connection)
             intersection_type = str(df.loc[df['※請填入'] == '路口類型：'].iat[0, 1]).split(' ')[0]
-            if intersection_type in ['正交四叉路口', '五叉路口', '六叉路口']:
+            if intersection_type in ['三叉路口','四叉路口','正交四叉路口', '五叉路口', '六叉路口']:
                 # 路口類型防呆
                 now_version = df_sample[(df_sample['name'] == intersection_type) & (df_sample['data_type'] == 'volume')]['version'].values[0]
                 version_info = df.loc[df['※請填入'] == '版本號：'].iat[0, 1]
@@ -320,7 +320,7 @@ def get_page_two_data_volume(path):
                             ]
 
                             # 表格有空值
-                            test = {'正交四叉路口': 5, '五叉路口': 6, '六叉路口': 7}
+                            test = {'三叉路口': 4, '四叉路口': 5, '正交四叉路口': 5, '五叉路口': 6, '六叉路口': 7}
 
                             subset = df.iloc[15:19, 1:test[intersection_type]]
                             if not subset.isna().any().any():
@@ -628,7 +628,10 @@ def save_upload_volume_turning(page_one_df_test, page_two_data):
         res_change_col_name['moto_two'] = -2
 
     # 如果目前上傳的tc_id/date已有相同多筆在資料表中，就先砍掉原本的資料
-    db.engine.execute(f"DELETE FROM volume_turning WHERE tc_id = '{tc_id}' AND date = '{date}'")
+    with db.engine.connect() as connection:
+        connection.execute(text("DELETE FROM volume_turning WHERE tc_id = :tc_id AND date = :date"), 
+                 {"tc_id": tc_id, "date": date})
+        # connection.commit()
     
     with db.engine.connect() as connection:
         # 寫入資料表
@@ -694,9 +697,15 @@ def save_upload_volume_basic(page_two_df_test, page_two_data):
     res_table_delete['車道數：'] = res_table_delete['車道數：'].astype(str)
 
     # 將資料放在同一個row
+    # for idx in range(len(column_list)):
+    #     res_table_delete[column_list_en[idx]] = \
+    #         res_table_delete.groupby('index')[column_list[idx]].apply(', '.join).reset_index()[column_list[idx]]
     for idx in range(len(column_list)):
-        res_table_delete[column_list_en[idx]] = \
-            res_table_delete.groupby('index')[column_list[idx]].apply(', '.join).reset_index()[column_list[idx]]
+        grouped = res_table_delete.groupby('index')[column_list[idx]].apply(
+            lambda x: ', '.join([str(v) for v in x if pd.notna(v)])
+        ).reset_index()
+        res_table_delete[column_list_en[idx]] = grouped[column_list[idx]]
+
 
     # 將內容新增到原先的dataframe
     for idx in range(len(column_list_en)):
@@ -728,7 +737,10 @@ def save_upload_volume_basic(page_two_df_test, page_two_data):
         res_change_col_name['t_for_five_up'] = '--'
 
     # 如果目前上傳的tc_id/date/data_type已有相同一筆在資料表中，就先砍掉原本的資料
-    db.engine.execute(f"DELETE FROM volume_basic WHERE tc_id = '{tc_id}' AND date = '{date}'")
+    with db.engine.connect() as connection:
+        connection.execute(text("DELETE FROM volume_basic WHERE tc_id = :tc_id AND date = :date"), 
+                 {"tc_id": tc_id, "date": date})
+        # connection.commit()
 
     with db.engine.connect() as connection:
         # 寫入資料表
@@ -868,7 +880,7 @@ def generate_download_excel(page_two_data, data_type, path, test):
     # 3. 將json檔轉為dataframe(原則上不用做任何處理)
     # 4. 將dataframe放入excel，確保數值和原本位置一樣，並可以可以操作後續頁面
     # 5. 將設定好的路徑存入資料tc_uploaded_file中該筆資料的export_excel_path欄位
-
+    print("開始製作擋案")
     # 取得基本資料
     if data_type == 'volume':
         tc_id = page_two_data['tc_id']
@@ -888,7 +900,7 @@ def generate_download_excel(page_two_data, data_type, path, test):
         sql = f"SELECT * FROM tc_uploaded_file WHERE status = 'active' and tc_id = '{tc_id}' and data_type = '{data_type}' AND date_group = '{date_result}'"
     
     with db.engine.connect() as connection:
-        df = pd.read_sql_query(sql, con=connection)
+        df = pd.read_sql_query(text(sql), con=connection)
 
     # 取得索引&相關欄位資料
     intersection_type = df.at[0, 'intersection_type']
@@ -1015,10 +1027,22 @@ def generate_download_excel(page_two_data, data_type, path, test):
                         ws.cell(row=r_idx, column=c_idx, value=value)
             elif intersection_type in ['五叉路口', '六叉路口']:
                 sql = f"SELECT * FROM volume_basic WHERE tc_id = '{tc_id}' AND date = '{date_result}'"
-
                 with db.engine.connect() as connection:
-                    df_test = pd.read_sql_query(sql, con=connection)
-                test_data = json.loads(df_test.at[0, 't_for_five_up'])
+                    df_test = pd.read_sql_query(text(sql), con=connection)
+                test_data = []  # 改為空列表
+                if not df_test.empty and 't_for_five_up' in df_test.columns:
+                    try:
+                        json_value = df_test.iloc[0]['t_for_five_up']
+                        if pd.notna(json_value) and json_value not in ['', '--', 'None']:
+                            parsed = json.loads(str(json_value))
+                            # 確保是列表格式
+                            if isinstance(parsed, list):
+                                test_data = parsed
+                            elif isinstance(parsed, dict):
+                                test_data = [parsed]
+                    except (json.JSONDecodeError, ValueError, KeyError) as e:
+                        print(f"解析 t_for_five_up 失敗: {e}")
+                        test_data = []
 
                 # 查詢值後，將該值設定到正確欄位(待優化)
                 if intersection_type == '五叉路口':
@@ -1045,13 +1069,64 @@ def generate_download_excel(page_two_data, data_type, path, test):
                     type_E = [1, 2, 3, 4, 6, 1, 2, 3, 4, 6, 1, 2, 3, 4, 6]
                     type_F = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
 
-                    for i in range(15):
-                        ws.cell(row=1, column=i + 2, value=df_pce[f"{car_type[i]}{test_data[0][type_A[i]]}"][0])  # A方向
-                        ws.cell(row=1, column=i + 17, value=df_pce[f"{car_type[i]}{test_data[1][type_B[i]]}"][0])  # B方向
-                        ws.cell(row=1, column=i + 32, value=df_pce[f"{car_type[i]}{test_data[2][type_C[i]]}"][0])  # C方向
-                        ws.cell(row=1, column=i + 47, value=df_pce[f"{car_type[i]}{test_data[3][type_D[i]]}"][0])  # D方向
-                        ws.cell(row=1, column=i + 62, value=df_pce[f"{car_type[i]}{test_data[4][type_E[i]]}"][0])  # E方向
-                        ws.cell(row=1, column=i + 77, value=df_pce[f"{car_type[i]}{test_data[5][type_F[i]]}"][0])  # F方向
+                    # for i in range(15):
+                    #     ws.cell(row=1, column=i + 2, value=df_pce[f"{car_type[i]}{test_data[0][type_A[i]]}"][0])  # A方向
+                    #     ws.cell(row=1, column=i + 17, value=df_pce[f"{car_type[i]}{test_data[1][type_B[i]]}"][0])  # B方向
+                    #     ws.cell(row=1, column=i + 32, value=df_pce[f"{car_type[i]}{test_data[2][type_C[i]]}"][0])  # C方向
+                    #     ws.cell(row=1, column=i + 47, value=df_pce[f"{car_type[i]}{test_data[3][type_D[i]]}"][0])  # D方向
+                    #     ws.cell(row=1, column=i + 62, value=df_pce[f"{car_type[i]}{test_data[4][type_E[i]]}"][0])  # E方向
+                    #     ws.cell(row=1, column=i + 77, value=df_pce[f"{car_type[i]}{test_data[5][type_F[i]]}"][0])  # F方向
+
+                    if len(test_data) >= 6:
+                        for i in range(15):
+                            try:
+                                # A方向
+                                if type_A[i] in test_data[0]:
+                                    col_name = f"{car_type[i]}{test_data[0][type_A[i]]}"
+                                    if col_name in df_pce.columns and len(df_pce) > 0:
+                                        ws.cell(row=1, column=i+2, value=df_pce[col_name][0])
+                                
+                                # B方向
+                                if type_B[i] in test_data[1]:
+                                    col_name = f"{car_type[i]}{test_data[1][type_B[i]]}"
+                                    if col_name in df_pce.columns and len(df_pce) > 0:
+                                        ws.cell(row=1, column=i+17, value=df_pce[col_name][0])
+                                
+                                # C方向
+                                if type_C[i] in test_data[2]:
+                                    col_name = f"{car_type[i]}{test_data[2][type_C[i]]}"
+                                    if col_name in df_pce.columns and len(df_pce) > 0:
+                                        ws.cell(row=1, column=i+32, value=df_pce[col_name][0])
+                                
+                                # D方向
+                                if type_D[i] in test_data[3]:
+                                    col_name = f"{car_type[i]}{test_data[3][type_D[i]]}"
+                                    if col_name in df_pce.columns and len(df_pce) > 0:
+                                        ws.cell(row=1, column=i+47, value=df_pce[col_name][0])
+                                
+                                # E方向
+                                if type_E[i] in test_data[4]:
+                                    col_name = f"{car_type[i]}{test_data[4][type_E[i]]}"
+                                    if col_name in df_pce.columns and len(df_pce) > 0:
+                                        ws.cell(row=1, column=i+62, value=df_pce[col_name][0])
+                                
+                                # F方向
+                                if type_F[i] in test_data[5]:
+                                    col_name = f"{car_type[i]}{test_data[5][type_F[i]]}"
+                                    if col_name in df_pce.columns and len(df_pce) > 0:
+                                        ws.cell(row=1, column=i+77, value=df_pce[col_name][0])
+                                        
+                            except (IndexError, KeyError, TypeError) as e:
+                                print(f"六叉路口第 {i} 個儲存格寫入錯誤: {e}")
+                                # 寫入空值或預設值
+                                ws.cell(row=1, column=i+2, value='')
+                                ws.cell(row=1, column=i+17, value='')
+                                ws.cell(row=1, column=i+32, value='')
+                                ws.cell(row=1, column=i+47, value='')
+                                ws.cell(row=1, column=i+62, value='')
+                                ws.cell(row=1, column=i+77, value='')
+                    else:
+                        print(f"警告：test_data 資料不足，需要 6 筆但只有 {len(test_data)} 筆")
 
     save_path = f"export/{data_type}/{tc_id}"
 
@@ -1083,7 +1158,10 @@ def generate_download_excel(page_two_data, data_type, path, test):
         df.at[0, 'export_excel_path'] = [export_path, export_path_v2]  # 下載檔0,上傳檔1
 
         # 如果目前上傳的tc_id/date/data_type已有相同一筆在資料表中，就砍掉原本的資料
-        db.engine.execute(f"DELETE FROM tc_uploaded_file WHERE tc_id = '{tc_id}' AND data_type = '{data_type}' AND date = '{date_result}'")
+        with db.engine.connect() as connection:
+            connection.execute(text("DELETE FROM tc_uploaded_file WHERE tc_id = :tc_id AND data_type = :data_type AND date = :date"), 
+                 {"tc_id": tc_id, "data_type": data_type, "date": date_result})
+            # connection.commit()
 
         with db.engine.connect() as connection:
             df.to_sql('tc_uploaded_file', connection, if_exists='append', index=False, chunksize=500)
@@ -1679,7 +1757,7 @@ def search_download_path(data_list):
     sql = """SELECT id, export_excel_path FROM tc_uploaded_file WHERE status = 'active'"""
 
     with db.engine.connect() as connection:
-        df = pd.read_sql_query(sql, con=connection)
+        df = pd.read_sql_query(text(sql), con=connection)
     df_all = df[df['id'].isin(id_list)]
 
     for item in data_list:

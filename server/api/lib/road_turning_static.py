@@ -68,7 +68,7 @@ def get_turning_data(type, tc_id):
 
         # 定義所有路口類型
         all_inter_type = {
-            'three': [],
+            'three': ['三叉路口'],
             'four': ['正交四叉路口', '四叉路口'],
             'five': ['五叉路口'],
             'six': ['六叉路口']
@@ -328,7 +328,7 @@ def get_statistics_data(request):
                         where tc_id in {sql_tuple_tc}
                         and owner_name in {sql_tuple_owner}
                         and project_num in {sql_tuple_project}
-                        and holiday_type LIKE %s
+                        and holiday_type LIKE :holiday_param
                         group by tc_id
                     ),
                     cte2 as
@@ -340,11 +340,11 @@ def get_statistics_data(request):
                     select a.tc_id, a.road, a.export_excel_path, a.intersection_type, a.excel_data , c.road_param, c.road_section, c.svg_detail
                     from public.tc_uploaded_file a
                     join cte1 b
-                    on a.tc_id = b.tc_id and a.date = b.latest_date
+                        on a.tc_id = b.tc_id and a.date = b.latest_date
                     join cte2 c
-                    on a.tc_id = c.tc_id
+                        on a.tc_id = c.tc_id
                     where data_type = '{data_type}';'''
-                df = pd.read_sql(sql, con=connection, params=(f'%{is_holiday}%',))
+                df = pd.read_sql(text(sql), con=connection, params={'holiday_param': f'%{is_holiday}%'})
             else:
                 # print(f"取所有TC之{date_range}做查詢")
                 sql = f'''with
@@ -355,7 +355,7 @@ def get_statistics_data(request):
                         where tc_id in {sql_tuple_tc}
                         and owner_name in {sql_tuple_owner}
                         and project_num in {sql_tuple_project}
-                        and holiday_type LIKE %s
+                        and holiday_type LIKE :holiday_param
                     ),
                     cte2 as
                     (
@@ -370,7 +370,7 @@ def get_statistics_data(request):
                     join cte2 c
                     on a.tc_id = c.tc_id
                     where data_type = '{data_type}';'''
-                res = pd.read_sql(sql, con=connection, params=(f'%{is_holiday}%',))
+                res = pd.read_sql(text(sql), con=connection, params={'holiday_param': f'%{is_holiday}%'})
                 # 過濾出所選日期
                 res['date'] = res['date'].astype(str)
                 df = res.loc[res['date'] == date_range]
@@ -435,7 +435,7 @@ def get_statistics_data(request):
                             where tc_id in {sql_tuple_tc}
                             and owner_name in {sql_tuple_owner}
                             and project_num in {sql_tuple_project}
-                            and day_peak LIKE %s
+                            and day_peak LIKE :holiday_param
                             group by tc_id
                         ),
                         cte2 as
@@ -452,7 +452,7 @@ def get_statistics_data(request):
                         on a.tc_id = c.tc_id
                         where data_type = '{data_type}';'''
 
-                df = pd.read_sql(sql, con=connection, params=(f'%{is_holiday}%',))
+                df = pd.read_sql(text(sql), con=connection, params={'holiday_param': f'%{is_holiday}%'})
             else:
                 # print(f"取所有TC之{date_range}做查詢")
                 sql = f'''with
@@ -463,7 +463,7 @@ def get_statistics_data(request):
                             where tc_id in {sql_tuple_tc}
                             and owner_name in {sql_tuple_owner}
                             and project_num in {sql_tuple_project}
-                            and day_peak LIKE %s
+                            and day_peak LIKE :holiday_param
                         ),
                         cte2 as
                         (
@@ -478,7 +478,7 @@ def get_statistics_data(request):
                         join cte2 c
                         on a.tc_id = c.tc_id
                         where data_type = '{data_type}';'''
-                res = pd.read_sql(sql, con=connection, params=(f'%{is_holiday}%',))
+                res = pd.read_sql(text(sql), con=connection, params={'holiday_param': f'%{is_holiday}%'})
                 # 過濾出所選日期
                 res['date'] = res['date'].astype(str)
                 df = res.loc[res['date'] == date_range][:1]  # 先暫時只取第一筆資料，反正每筆都長一樣(之後優化)
@@ -566,7 +566,7 @@ def get_all_tc_turning_status():
                 '''
 
     with db.engine.connect() as connection:
-        result_df = pd.read_sql(sql, con=connection)
+        result_df = pd.read_sql(text(sql), con=connection)
 
     return response_with(resp.SUCCESS_200, value={"data": result_df.to_dict('records')})
 

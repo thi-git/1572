@@ -36,7 +36,10 @@ def get_uploaded_info(request):
 
     with db.engine.connect() as connection:
         # 讀取users資料，找出該帳需要過濾的縣市和業主
-        selected_auth = pd.read_sql(text("SELECT * FROM users WHERE user_name = :user_name"), con=connection, params={'user_name': user_name}).loc[0, 'selected_auth']
+        result_df = pd.read_sql(text("SELECT * FROM users WHERE user_name = :user_name"), 
+                       con=connection, params={'user_name': user_name})
+
+        selected_auth = result_df.loc[0, 'selected_auth'] if not result_df.empty else None
 
         # 讀取轉向量資料(過濾掉值為NULL的資料，並查看是否有編輯紀錄)
         df_turning = pd.read_sql('road_turning_static', con=connection).dropna()
@@ -54,14 +57,14 @@ def get_uploaded_info(request):
                            (df_turning['road_section'].notna() & df_turning['road_section'] != '')]['tc_id'].tolist()
 
     
-    df_info = df_info[df_info['city'].isin(selected_auth['city'])]
+    df_info = df_info[df_info['city'].isin(selected_auth.get('city', []) if selected_auth else [])]
 
     result_df = df2.groupby('tc_id').agg(owner_name=('owner_name', 'first'), project_num=('project_num', 'unique'), data_type=('data_type', 'unique')).reset_index()
     result_df['project_num'] = result_df['project_num'].apply(lambda x: x.tolist())
     result_df['data_type'] = result_df['data_type'].apply(lambda x: x.tolist())
 
     # 過濾出該帳號需要的業主
-    result_df = result_df[result_df['owner_name'].isin(selected_auth['owner'])]
+    result_df = result_df[result_df['owner_name'].isin(selected_auth.get('owner', []) if selected_auth else [])]
 
     merged_df = pd.merge(df_info, result_df, on='tc_id', how='inner')
     merged_df['edit_status'] = merged_df['tc_id'].isin(edit_list)  # 以此欄位判斷是否有編輯過
@@ -182,7 +185,7 @@ def search_road_info(request):
                 '''
 
     with db.engine.connect() as connection:
-        df = pd.read_sql(sql, con=connection)
+        df = pd.read_sql(text(sql), con=connection)
     res1 = df[df['tc_id'].isin(tc_list)]
     res = res1[res1['city'].isin(district_new_list)]
 
@@ -344,8 +347,8 @@ def tc_uploaded_date():
         result = con.execute(db.text(sql), where_dict)
         res_dict = {}
         for row in result:
-            key = row['tc_id']
-            value = row['date'].strftime('%Y-%m-%d')
+            key = row._mapping['tc_id'] 
+            value = row._mapping['date'].strftime('%Y-%m-%d')
             if key in res_dict:
                 if value not in res_dict[key]:
                     res_dict[key].append(value)
@@ -387,10 +390,10 @@ def get_uploaded_filter_data(request):
         selected_auth = pd.read_sql(text("SELECT * FROM users WHERE user_name = :user_name"), con=connection, params={'user_name': user_name}).loc[0, 'selected_auth']
 
         # 讀取tc_uploaded_file資料，過濾出該帳號需顯示的業主
-        tc_uploaded_file = pd.read_sql('SELECT tc_id, data_type, owner_name, project_num FROM tc_uploaded_file', con=connection)
+        tc_uploaded_file = pd.read_sql(text('SELECT tc_id, data_type, owner_name, project_num FROM tc_uploaded_file'), con=connection)
 
         # 讀取tc_road_info資料，過濾出該帳號需顯示的縣市
-        tc_road_info = pd.read_sql('SELECT tc_id, city FROM tc_road_info', con=connection)
+        tc_road_info = pd.read_sql(text('SELECT tc_id, city FROM tc_road_info'), con=connection)
 
     tc_uploaded_file = tc_uploaded_file[tc_uploaded_file['owner_name'].isin(selected_auth['owner'])]
     tc_road_info = tc_road_info[tc_road_info['city'].isin(selected_auth['city'])]

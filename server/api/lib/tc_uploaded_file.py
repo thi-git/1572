@@ -1723,24 +1723,22 @@ def file_transfer_delay(df_file):
 # download需要的function
 # 下載檔案
 def download_file(request):
-    # 取得使用者所選id
     data = request.get_json()
-    data_list = data.get('data')  # 包含每筆資料的id和format
-
-    # 取得模板並寫入資料
+    data_list = data.get('data')
     export_list = search_download_path(data_list)
-
+    
     if len(export_list) > 1:
         zip_path = Zip().zip_file(file_list=export_list, save_location=CFG.EXPORT_FOLDER)
+        folder_path = "export/"
+        name = os.path.basename(zip_path)
     elif len(export_list) == 1:
         zip_path = export_list[0]
+        name = os.path.basename(zip_path)
+        directory = zip_path.replace(name, '')
+        folder_path = directory.split("res/")[1]
     else:
         return response_with(resp.INVALID_INPUT_422)
-
-    name = zip_path.split('/')[-1]
-    directory = zip_path.replace(name, '')
-    folder_path = directory.split(f"{CFG.STATIC_FOLDER}/")[1]
-
+    
     return {"folder_path": folder_path, "name": name}
 
 

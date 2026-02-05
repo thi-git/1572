@@ -17,18 +17,32 @@ class Zip:
             if not os.path.isdir(save_location):
                 os.makedirs(save_location)
 
-            with zipfile.ZipFile(zip_path, mode='w') as zf:
+            # 使用 ZIP_DEFLATED 進行壓縮
+            with zipfile.ZipFile(zip_path, mode='w', compression=zipfile.ZIP_DEFLATED) as zf:
                 try:
                     for file in file_list:
+                        # 確保檔案存在
                         if os.path.isfile(file):
                             file_path, file_name = os.path.split(file)
-                            # os.chdir(file_path)
+                            print(f"正在壓縮: {file} -> {file_name}")  # 調試用
+                            
+                            # 寫入檔案到壓縮檔
                             zf.write(file, arcname=file_name)
+                        else:
+                            print(f"檔案不存在: {file}")  # 調試用
+                    
+                    print(f"壓縮檔已建立: {zip_path}")  # 調試用
+                    print(f"壓縮檔內容: {zf.namelist()}")  # 調試用
                     return zip_path
 
                 except zipfile.BadZipfile as e:
                     print("ZIP 檔案錯誤：", e)
                     return None
+                except Exception as e:
+                    print(f"壓縮過程發生錯誤: {e}")
+                    return None
+        
+        return None
 
     def unzip_file(self, file_path, save_location):
         # 檢查檔案格式

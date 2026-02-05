@@ -1726,7 +1726,6 @@ def download_file(request):
     data = request.get_json()
     data_list = data.get('data')
     export_list = search_download_path(data_list)
-    print(export_list)
     
     if len(export_list) > 1:
         zip_path = Zip().zip_file(file_list=export_list, save_location=CFG.EXPORT_FOLDER)

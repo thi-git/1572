@@ -26,6 +26,9 @@ from api.routes.road_group import road_group_routes
 from api.routes.owner_project import owner_project_routes
 from api.routes.quality import quality_routes
 
+import sys
+sys.path = [p for p in sys.path if 'dist-packages' not in p]
+eventlet.monkey_patch()
 
 SWAGGER_URL = '/api/docs'
 app = Flask(__name__)

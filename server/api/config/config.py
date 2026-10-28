@@ -7,7 +7,7 @@ class Config(object):
     
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "postgresql://root:thi168168@220.130.185.38:25432/1572"
+    SQLALCHEMY_DATABASE_URI = "postgresql://root:thi168168@192.168.102.249:25432/1572"
     AUTH_API = "http://localhost:8081"
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_ENGINE_OPTIONS = {

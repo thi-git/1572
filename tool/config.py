@@ -1,6 +1,6 @@
 class DevelopmentConfig:
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "postgresql://root:thi168168@220.130.185.37:5432/1572"  # 請改為自己的SQL
+    SQLALCHEMY_DATABASE_URI = "postgresql://root:thi168168@192.168.102.249:25432/1572"  # 請改為自己的SQL
     AUTH_API = "http://localhost:8081"  # keycloak 網址
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_ENGINE_OPTIONS = {
